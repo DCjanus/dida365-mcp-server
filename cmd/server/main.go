@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/DCjanus/dida365-mcp-server/internal/middleware"
+	"google.golang.org/protobuf/types/known/anypb"
 	"log"
 	"net"
 	"net/http"
@@ -24,8 +25,12 @@ type server struct {
 
 // SayHello 实现 HelloService 服务
 func (s *server) SayHello(ctx context.Context, req *helloworldv1.SayHelloRequest) (*helloworldv1.SayHelloResponse, error) {
+	msg, err := anypb.New(req)
+	if err != nil {
+		return nil, err
+	}
 	return &helloworldv1.SayHelloResponse{
-		Message: protojson.Format(req),
+		Message: msg,
 	}, nil
 }
 

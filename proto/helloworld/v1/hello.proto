@@ -4,6 +4,7 @@ package helloworld.v1;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
 
 option go_package = "github.com/DCjanus/dida365-mcp-server/gen/proto/helloworld/v1;helloworldv1";
 
@@ -23,5 +24,5 @@ message SayHelloRequest {
 
 // SayHelloResponse 包含问候消息
 message SayHelloResponse {
-  string message = 1;
+  google.protobuf.Any message = 1;
 }
