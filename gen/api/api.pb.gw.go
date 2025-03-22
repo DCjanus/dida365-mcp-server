@@ -36,7 +36,7 @@ var (
 	_ = metadata.Join
 )
 
-func request_Data365Service_Ping_0(ctx context.Context, marshaler runtime.Marshaler, client Data365ServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Dida365OAuthService_Ping_0(ctx context.Context, marshaler runtime.Marshaler, client Dida365OAuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq emptypb.Empty
 		metadata runtime.ServerMetadata
@@ -46,7 +46,7 @@ func request_Data365Service_Ping_0(ctx context.Context, marshaler runtime.Marsha
 	return msg, metadata, err
 }
 
-func local_request_Data365Service_Ping_0(ctx context.Context, marshaler runtime.Marshaler, server Data365ServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Dida365OAuthService_Ping_0(ctx context.Context, marshaler runtime.Marshaler, server Dida365OAuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq emptypb.Empty
 		metadata runtime.ServerMetadata
@@ -55,39 +55,131 @@ func local_request_Data365Service_Ping_0(ctx context.Context, marshaler runtime.
 	return msg, metadata, err
 }
 
-// RegisterData365ServiceHandlerServer registers the http handlers for service Data365Service to "mux".
-// UnaryRPC     :call Data365ServiceServer directly.
+func request_Dida365OAuthService_OAuthLogin_0(ctx context.Context, marshaler runtime.Marshaler, client Dida365OAuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq emptypb.Empty
+		metadata runtime.ServerMetadata
+	)
+	io.Copy(io.Discard, req.Body)
+	msg, err := client.OAuthLogin(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_Dida365OAuthService_OAuthLogin_0(ctx context.Context, marshaler runtime.Marshaler, server Dida365OAuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq emptypb.Empty
+		metadata runtime.ServerMetadata
+	)
+	msg, err := server.OAuthLogin(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+var filter_Dida365OAuthService_OAuthCallback_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+
+func request_Dida365OAuthService_OAuthCallback_0(ctx context.Context, marshaler runtime.Marshaler, client Dida365OAuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq OAuthCallbackRequest
+		metadata runtime.ServerMetadata
+	)
+	io.Copy(io.Discard, req.Body)
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Dida365OAuthService_OAuthCallback_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.OAuthCallback(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_Dida365OAuthService_OAuthCallback_0(ctx context.Context, marshaler runtime.Marshaler, server Dida365OAuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq OAuthCallbackRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Dida365OAuthService_OAuthCallback_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.OAuthCallback(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+// RegisterDida365OAuthServiceHandlerServer registers the http handlers for service Dida365OAuthService to "mux".
+// UnaryRPC     :call Dida365OAuthServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterData365ServiceHandlerFromEndpoint instead.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterDida365OAuthServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterData365ServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server Data365ServiceServer) error {
-	mux.Handle(http.MethodGet, pattern_Data365Service_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+func RegisterDida365OAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server Dida365OAuthServiceServer) error {
+	mux.Handle(http.MethodGet, pattern_Dida365OAuthService_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.Data365Service/Ping", runtime.WithHTTPPathPattern("/ping"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.Dida365OAuthService/Ping", runtime.WithHTTPPathPattern("/ping"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Data365Service_Ping_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Dida365OAuthService_Ping_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_Data365Service_Ping_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Dida365OAuthService_Ping_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodGet, pattern_Dida365OAuthService_OAuthLogin_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.Dida365OAuthService/OAuthLogin", runtime.WithHTTPPathPattern("/oauth/login"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Dida365OAuthService_OAuthLogin_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_Dida365OAuthService_OAuthLogin_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodGet, pattern_Dida365OAuthService_OAuthCallback_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.Dida365OAuthService/OAuthCallback", runtime.WithHTTPPathPattern("/oauth/callback"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Dida365OAuthService_OAuthCallback_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_Dida365OAuthService_OAuthCallback_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
 }
 
-// RegisterData365ServiceHandlerFromEndpoint is same as RegisterData365ServiceHandler but
+// RegisterDida365OAuthServiceHandlerFromEndpoint is same as RegisterDida365OAuthServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterData365ServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterDida365OAuthServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
 		return err
@@ -106,45 +198,83 @@ func RegisterData365ServiceHandlerFromEndpoint(ctx context.Context, mux *runtime
 			}
 		}()
 	}()
-	return RegisterData365ServiceHandler(ctx, mux, conn)
+	return RegisterDida365OAuthServiceHandler(ctx, mux, conn)
 }
 
-// RegisterData365ServiceHandler registers the http handlers for service Data365Service to "mux".
+// RegisterDida365OAuthServiceHandler registers the http handlers for service Dida365OAuthService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterData365ServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterData365ServiceHandlerClient(ctx, mux, NewData365ServiceClient(conn))
+func RegisterDida365OAuthServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterDida365OAuthServiceHandlerClient(ctx, mux, NewDida365OAuthServiceClient(conn))
 }
 
-// RegisterData365ServiceHandlerClient registers the http handlers for service Data365Service
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "Data365ServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "Data365ServiceClient"
+// RegisterDida365OAuthServiceHandlerClient registers the http handlers for service Dida365OAuthService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "Dida365OAuthServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "Dida365OAuthServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "Data365ServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterData365ServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client Data365ServiceClient) error {
-	mux.Handle(http.MethodGet, pattern_Data365Service_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+// "Dida365OAuthServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterDida365OAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client Dida365OAuthServiceClient) error {
+	mux.Handle(http.MethodGet, pattern_Dida365OAuthService_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.Data365Service/Ping", runtime.WithHTTPPathPattern("/ping"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.Dida365OAuthService/Ping", runtime.WithHTTPPathPattern("/ping"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Data365Service_Ping_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Dida365OAuthService_Ping_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_Data365Service_Ping_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Dida365OAuthService_Ping_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodGet, pattern_Dida365OAuthService_OAuthLogin_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.Dida365OAuthService/OAuthLogin", runtime.WithHTTPPathPattern("/oauth/login"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Dida365OAuthService_OAuthLogin_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_Dida365OAuthService_OAuthLogin_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodGet, pattern_Dida365OAuthService_OAuthCallback_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.Dida365OAuthService/OAuthCallback", runtime.WithHTTPPathPattern("/oauth/callback"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Dida365OAuthService_OAuthCallback_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_Dida365OAuthService_OAuthCallback_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	return nil
 }
 
 var (
-	pattern_Data365Service_Ping_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"ping"}, ""))
+	pattern_Dida365OAuthService_Ping_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"ping"}, ""))
+	pattern_Dida365OAuthService_OAuthLogin_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"oauth", "login"}, ""))
+	pattern_Dida365OAuthService_OAuthCallback_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"oauth", "callback"}, ""))
 )
 
 var (
-	forward_Data365Service_Ping_0 = runtime.ForwardResponseMessage
+	forward_Dida365OAuthService_Ping_0          = runtime.ForwardResponseMessage
+	forward_Dida365OAuthService_OAuthLogin_0    = runtime.ForwardResponseMessage
+	forward_Dida365OAuthService_OAuthCallback_0 = runtime.ForwardResponseMessage
 )

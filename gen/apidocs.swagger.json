@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/api.proto",
+    "title": "model/response.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "Data365Service"
+      "name": "Dida365oAuthService"
     }
   ],
   "consumes": [
@@ -16,9 +16,67 @@
     "application/json"
   ],
   "paths": {
+    "/oauth/callback": {
+      "get": {
+        "operationId": "Dida365oAuthService_OAuthCallback",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiOAuthCallbackResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Dida365oAuthService"
+        ]
+      }
+    },
+    "/oauth/login": {
+      "get": {
+        "operationId": "Dida365oAuthService_OAuthLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/modelTemporaryRedirectResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Dida365oAuthService"
+        ]
+      }
+    },
     "/ping": {
       "get": {
-        "operationId": "Data365Service_Ping",
+        "operationId": "Dida365oAuthService_Ping",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -34,12 +92,28 @@
           }
         },
         "tags": [
-          "Data365Service"
+          "Dida365oAuthService"
         ]
       }
     }
   },
   "definitions": {
+    "apiOAuthCallbackResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "modelTemporaryRedirectResponse": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {

@@ -7,6 +7,7 @@ require (
 	buf.build/go/protoyaml v0.3.1
 	github.com/bufbuild/protovalidate-go v0.9.2
 	github.com/cockroachdb/errors v1.11.3
+	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
 	github.com/jsternberg/zap-logfmt v1.3.0
@@ -16,6 +17,7 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20250313205543-e70fdf4c4cb4
 	google.golang.org/grpc v1.71.0
 	google.golang.org/protobuf v1.36.5
+	resty.dev/v3 v3.0.0-beta.2
 )
 
 require (

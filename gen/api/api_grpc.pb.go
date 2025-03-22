@@ -8,6 +8,7 @@ package api
 
 import (
 	context "context"
+	model "github.com/dcjanus/dida365-mcp-server/gen/model"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -21,101 +22,177 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Data365Service_Ping_FullMethodName = "/api.Data365Service/Ping"
+	Dida365OAuthService_Ping_FullMethodName          = "/api.Dida365oAuthService/Ping"
+	Dida365OAuthService_OAuthLogin_FullMethodName    = "/api.Dida365oAuthService/OAuthLogin"
+	Dida365OAuthService_OAuthCallback_FullMethodName = "/api.Dida365oAuthService/OAuthCallback"
 )
 
-// Data365ServiceClient is the client API for Data365Service service.
+// Dida365OAuthServiceClient is the client API for Dida365OAuthService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type Data365ServiceClient interface {
+type Dida365OAuthServiceClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
+	OAuthLogin(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error)
+	OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*OAuthCallbackResponse, error)
 }
 
-type data365ServiceClient struct {
+type dida365OAuthServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewData365ServiceClient(cc grpc.ClientConnInterface) Data365ServiceClient {
-	return &data365ServiceClient{cc}
+func NewDida365OAuthServiceClient(cc grpc.ClientConnInterface) Dida365OAuthServiceClient {
+	return &dida365OAuthServiceClient{cc}
 }
 
-func (c *data365ServiceClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
+func (c *dida365OAuthServiceClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(wrapperspb.StringValue)
-	err := c.cc.Invoke(ctx, Data365Service_Ping_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Dida365OAuthService_Ping_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// Data365ServiceServer is the server API for Data365Service service.
-// All implementations must embed UnimplementedData365ServiceServer
-// for forward compatibility.
-type Data365ServiceServer interface {
-	Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
-	mustEmbedUnimplementedData365ServiceServer()
+func (c *dida365OAuthServiceClient) OAuthLogin(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(model.TemporaryRedirectResponse)
+	err := c.cc.Invoke(ctx, Dida365OAuthService_OAuthLogin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-// UnimplementedData365ServiceServer must be embedded to have
+func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*OAuthCallbackResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(OAuthCallbackResponse)
+	err := c.cc.Invoke(ctx, Dida365OAuthService_OAuthCallback_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Dida365OAuthServiceServer is the server API for Dida365OAuthService service.
+// All implementations must embed UnimplementedDida365OAuthServiceServer
+// for forward compatibility.
+type Dida365OAuthServiceServer interface {
+	Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
+	OAuthLogin(context.Context, *emptypb.Empty) (*model.TemporaryRedirectResponse, error)
+	OAuthCallback(context.Context, *OAuthCallbackRequest) (*OAuthCallbackResponse, error)
+	mustEmbedUnimplementedDida365OAuthServiceServer()
+}
+
+// UnimplementedDida365OAuthServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedData365ServiceServer struct{}
+type UnimplementedDida365OAuthServiceServer struct{}
 
-func (UnimplementedData365ServiceServer) Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error) {
+func (UnimplementedDida365OAuthServiceServer) Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedData365ServiceServer) mustEmbedUnimplementedData365ServiceServer() {}
-func (UnimplementedData365ServiceServer) testEmbeddedByValue()                        {}
+func (UnimplementedDida365OAuthServiceServer) OAuthLogin(context.Context, *emptypb.Empty) (*model.TemporaryRedirectResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OAuthLogin not implemented")
+}
+func (UnimplementedDida365OAuthServiceServer) OAuthCallback(context.Context, *OAuthCallbackRequest) (*OAuthCallbackResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OAuthCallback not implemented")
+}
+func (UnimplementedDida365OAuthServiceServer) mustEmbedUnimplementedDida365OAuthServiceServer() {}
+func (UnimplementedDida365OAuthServiceServer) testEmbeddedByValue()                             {}
 
-// UnsafeData365ServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to Data365ServiceServer will
+// UnsafeDida365OAuthServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to Dida365OAuthServiceServer will
 // result in compilation errors.
-type UnsafeData365ServiceServer interface {
-	mustEmbedUnimplementedData365ServiceServer()
+type UnsafeDida365OAuthServiceServer interface {
+	mustEmbedUnimplementedDida365OAuthServiceServer()
 }
 
-func RegisterData365ServiceServer(s grpc.ServiceRegistrar, srv Data365ServiceServer) {
-	// If the following call pancis, it indicates UnimplementedData365ServiceServer was
+func RegisterDida365OAuthServiceServer(s grpc.ServiceRegistrar, srv Dida365OAuthServiceServer) {
+	// If the following call pancis, it indicates UnimplementedDida365OAuthServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Data365Service_ServiceDesc, srv)
+	s.RegisterService(&Dida365OAuthService_ServiceDesc, srv)
 }
 
-func _Data365Service_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Dida365OAuthService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(Data365ServiceServer).Ping(ctx, in)
+		return srv.(Dida365OAuthServiceServer).Ping(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Data365Service_Ping_FullMethodName,
+		FullMethod: Dida365OAuthService_Ping_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(Data365ServiceServer).Ping(ctx, req.(*emptypb.Empty))
+		return srv.(Dida365OAuthServiceServer).Ping(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Data365Service_ServiceDesc is the grpc.ServiceDesc for Data365Service service.
+func _Dida365OAuthService_OAuthLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Dida365OAuthServiceServer).OAuthLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dida365OAuthService_OAuthLogin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Dida365OAuthServiceServer).OAuthLogin(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Dida365OAuthService_OAuthCallback_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OAuthCallbackRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Dida365OAuthServiceServer).OAuthCallback(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dida365OAuthService_OAuthCallback_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Dida365OAuthServiceServer).OAuthCallback(ctx, req.(*OAuthCallbackRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Dida365OAuthService_ServiceDesc is the grpc.ServiceDesc for Dida365OAuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Data365Service_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.Data365Service",
-	HandlerType: (*Data365ServiceServer)(nil),
+var Dida365OAuthService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.Dida365oAuthService",
+	HandlerType: (*Dida365OAuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Ping",
-			Handler:    _Data365Service_Ping_Handler,
+			Handler:    _Dida365OAuthService_Ping_Handler,
+		},
+		{
+			MethodName: "OAuthLogin",
+			Handler:    _Dida365OAuthService_OAuthLogin_Handler,
+		},
+		{
+			MethodName: "OAuthCallback",
+			Handler:    _Dida365OAuthService_OAuthCallback_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

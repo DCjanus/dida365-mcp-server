@@ -1,10 +1,12 @@
-default: 
+default: prepare
+
+prepare:
     just format
     just generate
     just lint
     just build
 
-prepare:
+init:
     go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
     go install github.com/incu6us/goimports-reviser/v3@latest
 
@@ -13,7 +15,7 @@ lint:
     golangci-lint run ./...
 
 format:
-    goimports-reviser ./... 
+    goimports-reviser ./...
     buf format -w .
 
 generate:
@@ -21,8 +23,12 @@ generate:
 
 build:
     go mod tidy
-    CGO_ENABLED=0 go build -o bin/dida365-mcp-server cmd/server/main.go
+    CGO_ENABLED=0 go build -o bin/dida365-oauth-server cmd/oauth/main.go
 
-run: build
-    ./bin/dida365-mcp-server
+clean:
+    rm -rf bin
+    rm -rf gen
+
+run: prepare
+    ./bin/dida365-oauth-server
 

@@ -1,4 +1,4 @@
-package middleware
+package grpcruntime
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func Validate() grpc.UnaryServerInterceptor {
+func ValidateMiddleware() grpc.UnaryServerInterceptor {
 	return func(
 		ctx context.Context,
 		req interface{},
