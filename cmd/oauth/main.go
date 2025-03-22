@@ -98,7 +98,7 @@ func main() {
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
-	log.Info("Server starting", zap.String("listen", lis.Addr().String()), zap.String("login", "http://"+lis.Addr().String()+"/oauth/login"))
+	log.Info("Server starting", zap.String("listen", lis.Addr().String()))
 	if err := httpServer.Serve(lis); err != nil {
 		log.Fatal("failed to serve", zap.Error(err))
 	}

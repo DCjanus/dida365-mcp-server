@@ -4,7 +4,6 @@ prepare:
     just format
     just generate
     just lint
-    just build
 
 init:
     go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
@@ -22,14 +21,16 @@ format:
 generate:
     buf generate
 
-build:
-    go mod tidy
+build: prepare
     CGO_ENABLED=0 go build -o bin/dida365-oauth-server cmd/oauth/main.go
+    CGO_ENABLED=0 go build -o bin/dida365-mcp-server cmd/mcp/main.go
 
 clean:
     rm -rf bin
     rm -rf gen
 
-run: prepare
+run-oauth: build
     ./bin/dida365-oauth-server
 
+run-mcp: build
+    ./bin/dida365-mcp-server
