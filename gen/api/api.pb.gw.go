@@ -36,7 +36,7 @@ var (
 	_ = metadata.Join
 )
 
-func request_Data365MCPService_Ping_0(ctx context.Context, marshaler runtime.Marshaler, client Data365MCPServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Data365Service_Ping_0(ctx context.Context, marshaler runtime.Marshaler, client Data365ServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq emptypb.Empty
 		metadata runtime.ServerMetadata
@@ -46,7 +46,7 @@ func request_Data365MCPService_Ping_0(ctx context.Context, marshaler runtime.Mar
 	return msg, metadata, err
 }
 
-func local_request_Data365MCPService_Ping_0(ctx context.Context, marshaler runtime.Marshaler, server Data365MCPServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Data365Service_Ping_0(ctx context.Context, marshaler runtime.Marshaler, server Data365ServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq emptypb.Empty
 		metadata runtime.ServerMetadata
@@ -55,39 +55,39 @@ func local_request_Data365MCPService_Ping_0(ctx context.Context, marshaler runti
 	return msg, metadata, err
 }
 
-// RegisterData365MCPServiceHandlerServer registers the http handlers for service Data365MCPService to "mux".
-// UnaryRPC     :call Data365MCPServiceServer directly.
+// RegisterData365ServiceHandlerServer registers the http handlers for service Data365Service to "mux".
+// UnaryRPC     :call Data365ServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterData365MCPServiceHandlerFromEndpoint instead.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterData365ServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterData365MCPServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server Data365MCPServiceServer) error {
-	mux.Handle(http.MethodGet, pattern_Data365MCPService_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+func RegisterData365ServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server Data365ServiceServer) error {
+	mux.Handle(http.MethodGet, pattern_Data365Service_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.Data365MCPService/Ping", runtime.WithHTTPPathPattern("/ping"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.Data365Service/Ping", runtime.WithHTTPPathPattern("/ping"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Data365MCPService_Ping_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Data365Service_Ping_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_Data365MCPService_Ping_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Data365Service_Ping_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
 }
 
-// RegisterData365MCPServiceHandlerFromEndpoint is same as RegisterData365MCPServiceHandler but
+// RegisterData365ServiceHandlerFromEndpoint is same as RegisterData365ServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterData365MCPServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterData365ServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
 		return err
@@ -106,45 +106,45 @@ func RegisterData365MCPServiceHandlerFromEndpoint(ctx context.Context, mux *runt
 			}
 		}()
 	}()
-	return RegisterData365MCPServiceHandler(ctx, mux, conn)
+	return RegisterData365ServiceHandler(ctx, mux, conn)
 }
 
-// RegisterData365MCPServiceHandler registers the http handlers for service Data365MCPService to "mux".
+// RegisterData365ServiceHandler registers the http handlers for service Data365Service to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterData365MCPServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterData365MCPServiceHandlerClient(ctx, mux, NewData365MCPServiceClient(conn))
+func RegisterData365ServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterData365ServiceHandlerClient(ctx, mux, NewData365ServiceClient(conn))
 }
 
-// RegisterData365MCPServiceHandlerClient registers the http handlers for service Data365MCPService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "Data365MCPServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "Data365MCPServiceClient"
+// RegisterData365ServiceHandlerClient registers the http handlers for service Data365Service
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "Data365ServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "Data365ServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "Data365MCPServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterData365MCPServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client Data365MCPServiceClient) error {
-	mux.Handle(http.MethodGet, pattern_Data365MCPService_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+// "Data365ServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterData365ServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client Data365ServiceClient) error {
+	mux.Handle(http.MethodGet, pattern_Data365Service_Ping_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.Data365MCPService/Ping", runtime.WithHTTPPathPattern("/ping"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.Data365Service/Ping", runtime.WithHTTPPathPattern("/ping"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Data365MCPService_Ping_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Data365Service_Ping_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_Data365MCPService_Ping_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Data365Service_Ping_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	return nil
 }
 
 var (
-	pattern_Data365MCPService_Ping_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"ping"}, ""))
+	pattern_Data365Service_Ping_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"ping"}, ""))
 )
 
 var (
-	forward_Data365MCPService_Ping_0 = runtime.ForwardResponseMessage
+	forward_Data365Service_Ping_0 = runtime.ForwardResponseMessage
 )

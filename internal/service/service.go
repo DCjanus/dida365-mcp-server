@@ -10,15 +10,15 @@ import (
 	"github.com/dcjanus/dida365-mcp-server/gen/api"
 )
 
-type Dida365MCP struct {
+type Dida365 struct {
 	logger *zap.Logger
-	api.UnimplementedData365MCPServiceServer
+	api.UnimplementedData365ServiceServer
 }
 
-func NewDida365MCP(logger *zap.Logger) *Dida365MCP {
-	return &Dida365MCP{logger: logger}
+func NewDida365MCP(logger *zap.Logger) *Dida365 {
+	return &Dida365{logger: logger}
 }
 
-func (d *Dida365MCP) Ping(ctx context.Context, req *emptypb.Empty) (*wrapperspb.StringValue, error) {
+func (d *Dida365) Ping(ctx context.Context, req *emptypb.Empty) (*wrapperspb.StringValue, error) {
 	return &wrapperspb.StringValue{Value: "Pong"}, nil
 }

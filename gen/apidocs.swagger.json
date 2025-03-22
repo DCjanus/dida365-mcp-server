@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "Data365MCPService"
+      "name": "Data365Service"
     }
   ],
   "consumes": [
@@ -18,7 +18,7 @@
   "paths": {
     "/ping": {
       "get": {
-        "operationId": "Data365MCPService_Ping",
+        "operationId": "Data365Service_Ping",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -34,7 +34,7 @@
           }
         },
         "tags": [
-          "Data365MCPService"
+          "Data365Service"
         ]
       }
     }

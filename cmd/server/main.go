@@ -10,6 +10,7 @@ import (
 	"github.com/cockroachdb/errors"
 	grpcmiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
@@ -50,17 +51,25 @@ func main() {
 			middleware.Validate(),
 		),
 	))
-	api.RegisterData365MCPServiceServer(srv, service.NewDida365MCP(logger))
+	api.RegisterData365ServiceServer(srv, service.NewDida365MCP(logger))
 
 	mux := runtime.NewServeMux(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
 		MarshalOptions: protojson.MarshalOptions{
 			UseProtoNames:     true,
 			EmitDefaultValues: true,
 		},
+		UnmarshalOptions: protojson.UnmarshalOptions{
+			DiscardUnknown: true,
+		},
 	}))
+	if err := mux.HandlePath(http.MethodGet, "/metrics", func(w http.ResponseWriter, r *http.Request, _ map[string]string) {
+		promhttp.Handler().ServeHTTP(w, r)
+	}); err != nil {
+		logger.Fatal("failed to register metrics handler", zap.Error(err))
+	}
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	if err := api.RegisterData365MCPServiceHandlerFromEndpoint(ctx, mux, "localhost:8080", opts); err != nil {
+	if err := api.RegisterData365ServiceHandlerFromEndpoint(ctx, mux, "localhost:8080", opts); err != nil {
 		logger.Fatal("failed to register gRPC gateway", zap.Error(err))
 	}
 

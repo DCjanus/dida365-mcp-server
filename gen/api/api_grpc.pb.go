@@ -21,101 +21,101 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Data365MCPService_Ping_FullMethodName = "/api.Data365MCPService/Ping"
+	Data365Service_Ping_FullMethodName = "/api.Data365Service/Ping"
 )
 
-// Data365MCPServiceClient is the client API for Data365MCPService service.
+// Data365ServiceClient is the client API for Data365Service service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type Data365MCPServiceClient interface {
+type Data365ServiceClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 }
 
-type data365MCPServiceClient struct {
+type data365ServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewData365MCPServiceClient(cc grpc.ClientConnInterface) Data365MCPServiceClient {
-	return &data365MCPServiceClient{cc}
+func NewData365ServiceClient(cc grpc.ClientConnInterface) Data365ServiceClient {
+	return &data365ServiceClient{cc}
 }
 
-func (c *data365MCPServiceClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
+func (c *data365ServiceClient) Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(wrapperspb.StringValue)
-	err := c.cc.Invoke(ctx, Data365MCPService_Ping_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Data365Service_Ping_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// Data365MCPServiceServer is the server API for Data365MCPService service.
-// All implementations must embed UnimplementedData365MCPServiceServer
+// Data365ServiceServer is the server API for Data365Service service.
+// All implementations must embed UnimplementedData365ServiceServer
 // for forward compatibility.
-type Data365MCPServiceServer interface {
+type Data365ServiceServer interface {
 	Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
-	mustEmbedUnimplementedData365MCPServiceServer()
+	mustEmbedUnimplementedData365ServiceServer()
 }
 
-// UnimplementedData365MCPServiceServer must be embedded to have
+// UnimplementedData365ServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedData365MCPServiceServer struct{}
+type UnimplementedData365ServiceServer struct{}
 
-func (UnimplementedData365MCPServiceServer) Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error) {
+func (UnimplementedData365ServiceServer) Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedData365MCPServiceServer) mustEmbedUnimplementedData365MCPServiceServer() {}
-func (UnimplementedData365MCPServiceServer) testEmbeddedByValue()                           {}
+func (UnimplementedData365ServiceServer) mustEmbedUnimplementedData365ServiceServer() {}
+func (UnimplementedData365ServiceServer) testEmbeddedByValue()                        {}
 
-// UnsafeData365MCPServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to Data365MCPServiceServer will
+// UnsafeData365ServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to Data365ServiceServer will
 // result in compilation errors.
-type UnsafeData365MCPServiceServer interface {
-	mustEmbedUnimplementedData365MCPServiceServer()
+type UnsafeData365ServiceServer interface {
+	mustEmbedUnimplementedData365ServiceServer()
 }
 
-func RegisterData365MCPServiceServer(s grpc.ServiceRegistrar, srv Data365MCPServiceServer) {
-	// If the following call pancis, it indicates UnimplementedData365MCPServiceServer was
+func RegisterData365ServiceServer(s grpc.ServiceRegistrar, srv Data365ServiceServer) {
+	// If the following call pancis, it indicates UnimplementedData365ServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&Data365MCPService_ServiceDesc, srv)
+	s.RegisterService(&Data365Service_ServiceDesc, srv)
 }
 
-func _Data365MCPService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Data365Service_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(Data365MCPServiceServer).Ping(ctx, in)
+		return srv.(Data365ServiceServer).Ping(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Data365MCPService_Ping_FullMethodName,
+		FullMethod: Data365Service_Ping_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(Data365MCPServiceServer).Ping(ctx, req.(*emptypb.Empty))
+		return srv.(Data365ServiceServer).Ping(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Data365MCPService_ServiceDesc is the grpc.ServiceDesc for Data365MCPService service.
+// Data365Service_ServiceDesc is the grpc.ServiceDesc for Data365Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Data365MCPService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.Data365MCPService",
-	HandlerType: (*Data365MCPServiceServer)(nil),
+var Data365Service_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.Data365Service",
+	HandlerType: (*Data365ServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Ping",
-			Handler:    _Data365MCPService_Ping_Handler,
+			Handler:    _Data365Service_Ping_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -6,7 +6,7 @@ import (
 
 	"buf.build/go/protoyaml"
 	"github.com/bufbuild/protovalidate-go"
-	"github.com/pkg/errors"
+	"github.com/cockroachdb/errors"
 
 	"github.com/dcjanus/dida365-mcp-server/gen/conf"
 )
