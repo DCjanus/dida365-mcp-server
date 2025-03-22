@@ -10,8 +10,8 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
-	github.com/jsternberg/zap-logfmt v1.3.0
 	github.com/prometheus/client_golang v1.21.1
+	github.com/thessem/zap-prettyconsole v0.5.2
 	go.uber.org/zap v1.27.0
 	golang.org/x/net v0.37.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250313205543-e70fdf4c4cb4
@@ -22,6 +22,7 @@ require (
 
 require (
 	cel.dev/expr v0.22.0 // indirect
+	github.com/Code-Hex/dd v1.1.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect

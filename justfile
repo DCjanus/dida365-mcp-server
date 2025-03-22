@@ -11,6 +11,7 @@ init:
     go install github.com/incu6us/goimports-reviser/v3@latest
 
 lint:
+    go mod tidy
     buf lint
     golangci-lint run ./...
 

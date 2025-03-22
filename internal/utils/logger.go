@@ -2,10 +2,9 @@ package utils
 
 import (
 	"os"
-	"time"
 
 	"github.com/cockroachdb/errors"
-	"github.com/jsternberg/zap-logfmt"
+	prettyconsole "github.com/thessem/zap-prettyconsole"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
@@ -13,17 +12,17 @@ import (
 )
 
 func NewLogger(cfg *conf.Logging) (*zap.Logger, error) {
-	config := zap.NewProductionEncoderConfig()
+	config := prettyconsole.NewEncoderConfig()
+	config.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncodeLevel = zapcore.CapitalColorLevelEncoder
 
 	level, err := zapcore.ParseLevel(cfg.GetLevel())
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse log level")
 	}
-	config.EncodeTime = func(ts time.Time, encoder zapcore.PrimitiveArrayEncoder) {
-		encoder.AppendString(ts.Local().Format(time.RFC3339))
-	}
+
 	logger := zap.New(zapcore.NewCore(
-		zaplogfmt.NewEncoder(config),
+		prettyconsole.NewEncoder(config),
 		os.Stdout,
 		level,
 	))
