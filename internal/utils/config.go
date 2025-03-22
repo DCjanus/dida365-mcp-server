@@ -1,13 +1,14 @@
 package utils
 
 import (
-	"buf.build/go/protoyaml"
 	"fmt"
 	"os"
 
+	"buf.build/go/protoyaml"
 	"github.com/bufbuild/protovalidate-go"
-	"github.com/dcjanus/dida365-mcp-server/gen/proto/configuration"
 	"github.com/pkg/errors"
+
+	"github.com/dcjanus/dida365-mcp-server/gen/proto/configuration"
 )
 
 func LoadConfig(path string) (*configuration.Config, error) {
@@ -30,8 +31,10 @@ func LoadConfig(path string) (*configuration.Config, error) {
 	}
 
 	masked := ProtoClone(config)
-	masked.GetOauth().ClientSecret = "[REDACTED]"
-	dumped, err := (protoyaml.MarshalOptions{}).Marshal(masked)
+	if masked.Oauth != nil && masked.Oauth.ClientSecret != "" {
+		masked.Oauth.ClientSecret = "********"
+	}
+	dumped, err := (protoyaml.MarshalOptions{UseProtoNames: true, EmitUnpopulated: true}).Marshal(masked)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to marshal config")
 	}

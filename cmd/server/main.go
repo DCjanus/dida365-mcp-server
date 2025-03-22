@@ -17,7 +17,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	apiv1 "github.com/dcjanus/dida365-mcp-server/gen/proto/api/v1"
+	"github.com/dcjanus/dida365-mcp-server/gen/proto/api"
 	"github.com/dcjanus/dida365-mcp-server/internal/middleware"
 	"github.com/dcjanus/dida365-mcp-server/internal/service"
 	"github.com/dcjanus/dida365-mcp-server/internal/utils"
@@ -50,7 +50,7 @@ func main() {
 			middleware.Validate(),
 		),
 	))
-	apiv1.RegisterData365MCPServer(srv, service.NewDida365MCP(logger))
+	api.RegisterData365MCPServer(srv, service.NewDida365MCP(logger))
 
 	mux := runtime.NewServeMux(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
 		MarshalOptions: protojson.MarshalOptions{
@@ -60,7 +60,7 @@ func main() {
 	}))
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	if err := apiv1.RegisterData365MCPHandlerFromEndpoint(ctx, mux, "localhost:8080", opts); err != nil {
+	if err := api.RegisterData365MCPHandlerFromEndpoint(ctx, mux, "localhost:8080", opts); err != nil {
 		logger.Fatal("failed to register gRPC gateway", zap.Error(err))
 	}
 

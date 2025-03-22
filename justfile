@@ -1,6 +1,11 @@
 default: 
     just format
+    just lint
     just build
+
+lint:
+    buf lint
+    golangci-lint run ./...
 
 format:
     goimports-reviser ./... # go install github.com/incu6us/goimports-reviser/v3@latest

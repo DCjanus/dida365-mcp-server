@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: proto/api/v1/api.proto
+// source: proto/api/api.proto
 
-package apiv1
+package api
 
 import (
 	context "context"
@@ -21,7 +21,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Data365MCP_Ping_FullMethodName = "/api.v1.Data365MCP/Ping"
+	Data365MCP_Ping_FullMethodName = "/api.Data365MCP/Ping"
 )
 
 // Data365MCPClient is the client API for Data365MCP service.
@@ -110,7 +110,7 @@ func _Data365MCP_Ping_Handler(srv interface{}, ctx context.Context, dec func(int
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Data365MCP_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.Data365MCP",
+	ServiceName: "api.Data365MCP",
 	HandlerType: (*Data365MCPServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -119,5 +119,5 @@ var Data365MCP_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/api/v1/api.proto",
+	Metadata: "proto/api/api.proto",
 }

@@ -1,12 +1,12 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "proto/api/v1/api.proto",
+    "title": "api/api.proto",
     "version": "version not set"
   },
   "tags": [
     {
-      "name": "Data365MCP"
+      "name": "Data365MCPService"
     }
   ],
   "consumes": [
@@ -16,9 +16,9 @@
     "application/json"
   ],
   "paths": {
-    "/v1/ping": {
+    "/ping": {
       "get": {
-        "operationId": "Data365MCP_Ping",
+        "operationId": "Data365MCPService_Ping",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -34,7 +34,7 @@
           }
         },
         "tags": [
-          "Data365MCP"
+          "Data365MCPService"
         ]
       }
     }
