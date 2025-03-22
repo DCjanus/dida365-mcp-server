@@ -3,11 +3,8 @@ default:
     just build
 
 format:
-    goimports-reviser .
+    goimports-reviser ./... # go install github.com/incu6us/goimports-reviser/v3@latest
     buf format -w .
-
-init:
-    go install github.com/incu6us/goimports-reviser/v3@latest
 
 generate:
     buf generate
