@@ -40,6 +40,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "age",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
           }
         ],
         "tags": [

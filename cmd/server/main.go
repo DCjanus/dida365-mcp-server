@@ -2,18 +2,20 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"github.com/DCjanus/dida365-mcp-server/internal/middleware"
 	"log"
 	"net"
 	"net/http"
 	"time"
 
 	helloworldv1 "github.com/DCjanus/dida365-mcp-server/gen/proto/helloworld/v1"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type server struct {
@@ -23,7 +25,7 @@ type server struct {
 // SayHello 实现 HelloService 服务
 func (s *server) SayHello(ctx context.Context, req *helloworldv1.SayHelloRequest) (*helloworldv1.SayHelloResponse, error) {
 	return &helloworldv1.SayHelloResponse{
-		Message: fmt.Sprintf("Hello, %s!", req.Name),
+		Message: protojson.Format(req),
 	}, nil
 }
 
@@ -35,11 +37,20 @@ func main() {
 	}
 
 	// 创建 gRPC 服务器
-	s := grpc.NewServer()
+	s := grpc.NewServer(grpc.ChainUnaryInterceptor(
+		grpc_middleware.ChainUnaryServer(
+			middleware.Validate(),
+		),
+	))
 	helloworldv1.RegisterHelloServiceServer(s, &server{})
 
 	// 创建 gRPC-Gateway mux
-	gwmux := runtime.NewServeMux()
+	gwmux := runtime.NewServeMux(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+		MarshalOptions: protojson.MarshalOptions{
+			UseProtoNames:     true,
+			EmitDefaultValues: true,
+		},
+	}))
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// 注册 gRPC-Gateway handler

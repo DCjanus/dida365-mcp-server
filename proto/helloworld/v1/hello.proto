@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package helloworld.v1;
 
+import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 
 option go_package = "github.com/DCjanus/dida365-mcp-server/gen/proto/helloworld/v1;helloworldv1";
@@ -17,6 +18,7 @@ service HelloService {
 // SayHelloRequest 包含要问候的人的名字
 message SayHelloRequest {
   string name = 1;
+  uint32 age = 2 [(buf.validate.field).uint32.gt = 12];
 }
 
 // SayHelloResponse 包含问候消息

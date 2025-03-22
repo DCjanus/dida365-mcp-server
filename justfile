@@ -1,3 +1,7 @@
+default: 
+    just format
+    just build
+
 format:
     goimports-reviser .
     buf format -w .
