@@ -2,55 +2,57 @@ package main
 
 import (
 	"context"
-	"github.com/DCjanus/dida365-mcp-server/internal/middleware"
-	"google.golang.org/protobuf/types/known/anypb"
-	"log"
+	"flag"
 	"net"
 	"net/http"
 	"time"
 
-	helloworldv1 "github.com/DCjanus/dida365-mcp-server/gen/proto/helloworld/v1"
-	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/cockroachdb/errors"
+	grpcmiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"go.uber.org/zap"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/encoding/protojson"
+
+	apiv1 "github.com/dcjanus/dida365-mcp-server/gen/proto/api/v1"
+	"github.com/dcjanus/dida365-mcp-server/internal/middleware"
+	"github.com/dcjanus/dida365-mcp-server/internal/service"
+	"github.com/dcjanus/dida365-mcp-server/internal/utils"
 )
 
-type server struct {
-	helloworldv1.UnimplementedHelloServiceServer
-}
-
-// SayHello 实现 HelloService 服务
-func (s *server) SayHello(ctx context.Context, req *helloworldv1.SayHelloRequest) (*helloworldv1.SayHelloResponse, error) {
-	msg, err := anypb.New(req)
-	if err != nil {
-		return nil, err
-	}
-	return &helloworldv1.SayHelloResponse{
-		Message: msg,
-	}, nil
-}
-
 func main() {
-	// 创建 TCP 监听器
+	configPath := flag.String("config", "config.yaml", "path to config file")
+	flag.Parse()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	cfg, err := utils.LoadConfig(*configPath)
+	if err != nil {
+		panic(errors.Wrap(err, "failed to load config"))
+	}
+
+	logger, err := utils.NewLogger(cfg.GetLogging())
+	if err != nil {
+		panic(errors.Wrap(err, "failed to create logger"))
+	}
+
 	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		logger.Fatal("failed to listen", zap.Error(err))
 	}
 
-	// 创建 gRPC 服务器
-	s := grpc.NewServer(grpc.ChainUnaryInterceptor(
-		grpc_middleware.ChainUnaryServer(
+	srv := grpc.NewServer(grpc.ChainUnaryInterceptor(
+		grpcmiddleware.ChainUnaryServer(
 			middleware.Validate(),
 		),
 	))
-	helloworldv1.RegisterHelloServiceServer(s, &server{})
+	apiv1.RegisterData365MCPServer(srv, service.NewDida365MCP(logger))
 
-	// 创建 gRPC-Gateway mux
-	gwmux := runtime.NewServeMux(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+	mux := runtime.NewServeMux(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
 		MarshalOptions: protojson.MarshalOptions{
 			UseProtoNames:     true,
 			EmitDefaultValues: true,
@@ -58,31 +60,20 @@ func main() {
 	}))
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	// 注册 gRPC-Gateway handler
-	if err := helloworldv1.RegisterHelloServiceHandlerFromEndpoint(
-		context.Background(),
-		gwmux,
-		"localhost:8080",
-		opts,
-	); err != nil {
-		log.Fatalf("failed to register gateway: %v", err)
+	if err := apiv1.RegisterData365MCPHandlerFromEndpoint(ctx, mux, "localhost:8080", opts); err != nil {
+		logger.Fatal("failed to register gRPC gateway", zap.Error(err))
 	}
 
-	// 创建支持 h2c 的 HTTP 服务器
-	h2s := &http2.Server{
-		MaxReadFrameSize:     1048576, // 1MB
-		MaxConcurrentStreams: 250,
-	}
+	h2s := &http2.Server{}
 
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.ProtoMajor == 2 && r.Header.Get("Content-Type") == "application/grpc" {
-			s.ServeHTTP(w, r)
+			srv.ServeHTTP(w, r)
 			return
 		}
-		gwmux.ServeHTTP(w, r)
+		mux.ServeHTTP(w, r)
 	})
 
-	// 使用 h2c 包装 handler
 	h2cHandler := h2c.NewHandler(handler, h2s)
 
 	httpServer := &http.Server{
@@ -90,9 +81,8 @@ func main() {
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
-	// 启动服务器
-	log.Printf("Server listening on %s", lis.Addr().String())
+	logger.Info("Server starting", zap.String("listen", lis.Addr().String()))
 	if err := httpServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		logger.Fatal("failed to serve", zap.Error(err))
 	}
 }

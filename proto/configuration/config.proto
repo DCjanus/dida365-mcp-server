@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package configuration;
+
+import "buf/validate/validate.proto";
+
+message Config {
+  OAuth oauth = 1 [(buf.validate.field).required = true];
+  Server server = 2 [(buf.validate.field).required = true];
+  Logging logging = 3;
+}
+
+message Server {
+  // Server listen address. Defaults to "localhost:8080".
+  string listen = 1;
+}
+
+// OAuth configuration. Get your client ID and secret from the Dida365 developer console.
+// https://developer.dida365.com/manage
+message OAuth {
+  string client_id = 1 [(buf.validate.field).required = true];
+  string client_secret = 2 [(buf.validate.field).required = true];
+  string redirect_uri = 3 [(buf.validate.field).required = true];
+}
+
+message Logging {
+  // The logging level. Defaults to "info".
+  string level = 1 [(buf.validate.field).string = {
+    in: [
+      "debug",
+      "info",
+      "warn",
+      "error"
+    ]
+  }];
+}

@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/DCjanus/dida365-mcp-server/gen
+    default: github.com/dcjanus/dida365-mcp-server/gen
     except:
       - buf.build/googleapis/googleapis
       - buf.build/grpc-ecosystem/grpc-gateway
