@@ -28,5 +28,6 @@ message OAuthCallbackRequest {
 }
 
 message OAuthCallbackResponse {
-  string token = 1;
+  string access_token = 1;
+  string state = 2;
 }

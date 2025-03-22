@@ -48,13 +48,15 @@ func main() {
 
 	srv := grpc.NewServer(grpc.ChainUnaryInterceptor(
 		grpcmiddleware.ChainUnaryServer(
-			grpcruntime.ValidateMiddleware(),
+			grpcruntime.ValidateInterceptor(),
+			grpcruntime.LoggingInterceptor(log),
 		),
 	))
 	api.RegisterDida365OAuthServiceServer(srv, service.NewDida365AuthService(log, cfg))
 
 	mux := runtime.NewServeMux(
 		grpcruntime.TemporaryRedirectForwardResponseOption(),
+		grpcruntime.WithHTTPMetadata(log),
 		runtime.WithMarshalerOption(
 			runtime.MIMEWildcard,
 			&runtime.JSONPb{
@@ -96,7 +98,7 @@ func main() {
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
-	log.Info("Server starting", zap.String("listen", lis.Addr().String()))
+	log.Info("Server starting", zap.String("listen", lis.Addr().String()), zap.String("login", "http://"+lis.Addr().String()+"/oauth/login"))
 	if err := httpServer.Serve(lis); err != nil {
 		log.Fatal("failed to serve", zap.Error(err))
 	}

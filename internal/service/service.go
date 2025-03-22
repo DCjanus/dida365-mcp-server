@@ -75,5 +75,5 @@ func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthC
 		return nil, errors.Errorf("failed to request oauth token, status: %d, body: %s", res.StatusCode(), res.String())
 	}
 
-	return &api.OAuthCallbackResponse{Token: reply.AccessToken}, nil
+	return &api.OAuthCallbackResponse{AccessToken: reply.AccessToken, State: req.GetState()}, nil
 }

@@ -101,7 +101,10 @@
     "apiOAuthCallbackResponse": {
       "type": "object",
       "properties": {
-        "token": {
+        "accessToken": {
+          "type": "string"
+        },
+        "state": {
           "type": "string"
         }
       }
