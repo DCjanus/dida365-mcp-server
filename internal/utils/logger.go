@@ -9,10 +9,10 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/dcjanus/dida365-mcp-server/gen/proto/configuration"
+	"github.com/dcjanus/dida365-mcp-server/gen/conf"
 )
 
-func NewLogger(cfg *configuration.Logging) (*zap.Logger, error) {
+func NewLogger(cfg *conf.Logging) (*zap.Logger, error) {
 	config := zap.NewProductionEncoderConfig()
 
 	level, err := zapcore.ParseLevel(cfg.GetLevel())

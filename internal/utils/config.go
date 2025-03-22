@@ -8,21 +8,21 @@ import (
 	"github.com/bufbuild/protovalidate-go"
 	"github.com/pkg/errors"
 
-	"github.com/dcjanus/dida365-mcp-server/gen/proto/configuration"
+	"github.com/dcjanus/dida365-mcp-server/gen/conf"
 )
 
-func LoadConfig(path string) (*configuration.Config, error) {
+func LoadConfig(path string) (*conf.Config, error) {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to read config file")
 	}
 	text := string(content)
 	expandedText := os.ExpandEnv(text)
-	config := &configuration.Config{
-		Server: &configuration.Server{
+	config := &conf.Config{
+		Server: &conf.Server{
 			Listen: "localhost:8080",
 		},
-		Logging: &configuration.Logging{
+		Logging: &conf.Logging{
 			Level: "info",
 		},
 	}

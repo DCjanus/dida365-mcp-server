@@ -7,12 +7,12 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 
-	"github.com/dcjanus/dida365-mcp-server/gen/proto/api"
+	"github.com/dcjanus/dida365-mcp-server/gen/api"
 )
 
 type Dida365MCP struct {
 	logger *zap.Logger
-	api.UnimplementedData365MCPServer
+	api.UnimplementedData365MCPServiceServer
 }
 
 func NewDida365MCP(logger *zap.Logger) *Dida365MCP {
