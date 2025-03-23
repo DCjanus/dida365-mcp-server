@@ -8,6 +8,8 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 
 	"github.com/dcjanus/dida365-mcp-server/gen/api"
 	"github.com/dcjanus/dida365-mcp-server/internal/dida"
@@ -32,11 +34,6 @@ func NewDidaWrapper(ctx context.Context, log *zap.Logger, token string) (*DidaWr
 	}, nil
 }
 
-type TaskRequest struct {
-	ProjectID string `json:"project_id"`
-	TaskID    string `json:"task_id"`
-}
-
 func (t *DidaWrapper) handleJSONResponse(data any) (*mcp.CallToolResult, error) {
 	jsonBytes, err := json.Marshal(data)
 	if err != nil {
@@ -45,7 +42,7 @@ func (t *DidaWrapper) handleJSONResponse(data any) (*mcp.CallToolResult, error) 
 	return mcp.NewToolResultText(string(jsonBytes)), nil
 }
 
-func (t *DidaWrapper) parseJSONRequest(request mcp.CallToolRequest, target any) error {
+func (t *DidaWrapper) parseJSONRequest(request mcp.CallToolRequest, target proto.Message) error {
 	if len(request.Params.Arguments) == 0 {
 		return errors.New("invalid request: missing parameters")
 	}
@@ -53,7 +50,7 @@ func (t *DidaWrapper) parseJSONRequest(request mcp.CallToolRequest, target any) 
 	if err != nil {
 		return errors.Wrap(err, "failed to marshal request arguments")
 	}
-	if err := json.Unmarshal(jsonBytes, target); err != nil {
+	if err := protojson.Unmarshal(jsonBytes, target); err != nil {
 		return errors.Wrap(err, "failed to parse request parameters")
 	}
 	return nil
@@ -104,11 +101,11 @@ func (t *DidaWrapper) GetProject(ctx context.Context) server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			var projectID string
-			if err := t.parseJSONRequest(request, &projectID); err != nil {
+			var req api.GetProjectRequest
+			if err := t.parseJSONRequest(request, &req); err != nil {
 				return nil, err
 			}
-			project, err := t.cli.GetProject(ctx, projectID)
+			project, err := t.cli.GetProject(ctx, req.ProjectId)
 			if err != nil {
 				return nil, errors.Wrap(err, "failed to get project")
 			}
@@ -127,11 +124,11 @@ func (t *DidaWrapper) GetProjectData(ctx context.Context) server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			var projectID string
-			if err := t.parseJSONRequest(request, &projectID); err != nil {
+			var req api.GetProjectDataRequest
+			if err := t.parseJSONRequest(request, &req); err != nil {
 				return nil, err
 			}
-			data, err := t.cli.GetProjectData(ctx, projectID)
+			data, err := t.cli.GetProjectData(ctx, req.ProjectId)
 			if err != nil {
 				return nil, errors.Wrap(err, "failed to get project data")
 			}
@@ -151,10 +148,10 @@ func (t *DidaWrapper) CreateProject(ctx context.Context) server.ServerTool {
 			mcp.WithString("color",
 				mcp.Description("Color of the project in hex format (e.g. \"#F18181\")"),
 			),
-			mcp.WithNumber("sort_order",
+			mcp.WithNumber("sortOrder",
 				mcp.Description("Sort order of the project"),
 			),
-			mcp.WithString("view_mode",
+			mcp.WithString("viewMode",
 				mcp.Description("View mode of the project, must be one of: \"list\", \"kanban\", \"timeline\""),
 			),
 			mcp.WithString("kind",
@@ -189,10 +186,10 @@ func (t *DidaWrapper) UpdateProject(ctx context.Context) server.ServerTool {
 			mcp.WithString("color",
 				mcp.Description("New color of the project"),
 			),
-			mcp.WithNumber("sort_order",
+			mcp.WithNumber("sortOrder",
 				mcp.Description("New sort order of the project"),
 			),
-			mcp.WithString("view_mode",
+			mcp.WithString("viewMode",
 				mcp.Description("New view mode of the project (list, kanban, timeline)"),
 			),
 			mcp.WithString("kind",
@@ -223,11 +220,11 @@ func (t *DidaWrapper) DeleteProject(ctx context.Context) server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			var projectID string
-			if err := t.parseJSONRequest(request, &projectID); err != nil {
+			var req api.DeleteProjectRequest
+			if err := t.parseJSONRequest(request, &req); err != nil {
 				return nil, err
 			}
-			err := t.cli.DeleteProject(ctx, projectID)
+			err := t.cli.DeleteProject(ctx, req.ProjectId)
 			if err != nil {
 				return nil, errors.Wrap(err, "failed to delete project")
 			}
@@ -250,11 +247,11 @@ func (t *DidaWrapper) GetTask(ctx context.Context) server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			var req TaskRequest
+			var req api.GetTaskRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
 				return nil, err
 			}
-			task, err := t.cli.GetTask(ctx, req.ProjectID, req.TaskID)
+			task, err := t.cli.GetTask(ctx, req.ProjectId, req.TaskId)
 			if err != nil {
 				return nil, errors.Wrap(err, "failed to get task")
 			}
@@ -281,16 +278,16 @@ func (t *DidaWrapper) CreateTask(ctx context.Context) server.ServerTool {
 			mcp.WithString("desc",
 				mcp.Description("Description of the task"),
 			),
-			mcp.WithBoolean("is_all_day",
+			mcp.WithBoolean("isAllDay",
 				mcp.Description("Whether the task is an all-day task"),
 			),
-			mcp.WithString("start_date",
+			mcp.WithString("startDate",
 				mcp.Description("Start date of the task in format \"yyyy-MM-dd'T'HH:mm:ssZ\" (e.g. \"2019-11-13T03:00:00+0000\")"),
 			),
-			mcp.WithString("due_date",
+			mcp.WithString("dueDate",
 				mcp.Description("Due date of the task in format \"yyyy-MM-dd'T'HH:mm:ssZ\" (e.g. \"2019-11-13T03:00:00+0000\")"),
 			),
-			mcp.WithString("time_zone",
+			mcp.WithString("timeZone",
 				mcp.Description("Time zone of the task (e.g. \"America/Los_Angeles\")"),
 			),
 			mcp.WithArray("reminders",
@@ -300,13 +297,13 @@ func (t *DidaWrapper) CreateTask(ctx context.Context) server.ServerTool {
 					"description": "Reminder time in RRULE format (e.g. \"TRIGGER:P0DT9H0M0S\")",
 				}),
 			),
-			mcp.WithString("repeat_flag",
+			mcp.WithString("repeatFlag",
 				mcp.Description("Repeat flag for the task in RRULE format (e.g. \"RRULE:FREQ=DAILY;INTERVAL=1\")"),
 			),
 			mcp.WithNumber("priority",
 				mcp.Description("Priority of the task (0: none, 1: low, 3: medium, 5: high)"),
 			),
-			mcp.WithNumber("sort_order",
+			mcp.WithNumber("sortOrder",
 				mcp.Description("Sort order of the task"),
 			),
 			mcp.WithArray("items",
@@ -328,23 +325,23 @@ func (t *DidaWrapper) CreateTask(ctx context.Context) server.ServerTool {
 							"description": "Title of the checklist item",
 							"required":    true,
 						},
-						"sort_order": map[string]interface{}{
+						"sortOrder": map[string]interface{}{
 							"type":        "number",
 							"description": "Sort order of the checklist item",
 						},
-						"start_date": map[string]interface{}{
+						"startDate": map[string]interface{}{
 							"type":        "string",
 							"description": "Start date of the checklist item in format \"yyyy-MM-dd'T'HH:mm:ssZ\"",
 						},
-						"is_all_day": map[string]interface{}{
+						"isAllDay": map[string]interface{}{
 							"type":        "boolean",
 							"description": "Whether the checklist item is an all-day item",
 						},
-						"time_zone": map[string]interface{}{
+						"timeZone": map[string]interface{}{
 							"type":        "string",
 							"description": "Time zone of the checklist item (e.g. \"America/Los_Angeles\")",
 						},
-						"completed_time": map[string]interface{}{
+						"completedTime": map[string]interface{}{
 							"type":        "string",
 							"description": "Completion time of the checklist item in format \"yyyy-MM-dd'T'HH:mm:ssZ\"",
 						},
@@ -387,16 +384,16 @@ func (t *DidaWrapper) UpdateTask(ctx context.Context) server.ServerTool {
 			mcp.WithString("desc",
 				mcp.Description("New description of the task"),
 			),
-			mcp.WithBoolean("is_all_day",
+			mcp.WithBoolean("isAllDay",
 				mcp.Description("Whether the task is an all-day task"),
 			),
-			mcp.WithString("start_date",
+			mcp.WithString("startDate",
 				mcp.Description("New start date of the task in format \"yyyy-MM-dd'T'HH:mm:ssZ\" (e.g. \"2019-11-13T03:00:00+0000\")"),
 			),
-			mcp.WithString("due_date",
+			mcp.WithString("dueDate",
 				mcp.Description("New due date of the task in format \"yyyy-MM-dd'T'HH:mm:ssZ\" (e.g. \"2019-11-13T03:00:00+0000\")"),
 			),
-			mcp.WithString("time_zone",
+			mcp.WithString("timeZone",
 				mcp.Description("New time zone of the task (e.g. \"America/Los_Angeles\")"),
 			),
 			mcp.WithArray("reminders",
@@ -406,13 +403,13 @@ func (t *DidaWrapper) UpdateTask(ctx context.Context) server.ServerTool {
 					"description": "Reminder time in RRULE format (e.g. \"TRIGGER:P0DT9H0M0S\")",
 				}),
 			),
-			mcp.WithString("repeat_flag",
+			mcp.WithString("repeatFlag",
 				mcp.Description("New repeat flag for the task in RRULE format (e.g. \"RRULE:FREQ=DAILY;INTERVAL=1\")"),
 			),
 			mcp.WithNumber("priority",
 				mcp.Description("New priority of the task (0: none, 1: low, 3: medium, 5: high)"),
 			),
-			mcp.WithNumber("sort_order",
+			mcp.WithNumber("sortOrder",
 				mcp.Description("New sort order of the task"),
 			),
 			mcp.WithArray("items",
@@ -434,23 +431,23 @@ func (t *DidaWrapper) UpdateTask(ctx context.Context) server.ServerTool {
 							"description": "Title of the checklist item",
 							"required":    true,
 						},
-						"sort_order": map[string]interface{}{
+						"sortOrder": map[string]interface{}{
 							"type":        "number",
 							"description": "Sort order of the checklist item",
 						},
-						"start_date": map[string]interface{}{
+						"startDate": map[string]interface{}{
 							"type":        "string",
 							"description": "Start date of the checklist item in format \"yyyy-MM-dd'T'HH:mm:ssZ\"",
 						},
-						"is_all_day": map[string]interface{}{
+						"isAllDay": map[string]interface{}{
 							"type":        "boolean",
 							"description": "Whether the checklist item is an all-day item",
 						},
-						"time_zone": map[string]interface{}{
+						"timeZone": map[string]interface{}{
 							"type":        "string",
 							"description": "Time zone of the checklist item (e.g. \"America/Los_Angeles\")",
 						},
-						"completed_time": map[string]interface{}{
+						"completedTime": map[string]interface{}{
 							"type":        "string",
 							"description": "Completion time of the checklist item in format \"yyyy-MM-dd'T'HH:mm:ssZ\"",
 						},
@@ -486,11 +483,11 @@ func (t *DidaWrapper) CompleteTask(ctx context.Context) server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			var req TaskRequest
+			var req api.CompleteTaskRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
 				return nil, err
 			}
-			err := t.cli.CompleteTask(ctx, req.ProjectID, req.TaskID)
+			err := t.cli.CompleteTask(ctx, req.ProjectId, req.TaskId)
 			if err != nil {
 				return nil, errors.Wrap(err, "failed to complete task")
 			}
@@ -513,11 +510,11 @@ func (t *DidaWrapper) DeleteTask(ctx context.Context) server.ServerTool {
 			),
 		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-			var req TaskRequest
+			var req api.DeleteTaskRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
 				return nil, err
 			}
-			err := t.cli.DeleteTask(ctx, req.ProjectID, req.TaskID)
+			err := t.cli.DeleteTask(ctx, req.ProjectId, req.TaskId)
 			if err != nil {
 				return nil, errors.Wrap(err, "failed to delete task")
 			}
