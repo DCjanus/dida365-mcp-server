@@ -151,8 +151,13 @@ jobs:
           
           # Create multi-arch manifest for each tag
           for tag in ${{ needs.prepare.outputs.tags }}; do
+            # Tag images with architecture-specific tags
+            docker tag $tag $tag-amd64
+            docker tag $tag $tag-arm64
+            
+            # Create and push multi-arch manifest
             docker manifest create $tag \
               --amend $tag-amd64 \
               --amend $tag-arm64
-            docker manifest push $tag 
+            docker manifest push $tag
           done
