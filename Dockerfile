@@ -15,6 +15,7 @@ FROM alpine:latest
 
 COPY --from=builder /src/bin/dida365-mcp-server /usr/local/bin/dida365-mcp-server
 COPY --from=builder /src/bin/dida365-oauth-server /usr/local/bin/dida365-oauth-server
+COPY --from=builder /src/config/oauth.yaml /etc/dida365-oauth-server/config.yaml
 
 CMD ["dida365-mcp-server"]
 

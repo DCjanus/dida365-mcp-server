@@ -33,7 +33,7 @@ clean:
     rm -rf gen
 
 run-oauth: default
-    ./bin/dida365-oauth-server
+    ./bin/dida365-oauth-server -config ./config/oauth.yaml
 
 run-mcp: default
     ./bin/dida365-mcp-server -verbose

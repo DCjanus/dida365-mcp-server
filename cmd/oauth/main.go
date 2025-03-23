@@ -25,7 +25,7 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "config/oauth.yaml", "path to config file, can be set using the OAUTH_CONFIG environment variable")
+	configPath := flag.String("config", "/etc/dida365-oauth-server/config.yaml", "path to config file")
 	flag.Parse()
 
 	ctx, cancel := context.WithCancel(context.Background())
