@@ -20,10 +20,8 @@ type Client struct {
 
 // NewClient creates a new Dida365 API client with the given logger and authentication token.
 func NewClient(log *zap.Logger, token string) *Client {
-	log = log.With(zap.String("component", "dida.Client"))
-
 	return &Client{
-		log: log,
+		log: log.With(zap.String("component", "dida.Client")),
 		cli: resty.New().SetBaseURL("https://api.dida365.com").SetAuthToken(token),
 	}
 }

@@ -22,8 +22,8 @@ generate:
     buf generate
 
 build: prepare
-    CGO_ENABLED=0 go build -o bin/dida365-oauth-server cmd/oauth/main.go
-    CGO_ENABLED=0 go build -o bin/dida365-mcp-server cmd/mcp/main.go
+    CGO_ENABLED=0 go build -o bin/dida365-oauth-server ./cmd/oauth
+    CGO_ENABLED=0 go build -o bin/dida365-mcp-server ./cmd/mcp
 
 clean:
     rm -rf bin
