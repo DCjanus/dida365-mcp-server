@@ -1,4 +1,4 @@
-default: prepare
+default: build
 
 prepare:
     just format

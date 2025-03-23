@@ -25,11 +25,13 @@ import (
 )
 
 func main() {
-	configPath := flag.String("config", "config.yaml", "path to config file")
+	configPath := flag.String("config", "config/oauth.yaml", "path to config file, can be set using the OAUTH_CONFIG environment variable")
 	flag.Parse()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
+	utils.LoadDotEnvs()
 
 	cfg, err := utils.LoadConfig(*configPath)
 	if err != nil {

@@ -3,13 +3,26 @@ package utils
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"buf.build/go/protoyaml"
 	"github.com/bufbuild/protovalidate-go"
 	"github.com/cockroachdb/errors"
+	"github.com/joho/godotenv"
 
 	"github.com/dcjanus/dida365-mcp-server/gen/conf"
 )
+
+// LoadDotEnvs loads the *.env file in the root directory.
+func LoadDotEnvs() {
+	files, err := filepath.Glob("*.env")
+	if err != nil {
+		panic(errors.Wrap(err, "failed to scan current directory"))
+	}
+	if err := godotenv.Load(files...); err != nil {
+		panic(errors.Wrap(err, "failed to load .env file"))
+	}
+}
 
 func LoadConfig(path string) (*conf.Config, error) {
 	content, err := os.ReadFile(path)
