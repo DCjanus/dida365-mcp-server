@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/bufbuild/protovalidate-go"
 	"github.com/cockroachdb/errors"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
@@ -52,6 +53,9 @@ func (t *DidaWrapper) parseJSONRequest(request mcp.CallToolRequest, target proto
 	}
 	if err := protojson.Unmarshal(jsonBytes, target); err != nil {
 		return errors.Wrap(err, "failed to parse request parameters")
+	}
+	if err := protovalidate.Validate(target); err != nil {
+		return errors.Wrap(err, "failed to validate request parameters")
 	}
 	return nil
 }
