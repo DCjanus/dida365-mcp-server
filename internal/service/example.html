@@ -201,7 +201,6 @@
     </div>
 
     <script>
-        // 显示 toast 消息
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -212,13 +211,11 @@
             }, 3000);
         }
 
-        // 从 URL 获取 access_token
         function getAccessTokenFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('access_token');
         }
 
-        // 生成配置 JSON
         function generateConfig(token) {
             return JSON.stringify({
                 mcpServers: {
@@ -233,7 +230,6 @@
             }, null, 4);
         }
 
-        // 复制配置到剪贴板
         function copyConfig() {
             const configElement = document.getElementById('config');
             navigator.clipboard.writeText(configElement.textContent)
@@ -245,7 +241,6 @@
                 });
         }
 
-        // 初始化页面
         function init() {
             const token = getAccessTokenFromUrl();
             const configElement = document.getElementById('config');
@@ -258,7 +253,6 @@
             }
         }
 
-        // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>

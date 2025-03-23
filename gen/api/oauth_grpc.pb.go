@@ -9,6 +9,7 @@ package api
 import (
 	context "context"
 	model "github.com/dcjanus/dida365-mcp-server/gen/model"
+	httpbody "google.golang.org/genproto/googleapis/api/httpbody"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -37,7 +38,7 @@ type Dida365OAuthServiceClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	OAuthLogin(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error)
 	OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error)
-	OAuthPrompt(ctx context.Context, in *OAuthPromptRequest, opts ...grpc.CallOption) (*model.HTMLResponse, error)
+	OAuthPrompt(ctx context.Context, in *OAuthPromptRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error)
 }
 
 type dida365OAuthServiceClient struct {
@@ -78,9 +79,9 @@ func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuth
 	return out, nil
 }
 
-func (c *dida365OAuthServiceClient) OAuthPrompt(ctx context.Context, in *OAuthPromptRequest, opts ...grpc.CallOption) (*model.HTMLResponse, error) {
+func (c *dida365OAuthServiceClient) OAuthPrompt(ctx context.Context, in *OAuthPromptRequest, opts ...grpc.CallOption) (*httpbody.HttpBody, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(model.HTMLResponse)
+	out := new(httpbody.HttpBody)
 	err := c.cc.Invoke(ctx, Dida365OAuthService_OAuthPrompt_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -97,7 +98,7 @@ type Dida365OAuthServiceServer interface {
 	Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
 	OAuthLogin(context.Context, *emptypb.Empty) (*model.TemporaryRedirectResponse, error)
 	OAuthCallback(context.Context, *OAuthCallbackRequest) (*model.TemporaryRedirectResponse, error)
-	OAuthPrompt(context.Context, *OAuthPromptRequest) (*model.HTMLResponse, error)
+	OAuthPrompt(context.Context, *OAuthPromptRequest) (*httpbody.HttpBody, error)
 	mustEmbedUnimplementedDida365OAuthServiceServer()
 }
 
@@ -117,7 +118,7 @@ func (UnimplementedDida365OAuthServiceServer) OAuthLogin(context.Context, *empty
 func (UnimplementedDida365OAuthServiceServer) OAuthCallback(context.Context, *OAuthCallbackRequest) (*model.TemporaryRedirectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OAuthCallback not implemented")
 }
-func (UnimplementedDida365OAuthServiceServer) OAuthPrompt(context.Context, *OAuthPromptRequest) (*model.HTMLResponse, error) {
+func (UnimplementedDida365OAuthServiceServer) OAuthPrompt(context.Context, *OAuthPromptRequest) (*httpbody.HttpBody, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OAuthPrompt not implemented")
 }
 func (UnimplementedDida365OAuthServiceServer) mustEmbedUnimplementedDida365OAuthServiceServer() {}

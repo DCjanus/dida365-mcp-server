@@ -8,6 +8,7 @@ import (
 	"github.com/cockroachdb/errors"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
+	"google.golang.org/genproto/googleapis/api/httpbody"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -82,6 +83,6 @@ func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthC
 	return &model.TemporaryRedirectResponse{Location: "/oauth/prompt?access_token=" + reply.AccessToken}, nil
 }
 
-func (d *Dida365oAuthService) OAuthPrompt(ctx context.Context, req *api.OAuthPromptRequest) (*model.HTMLResponse, error) {
-	return &model.HTMLResponse{Html: exampleHTML}, nil
+func (d *Dida365oAuthService) OAuthPrompt(ctx context.Context, req *api.OAuthPromptRequest) (*httpbody.HttpBody, error) {
+	return &httpbody.HttpBody{ContentType: "text/html", Data: []byte(exampleHTML)}, nil
 }

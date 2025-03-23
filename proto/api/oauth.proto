@@ -4,6 +4,7 @@ package api;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/api/httpbody.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "model/response.proto";
@@ -22,7 +23,7 @@ service Dida365oAuthService {
     option (google.api.http) = {get: "/oauth/callback"};
   }
 
-  rpc OAuthPrompt(OAuthPromptRequest) returns (model.HTMLResponse) {
+  rpc OAuthPrompt(OAuthPromptRequest) returns (google.api.HttpBody) {
     option (google.api.http) = {get: "/oauth/prompt"};
   }
 }
