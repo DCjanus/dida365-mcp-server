@@ -12,6 +12,7 @@ init:
     go install github.com/incu6us/goimports-reviser/v3@latest
 
 lint:
+    buf format --exit-code . > /dev/null || (echo "check proto format failed" && exit 1)
     go mod tidy
     buf lint
     golangci-lint run ./...
