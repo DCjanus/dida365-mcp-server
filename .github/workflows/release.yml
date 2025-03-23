@@ -69,6 +69,8 @@ jobs:
           tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
           push: true
           outputs: type=image,push-by-digest=true,name-canonical=true
+          provenance: true
+          sbom: true
 
       - name: Export digest
         run: |
