@@ -25,6 +25,7 @@ const (
 	Dida365OAuthService_Ping_FullMethodName          = "/api.Dida365oAuthService/Ping"
 	Dida365OAuthService_OAuthLogin_FullMethodName    = "/api.Dida365oAuthService/OAuthLogin"
 	Dida365OAuthService_OAuthCallback_FullMethodName = "/api.Dida365oAuthService/OAuthCallback"
+	Dida365OAuthService_OAuthPrompt_FullMethodName   = "/api.Dida365oAuthService/OAuthPrompt"
 )
 
 // Dida365OAuthServiceClient is the client API for Dida365OAuthService service.
@@ -35,7 +36,8 @@ const (
 type Dida365OAuthServiceClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	OAuthLogin(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error)
-	OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*model.HTMLResponse, error)
+	OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error)
+	OAuthPrompt(ctx context.Context, in *OAuthPromptRequest, opts ...grpc.CallOption) (*model.HTMLResponse, error)
 }
 
 type dida365OAuthServiceClient struct {
@@ -66,10 +68,20 @@ func (c *dida365OAuthServiceClient) OAuthLogin(ctx context.Context, in *emptypb.
 	return out, nil
 }
 
-func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*model.HTMLResponse, error) {
+func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(model.TemporaryRedirectResponse)
+	err := c.cc.Invoke(ctx, Dida365OAuthService_OAuthCallback_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dida365OAuthServiceClient) OAuthPrompt(ctx context.Context, in *OAuthPromptRequest, opts ...grpc.CallOption) (*model.HTMLResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(model.HTMLResponse)
-	err := c.cc.Invoke(ctx, Dida365OAuthService_OAuthCallback_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Dida365OAuthService_OAuthPrompt_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +96,8 @@ func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuth
 type Dida365OAuthServiceServer interface {
 	Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
 	OAuthLogin(context.Context, *emptypb.Empty) (*model.TemporaryRedirectResponse, error)
-	OAuthCallback(context.Context, *OAuthCallbackRequest) (*model.HTMLResponse, error)
+	OAuthCallback(context.Context, *OAuthCallbackRequest) (*model.TemporaryRedirectResponse, error)
+	OAuthPrompt(context.Context, *OAuthPromptRequest) (*model.HTMLResponse, error)
 	mustEmbedUnimplementedDida365OAuthServiceServer()
 }
 
@@ -101,8 +114,11 @@ func (UnimplementedDida365OAuthServiceServer) Ping(context.Context, *emptypb.Emp
 func (UnimplementedDida365OAuthServiceServer) OAuthLogin(context.Context, *emptypb.Empty) (*model.TemporaryRedirectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OAuthLogin not implemented")
 }
-func (UnimplementedDida365OAuthServiceServer) OAuthCallback(context.Context, *OAuthCallbackRequest) (*model.HTMLResponse, error) {
+func (UnimplementedDida365OAuthServiceServer) OAuthCallback(context.Context, *OAuthCallbackRequest) (*model.TemporaryRedirectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OAuthCallback not implemented")
+}
+func (UnimplementedDida365OAuthServiceServer) OAuthPrompt(context.Context, *OAuthPromptRequest) (*model.HTMLResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OAuthPrompt not implemented")
 }
 func (UnimplementedDida365OAuthServiceServer) mustEmbedUnimplementedDida365OAuthServiceServer() {}
 func (UnimplementedDida365OAuthServiceServer) testEmbeddedByValue()                             {}
@@ -179,6 +195,24 @@ func _Dida365OAuthService_OAuthCallback_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Dida365OAuthService_OAuthPrompt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OAuthPromptRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(Dida365OAuthServiceServer).OAuthPrompt(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Dida365OAuthService_OAuthPrompt_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(Dida365OAuthServiceServer).OAuthPrompt(ctx, req.(*OAuthPromptRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Dida365OAuthService_ServiceDesc is the grpc.ServiceDesc for Dida365OAuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -197,6 +231,10 @@ var Dida365OAuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "OAuthCallback",
 			Handler:    _Dida365OAuthService_OAuthCallback_Handler,
+		},
+		{
+			MethodName: "OAuthPrompt",
+			Handler:    _Dida365OAuthService_OAuthPrompt_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

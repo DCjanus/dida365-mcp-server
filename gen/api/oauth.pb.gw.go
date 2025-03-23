@@ -107,6 +107,39 @@ func local_request_Dida365OAuthService_OAuthCallback_0(ctx context.Context, mars
 	return msg, metadata, err
 }
 
+var filter_Dida365OAuthService_OAuthPrompt_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+
+func request_Dida365OAuthService_OAuthPrompt_0(ctx context.Context, marshaler runtime.Marshaler, client Dida365OAuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq OAuthPromptRequest
+		metadata runtime.ServerMetadata
+	)
+	io.Copy(io.Discard, req.Body)
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Dida365OAuthService_OAuthPrompt_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.OAuthPrompt(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_Dida365OAuthService_OAuthPrompt_0(ctx context.Context, marshaler runtime.Marshaler, server Dida365OAuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq OAuthPromptRequest
+		metadata runtime.ServerMetadata
+	)
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Dida365OAuthService_OAuthPrompt_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.OAuthPrompt(ctx, &protoReq)
+	return msg, metadata, err
+}
+
 // RegisterDida365OAuthServiceHandlerServer registers the http handlers for service Dida365OAuthService to "mux".
 // UnaryRPC     :call Dida365OAuthServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -172,6 +205,26 @@ func RegisterDida365OAuthServiceHandlerServer(ctx context.Context, mux *runtime.
 			return
 		}
 		forward_Dida365OAuthService_OAuthCallback_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodGet, pattern_Dida365OAuthService_OAuthPrompt_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.Dida365OAuthService/OAuthPrompt", runtime.WithHTTPPathPattern("/oauth/prompt"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Dida365OAuthService_OAuthPrompt_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_Dida365OAuthService_OAuthPrompt_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
@@ -264,6 +317,23 @@ func RegisterDida365OAuthServiceHandlerClient(ctx context.Context, mux *runtime.
 		}
 		forward_Dida365OAuthService_OAuthCallback_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodGet, pattern_Dida365OAuthService_OAuthPrompt_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.Dida365OAuthService/OAuthPrompt", runtime.WithHTTPPathPattern("/oauth/prompt"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Dida365OAuthService_OAuthPrompt_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_Dida365OAuthService_OAuthPrompt_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	return nil
 }
 
@@ -271,10 +341,12 @@ var (
 	pattern_Dida365OAuthService_Ping_0          = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"ping"}, ""))
 	pattern_Dida365OAuthService_OAuthLogin_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"oauth", "login"}, ""))
 	pattern_Dida365OAuthService_OAuthCallback_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"oauth", "callback"}, ""))
+	pattern_Dida365OAuthService_OAuthPrompt_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"oauth", "prompt"}, ""))
 )
 
 var (
 	forward_Dida365OAuthService_Ping_0          = runtime.ForwardResponseMessage
 	forward_Dida365OAuthService_OAuthLogin_0    = runtime.ForwardResponseMessage
 	forward_Dida365OAuthService_OAuthCallback_0 = runtime.ForwardResponseMessage
+	forward_Dida365OAuthService_OAuthPrompt_0   = runtime.ForwardResponseMessage
 )

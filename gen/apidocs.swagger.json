@@ -26,7 +26,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/modelHTMLResponse"
+              "$ref": "#/definitions/modelTemporaryRedirectResponse"
             }
           },
           "default": {
@@ -66,6 +66,36 @@
             }
           }
         },
+        "tags": [
+          "Dida365oAuthService"
+        ]
+      }
+    },
+    "/oauth/prompt": {
+      "get": {
+        "operationId": "Dida365oAuthService_OAuthPrompt",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/modelHTMLResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accessToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "tags": [
           "Dida365oAuthService"
         ]

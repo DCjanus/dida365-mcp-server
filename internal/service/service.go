@@ -1,10 +1,8 @@
 package service
 
 import (
-	"bytes"
 	"context"
 	_ "embed"
-	"html/template"
 	"net/url"
 
 	"github.com/cockroachdb/errors"
@@ -56,10 +54,9 @@ func (d *Dida365oAuthService) OAuthLogin(ctx context.Context, _ *emptypb.Empty) 
 }
 
 //go:embed example.html
-var exampleHTMLTpl string
-var exmapleHTML = template.Must(template.New("example").Parse(exampleHTMLTpl))
+var exampleHTML string
 
-func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthCallbackRequest) (*model.HTMLResponse, error) {
+func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthCallbackRequest) (*model.TemporaryRedirectResponse, error) {
 	reply := struct {
 		AccessToken string `json:"access_token"`
 	}{}
@@ -82,10 +79,9 @@ func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthC
 		return nil, errors.Errorf("failed to request oauth token, status: %d, body: %s", res.StatusCode(), res.String())
 	}
 
-	var buf bytes.Buffer
-	if err := exmapleHTML.Execute(&buf, reply); err != nil {
-		return nil, errors.Wrap(err, "failed to execute example HTML template")
-	}
+	return &model.TemporaryRedirectResponse{Location: "/oauth/prompt?access_token=" + reply.AccessToken}, nil
+}
 
-	return &model.HTMLResponse{Html: buf.String()}, nil
+func (d *Dida365oAuthService) OAuthPrompt(ctx context.Context, req *api.OAuthPromptRequest) (*model.HTMLResponse, error) {
+	return &model.HTMLResponse{Html: exampleHTML}, nil
 }
