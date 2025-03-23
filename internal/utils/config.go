@@ -19,8 +19,10 @@ func LoadDotEnvs() {
 	if err != nil {
 		panic(errors.Wrap(err, "failed to scan current directory"))
 	}
-	if err := godotenv.Load(files...); err != nil {
-		panic(errors.Wrap(err, "failed to load .env file"))
+	if len(files) > 0 {
+		if err := godotenv.Load(files...); err != nil {
+			panic(errors.Wrap(err, "failed to load .env file"))
+		}
 	}
 }
 

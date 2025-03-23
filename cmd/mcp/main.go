@@ -62,6 +62,7 @@ func main() {
 	}
 	srv.AddTools(wrapper.Tools()...)
 
+	log.Info("starting MCP server")
 	if err := server.ServeStdio(srv); err != nil {
 		log.Fatal("failed to serve MCP server", zap.Error(err))
 	}
