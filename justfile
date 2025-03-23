@@ -33,4 +33,4 @@ run-oauth: build
     ./bin/dida365-oauth-server
 
 run-mcp: build
-    ./bin/dida365-mcp-server
+    ./bin/dida365-mcp-server -verbose

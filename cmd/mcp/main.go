@@ -15,18 +15,22 @@ import (
 )
 
 func main() {
+	utils.LoadDotEnvs()
+
 	verbose := false
-	accessToken := os.Getenv("MCP_ACCESS_TOKEN")
+	accessToken := ""
 	flag.StringVar(&accessToken, "access_token", "", "The access token to use for the MCP server, can be set using the MCP_ACCESS_TOKEN environment variable")
 	flag.BoolVar(&verbose, "verbose", false, "Whether to enable verbose logging")
 	flag.Parse()
 
+	if accessToken == "" {
+		accessToken = os.Getenv("MCP_ACCESS_TOKEN")
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	loggingConfig := &conf.Logging{
-		Level: "info",
-	}
+	loggingConfig := &conf.Logging{Level: "info"}
 	if verbose {
 		loggingConfig.Level = "debug"
 	}
@@ -35,17 +39,17 @@ func main() {
 		panic(errors.Wrap(err, "invalid logging config"))
 	}
 
-	if accessToken == "" {
-		flag.Usage()
-		os.Exit(1)
-	}
 	log, err := utils.NewLogger(loggingConfig)
 	if err != nil {
 		panic(errors.Wrap(err, "failed to create logger"))
 	}
-	defer func() {
-		_ = log.Sync()
-	}()
+	defer func() { _ = log.Sync() }()
+
+	if accessToken == "" {
+		flag.Usage()
+		log.Fatal("access token is required")
+		os.Exit(1)
+	}
 
 	srv := server.NewMCPServer(
 		"Dida365 MCP Server",
