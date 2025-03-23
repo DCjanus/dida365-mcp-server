@@ -7,20 +7,130 @@
     <title>Dida365 MCP Server Example</title>
     <script src="https://unpkg.com/vue@3.5.13"></script>
     <script src="https://unpkg.com/naive-ui@2.41.0"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            margin-bottom: 24px;
+        }
+
+        .config-box {
+            background-color: #f9f9f9;
+            padding: 16px;
+            border-radius: 4px;
+            position: relative;
+            margin: 16px 0;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
 </head>
 
 <body>
     <div id="app"></div>
     <script type="module">
-        const { createApp } = Vue;
-        const { NButton } = NUI;
+        const { createApp, ref, onMounted } = Vue;
+        const { NButton, NCard, NMessage } = NUI;
 
         createApp({
             setup() {
-                return {};
-            },
-        }).mount('#app');
+                const accessToken = ref('');
+                const configJson = ref('');
 
+                // 从 URL 获取 access_token
+                const getAccessTokenFromUrl = () => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get('access_token');
+                };
+
+                // 生成配置 JSON
+                const generateConfig = (token) => {
+                    return JSON.stringify({
+                        mcpServers: {
+                            dida: {
+                                command: "/path/to/dida365-mcp-server",
+                                args: [
+                                    "-access_token",
+                                    token
+                                ]
+                            }
+                        }
+                    }, null, 4);
+                };
+
+                // 复制配置到剪贴板
+                const copyConfig = () => {
+                    navigator.clipboard.writeText(configJson.value)
+                        .then(() => {
+                            NMessage.success('配置已复制到剪贴板');
+                        })
+                        .catch(() => {
+                            NMessage.error('复制失败，请手动复制');
+                        });
+                };
+
+                onMounted(() => {
+                    const token = getAccessTokenFromUrl();
+                    if (token) {
+                        accessToken.value = token;
+                        configJson.value = generateConfig(token);
+                    } else {
+                        NMessage.warning('未找到 access_token 参数');
+                    }
+                });
+
+                return {
+                    accessToken,
+                    configJson,
+                    copyConfig
+                };
+            },
+            template: `
+                <div class="container">
+                    <div class="header">
+                        <h1>Dida365 MCP Server 配置示例</h1>
+                        <p>基于当前 access_token 生成的配置示例：</p>
+                    </div>
+                    
+                    <div class="config-box">
+                        <n-button class="copy-button" type="primary" size="small" @click="copyConfig">
+                            复制配置
+                        </n-button>
+                        <pre>{{ configJson }}</pre>
+                    </div>
+
+                    <n-card title="使用说明" size="small">
+                        <p>1. 将上述配置添加到你的配置文件中</p>
+                        <p>2. 将 <code>/path/to/dida365-mcp-server</code> 替换为实际的程序路径</p>
+                        <p>3. 确保 access_token 正确设置</p>
+                    </n-card>
+                </div>
+            `
+        }).mount('#app');
     </script>
 </body>
 
