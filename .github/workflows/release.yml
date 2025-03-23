@@ -66,7 +66,7 @@ jobs:
           context: .
           platforms: linux/${{ matrix.platform.name }}
           labels: ${{ needs.prepare.outputs.labels }}
-          tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           push: true
           outputs: type=image,push-by-digest=true,name-canonical=true
           provenance: true
@@ -117,10 +117,10 @@ jobs:
         run: |
           for tag in ${{ needs.prepare.outputs.tags }}; do
             echo "Creating manifest for $tag..."
-            docker buildx imagetools create -t $tag \
+            docker buildx imagetools create -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$tag \
               $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
             echo "Pushing manifest for $tag..."
-            docker buildx imagetools push $tag
+            docker buildx imagetools push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$tag
             echo "Verifying manifest..."
-            docker buildx imagetools inspect $tag
+            docker buildx imagetools inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$tag
           done
