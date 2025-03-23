@@ -18,7 +18,7 @@
 
 #### 方式一：使用在线服务（推荐）
 
-1. 打开浏览器访问 `https://oauth.dida365.dcjanus.com/oauth/login`
+1. 打开浏览器访问 <https://oauth.dida365.dcjanus.com/oauth/login>
 2. 系统会自动重定向到滴答清单的授权页面
 3. 在滴答清单页面确认授权
 4. 授权成功后，系统会自动重定向回 `/oauth/callback` 端点
@@ -29,7 +29,7 @@
 1. 访问滴答清单的[开发者中心](https://developer.dida365.com/manage)，创建新应用
 2. 在应用设置中，将 `Redirect URL` 配置为 `http://localhost:8080/oauth/callback`
 3. 启动本地服务器（默认端口：8080）
-4. 访问 `http://localhost:8080/oauth/login`
+4. 访问 <http://localhost:8080/oauth/login>
 5. 按照页面提示完成授权流程
 6. 获取访问令牌
 
