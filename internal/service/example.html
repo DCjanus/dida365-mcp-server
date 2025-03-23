@@ -5,132 +5,261 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dida365 MCP Server Example</title>
-    <script src="https://unpkg.com/vue@3.5.13"></script>
-    <script src="https://unpkg.com/naive-ui@2.41.0"></script>
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+            --warning-color: #d97706;
+            --text-color: #1f2937;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --code-bg: #f8fafc;
+            --border-radius: 8px;
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             padding: 20px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f5f5f5;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background-color: white;
-            padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: var(--card-bg);
+            padding: 32px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .header {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .header p {
+            color: #6b7280;
         }
 
         .config-box {
-            background-color: #f9f9f9;
-            padding: 16px;
-            border-radius: 4px;
+            background-color: var(--code-bg);
+            padding: 24px;
+            border-radius: var(--border-radius);
             position: relative;
-            margin: 16px 0;
+            margin: 24px 0;
+            border: 1px solid #e5e7eb;
         }
 
         .copy-button {
             position: absolute;
-            top: 8px;
-            right: 8px;
+            top: 12px;
+            right: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .copy-button:active {
+            transform: scale(0.98);
         }
 
         pre {
             margin: 0;
             white-space: pre-wrap;
             word-wrap: break-word;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .instructions {
+            background-color: var(--card-bg);
+            border: 1px solid #e5e7eb;
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        .instructions h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .instructions p {
+            margin: 8px 0;
+            color: #4b5563;
+        }
+
+        code {
+            background-color: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9em;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-size: 14px;
+            opacity: 0;
+            transition: var(--transition);
+            transform: translateY(-20px);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background-color: var(--success-color);
+        }
+
+        .toast.error {
+            background-color: var(--error-color);
+        }
+
+        .toast.warning {
+            background-color: var(--warning-color);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px;
+            }
+
+            .config-box {
+                padding: 16px;
+            }
+
+            .copy-button {
+                position: static;
+                width: 100%;
+                margin-bottom: 12px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="app"></div>
-    <script type="module">
-        const { createApp, ref, onMounted } = Vue;
-        const { NButton, NCard, NMessage } = NUI;
+    <div class="container">
+        <div id="toast" class="toast"></div>
 
-        createApp({
-            setup() {
-                const accessToken = ref('');
-                const configJson = ref('');
+        <div class="header">
+            <h1>Dida365 MCP Server 配置示例</h1>
+            <p>基于当前 access_token 生成的配置示例：</p>
+        </div>
 
-                // 从 URL 获取 access_token
-                const getAccessTokenFromUrl = () => {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    return urlParams.get('access_token');
-                };
+        <div class="config-box">
+            <button class="copy-button" onclick="copyConfig()">
+                复制配置
+            </button>
+            <pre id="config"></pre>
+        </div>
 
-                // 生成配置 JSON
-                const generateConfig = (token) => {
-                    return JSON.stringify({
-                        mcpServers: {
-                            dida: {
-                                command: "/path/to/dida365-mcp-server",
-                                args: [
-                                    "-access_token",
-                                    token
-                                ]
-                            }
-                        }
-                    }, null, 4);
-                };
+        <div class="instructions">
+            <h2>使用说明</h2>
+            <p>1. 将上述配置添加到你的配置文件中</p>
+            <p>2. 将 <code>/path/to/dida365-mcp-server</code> 替换为实际的程序路径</p>
+            <p>3. 确保 access_token 正确设置</p>
+        </div>
+    </div>
 
-                // 复制配置到剪贴板
-                const copyConfig = () => {
-                    navigator.clipboard.writeText(configJson.value)
-                        .then(() => {
-                            NMessage.success('配置已复制到剪贴板');
-                        })
-                        .catch(() => {
-                            NMessage.error('复制失败，请手动复制');
-                        });
-                };
+    <script>
+        // 显示 toast 消息
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
 
-                onMounted(() => {
-                    const token = getAccessTokenFromUrl();
-                    if (token) {
-                        accessToken.value = token;
-                        configJson.value = generateConfig(token);
-                    } else {
-                        NMessage.warning('未找到 access_token 参数');
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        // 从 URL 获取 access_token
+        function getAccessTokenFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('access_token');
+        }
+
+        // 生成配置 JSON
+        function generateConfig(token) {
+            return JSON.stringify({
+                mcpServers: {
+                    dida: {
+                        command: "/path/to/dida365-mcp-server",
+                        args: [
+                            "-access_token",
+                            token
+                        ]
                     }
+                }
+            }, null, 4);
+        }
+
+        // 复制配置到剪贴板
+        function copyConfig() {
+            const configElement = document.getElementById('config');
+            navigator.clipboard.writeText(configElement.textContent)
+                .then(() => {
+                    showToast('配置已复制到剪贴板');
+                })
+                .catch(() => {
+                    showToast('复制失败，请手动复制', 'error');
                 });
+        }
 
-                return {
-                    accessToken,
-                    configJson,
-                    copyConfig
-                };
-            },
-            template: `
-                <div class="container">
-                    <div class="header">
-                        <h1>Dida365 MCP Server 配置示例</h1>
-                        <p>基于当前 access_token 生成的配置示例：</p>
-                    </div>
-                    
-                    <div class="config-box">
-                        <n-button class="copy-button" type="primary" size="small" @click="copyConfig">
-                            复制配置
-                        </n-button>
-                        <pre>{{ configJson }}</pre>
-                    </div>
+        // 初始化页面
+        function init() {
+            const token = getAccessTokenFromUrl();
+            const configElement = document.getElementById('config');
 
-                    <n-card title="使用说明" size="small">
-                        <p>1. 将上述配置添加到你的配置文件中</p>
-                        <p>2. 将 <code>/path/to/dida365-mcp-server</code> 替换为实际的程序路径</p>
-                        <p>3. 确保 access_token 正确设置</p>
-                    </n-card>
-                </div>
-            `
-        }).mount('#app');
+            if (token) {
+                configElement.textContent = generateConfig(token);
+            } else {
+                showToast('未找到 access_token 参数', 'warning');
+                configElement.textContent = '请在 URL 中添加 access_token 参数';
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 
