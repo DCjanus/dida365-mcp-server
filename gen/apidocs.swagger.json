@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "DidaAPIService"
+      "name": "DidaOpenApiService"
     },
     {
       "name": "Dida365oAuthService"
@@ -79,8 +79,7 @@
     },
     "/open/v1/project": {
       "get": {
-        "summary": "Project related APIs",
-        "operationId": "DidaAPIService_GetUserProjects",
+        "operationId": "DidaOpenApiService_GetUserProjects",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -96,11 +95,11 @@
           }
         },
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       },
       "post": {
-        "operationId": "DidaAPIService_CreateProject",
+        "operationId": "DidaOpenApiService_CreateProject",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -149,13 +148,13 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       }
     },
     "/open/v1/project/{projectId}": {
       "get": {
-        "operationId": "DidaAPIService_GetProject",
+        "operationId": "DidaOpenApiService_GetProject",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -179,11 +178,11 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       },
       "delete": {
-        "operationId": "DidaAPIService_DeleteProject",
+        "operationId": "DidaOpenApiService_DeleteProject",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -207,11 +206,11 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       },
       "post": {
-        "operationId": "DidaAPIService_UpdateProject",
+        "operationId": "DidaOpenApiService_UpdateProject",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -266,13 +265,13 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       }
     },
     "/open/v1/project/{projectId}/data": {
       "get": {
-        "operationId": "DidaAPIService_GetProjectData",
+        "operationId": "DidaOpenApiService_GetProjectData",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -296,14 +295,13 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       }
     },
     "/open/v1/project/{projectId}/task/{taskId}": {
       "get": {
-        "summary": "Task related APIs",
-        "operationId": "DidaAPIService_GetTask",
+        "operationId": "DidaOpenApiService_GetTask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -333,11 +331,11 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       },
       "delete": {
-        "operationId": "DidaAPIService_DeleteTask",
+        "operationId": "DidaOpenApiService_DeleteTask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -367,13 +365,13 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       }
     },
     "/open/v1/project/{projectId}/task/{taskId}/complete": {
       "post": {
-        "operationId": "DidaAPIService_CompleteTask",
+        "operationId": "DidaOpenApiService_CompleteTask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -403,13 +401,13 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       }
     },
     "/open/v1/task": {
       "post": {
-        "operationId": "DidaAPIService_CreateTask",
+        "operationId": "DidaOpenApiService_CreateTask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -493,8 +491,14 @@
             "name": "priority",
             "in": "query",
             "required": false,
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "enum": [
+              "TASK_PRIORITY_NONE",
+              "TASK_PRIORITY_LOW",
+              "TASK_PRIORITY_MEDIUM",
+              "TASK_PRIORITY_HIGH"
+            ],
+            "default": "TASK_PRIORITY_NONE"
           },
           {
             "name": "sortOrder",
@@ -505,13 +509,13 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       }
     },
     "/open/v1/task/{taskId}": {
       "post": {
-        "operationId": "DidaAPIService_UpdateTask",
+        "operationId": "DidaOpenApiService_UpdateTask",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -601,8 +605,14 @@
             "name": "priority",
             "in": "query",
             "required": false,
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "enum": [
+              "TASK_PRIORITY_NONE",
+              "TASK_PRIORITY_LOW",
+              "TASK_PRIORITY_MEDIUM",
+              "TASK_PRIORITY_HIGH"
+            ],
+            "default": "TASK_PRIORITY_NONE"
           },
           {
             "name": "sortOrder",
@@ -613,7 +623,7 @@
           }
         ],
         "tags": [
-          "DidaAPIService"
+          "DidaOpenApiService"
         ]
       }
     },
@@ -648,8 +658,7 @@
           "type": "string"
         },
         "status": {
-          "type": "integer",
-          "format": "int32"
+          "$ref": "#/definitions/apiChecklistItemStatus"
         },
         "title": {
           "type": "string"
@@ -668,6 +677,14 @@
           "type": "string"
         }
       }
+    },
+    "apiChecklistItemStatus": {
+      "type": "string",
+      "enum": [
+        "CHECKLIST_ITEM_STATUS_NORMAL",
+        "CHECKLIST_ITEM_STATUS_COMPLETED"
+      ],
+      "default": "CHECKLIST_ITEM_STATUS_NORMAL"
     },
     "apiColumn": {
       "type": "object",
@@ -808,12 +825,10 @@
           }
         },
         "priority": {
-          "type": "integer",
-          "format": "int32"
+          "$ref": "#/definitions/apiTaskPriority"
         },
         "status": {
-          "type": "integer",
-          "format": "int32"
+          "$ref": "#/definitions/apiTaskStatus"
         },
         "completedTime": {
           "type": "string"
@@ -830,6 +845,24 @@
           }
         }
       }
+    },
+    "apiTaskPriority": {
+      "type": "string",
+      "enum": [
+        "TASK_PRIORITY_NONE",
+        "TASK_PRIORITY_LOW",
+        "TASK_PRIORITY_MEDIUM",
+        "TASK_PRIORITY_HIGH"
+      ],
+      "default": "TASK_PRIORITY_NONE"
+    },
+    "apiTaskStatus": {
+      "type": "string",
+      "enum": [
+        "TASK_STATUS_NORMAL",
+        "TASK_STATUS_COMPLETED"
+      ],
+      "default": "TASK_STATUS_NORMAL"
     },
     "modelTemporaryRedirectResponse": {
       "type": "object",

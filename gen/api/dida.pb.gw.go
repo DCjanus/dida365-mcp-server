@@ -35,7 +35,7 @@ var (
 	_ = metadata.Join
 )
 
-func request_DidaAPIService_GetTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_GetTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetTaskRequest
 		metadata runtime.ServerMetadata
@@ -62,7 +62,7 @@ func request_DidaAPIService_GetTask_0(ctx context.Context, marshaler runtime.Mar
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_GetTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_GetTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetTaskRequest
 		metadata runtime.ServerMetadata
@@ -88,9 +88,9 @@ func local_request_DidaAPIService_GetTask_0(ctx context.Context, marshaler runti
 	return msg, metadata, err
 }
 
-var filter_DidaAPIService_CreateTask_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+var filter_DidaOpenApiService_CreateTask_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 
-func request_DidaAPIService_CreateTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_CreateTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CreateTaskRequest
 		metadata runtime.ServerMetadata
@@ -99,14 +99,14 @@ func request_DidaAPIService_CreateTask_0(ctx context.Context, marshaler runtime.
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaAPIService_CreateTask_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaOpenApiService_CreateTask_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.CreateTask(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_CreateTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_CreateTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CreateTaskRequest
 		metadata runtime.ServerMetadata
@@ -114,16 +114,16 @@ func local_request_DidaAPIService_CreateTask_0(ctx context.Context, marshaler ru
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaAPIService_CreateTask_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaOpenApiService_CreateTask_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.CreateTask(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-var filter_DidaAPIService_UpdateTask_0 = &utilities.DoubleArray{Encoding: map[string]int{"task_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+var filter_DidaOpenApiService_UpdateTask_0 = &utilities.DoubleArray{Encoding: map[string]int{"task_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 
-func request_DidaAPIService_UpdateTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_UpdateTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq UpdateTaskRequest
 		metadata runtime.ServerMetadata
@@ -141,14 +141,14 @@ func request_DidaAPIService_UpdateTask_0(ctx context.Context, marshaler runtime.
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaAPIService_UpdateTask_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaOpenApiService_UpdateTask_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.UpdateTask(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_UpdateTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_UpdateTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq UpdateTaskRequest
 		metadata runtime.ServerMetadata
@@ -165,14 +165,14 @@ func local_request_DidaAPIService_UpdateTask_0(ctx context.Context, marshaler ru
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaAPIService_UpdateTask_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaOpenApiService_UpdateTask_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.UpdateTask(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-func request_DidaAPIService_CompleteTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_CompleteTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CompleteTaskRequest
 		metadata runtime.ServerMetadata
@@ -199,7 +199,7 @@ func request_DidaAPIService_CompleteTask_0(ctx context.Context, marshaler runtim
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_CompleteTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_CompleteTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CompleteTaskRequest
 		metadata runtime.ServerMetadata
@@ -225,7 +225,7 @@ func local_request_DidaAPIService_CompleteTask_0(ctx context.Context, marshaler 
 	return msg, metadata, err
 }
 
-func request_DidaAPIService_DeleteTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_DeleteTask_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteTaskRequest
 		metadata runtime.ServerMetadata
@@ -252,7 +252,7 @@ func request_DidaAPIService_DeleteTask_0(ctx context.Context, marshaler runtime.
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_DeleteTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_DeleteTask_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteTaskRequest
 		metadata runtime.ServerMetadata
@@ -278,7 +278,7 @@ func local_request_DidaAPIService_DeleteTask_0(ctx context.Context, marshaler ru
 	return msg, metadata, err
 }
 
-func request_DidaAPIService_GetUserProjects_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_GetUserProjects_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq Empty
 		metadata runtime.ServerMetadata
@@ -288,7 +288,7 @@ func request_DidaAPIService_GetUserProjects_0(ctx context.Context, marshaler run
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_GetUserProjects_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_GetUserProjects_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq Empty
 		metadata runtime.ServerMetadata
@@ -297,7 +297,7 @@ func local_request_DidaAPIService_GetUserProjects_0(ctx context.Context, marshal
 	return msg, metadata, err
 }
 
-func request_DidaAPIService_GetProject_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_GetProject_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetProjectRequest
 		metadata runtime.ServerMetadata
@@ -316,7 +316,7 @@ func request_DidaAPIService_GetProject_0(ctx context.Context, marshaler runtime.
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_GetProject_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_GetProject_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetProjectRequest
 		metadata runtime.ServerMetadata
@@ -334,7 +334,7 @@ func local_request_DidaAPIService_GetProject_0(ctx context.Context, marshaler ru
 	return msg, metadata, err
 }
 
-func request_DidaAPIService_GetProjectData_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_GetProjectData_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetProjectDataRequest
 		metadata runtime.ServerMetadata
@@ -353,7 +353,7 @@ func request_DidaAPIService_GetProjectData_0(ctx context.Context, marshaler runt
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_GetProjectData_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_GetProjectData_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq GetProjectDataRequest
 		metadata runtime.ServerMetadata
@@ -371,9 +371,9 @@ func local_request_DidaAPIService_GetProjectData_0(ctx context.Context, marshale
 	return msg, metadata, err
 }
 
-var filter_DidaAPIService_CreateProject_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+var filter_DidaOpenApiService_CreateProject_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 
-func request_DidaAPIService_CreateProject_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_CreateProject_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CreateProjectRequest
 		metadata runtime.ServerMetadata
@@ -382,14 +382,14 @@ func request_DidaAPIService_CreateProject_0(ctx context.Context, marshaler runti
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaAPIService_CreateProject_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaOpenApiService_CreateProject_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.CreateProject(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_CreateProject_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_CreateProject_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq CreateProjectRequest
 		metadata runtime.ServerMetadata
@@ -397,16 +397,16 @@ func local_request_DidaAPIService_CreateProject_0(ctx context.Context, marshaler
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaAPIService_CreateProject_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaOpenApiService_CreateProject_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.CreateProject(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-var filter_DidaAPIService_UpdateProject_0 = &utilities.DoubleArray{Encoding: map[string]int{"project_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+var filter_DidaOpenApiService_UpdateProject_0 = &utilities.DoubleArray{Encoding: map[string]int{"project_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 
-func request_DidaAPIService_UpdateProject_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_UpdateProject_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq UpdateProjectRequest
 		metadata runtime.ServerMetadata
@@ -424,14 +424,14 @@ func request_DidaAPIService_UpdateProject_0(ctx context.Context, marshaler runti
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaAPIService_UpdateProject_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaOpenApiService_UpdateProject_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := client.UpdateProject(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_UpdateProject_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_UpdateProject_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq UpdateProjectRequest
 		metadata runtime.ServerMetadata
@@ -448,14 +448,14 @@ func local_request_DidaAPIService_UpdateProject_0(ctx context.Context, marshaler
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaAPIService_UpdateProject_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_DidaOpenApiService_UpdateProject_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	msg, err := server.UpdateProject(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-func request_DidaAPIService_DeleteProject_0(ctx context.Context, marshaler runtime.Marshaler, client DidaAPIServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_DidaOpenApiService_DeleteProject_0(ctx context.Context, marshaler runtime.Marshaler, client DidaOpenApiServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteProjectRequest
 		metadata runtime.ServerMetadata
@@ -474,7 +474,7 @@ func request_DidaAPIService_DeleteProject_0(ctx context.Context, marshaler runti
 	return msg, metadata, err
 }
 
-func local_request_DidaAPIService_DeleteProject_0(ctx context.Context, marshaler runtime.Marshaler, server DidaAPIServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_DidaOpenApiService_DeleteProject_0(ctx context.Context, marshaler runtime.Marshaler, server DidaOpenApiServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
 		protoReq DeleteProjectRequest
 		metadata runtime.ServerMetadata
@@ -492,239 +492,239 @@ func local_request_DidaAPIService_DeleteProject_0(ctx context.Context, marshaler
 	return msg, metadata, err
 }
 
-// RegisterDidaAPIServiceHandlerServer registers the http handlers for service DidaAPIService to "mux".
-// UnaryRPC     :call DidaAPIServiceServer directly.
+// RegisterDidaOpenApiServiceHandlerServer registers the http handlers for service DidaOpenApiService to "mux".
+// UnaryRPC     :call DidaOpenApiServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterDidaAPIServiceHandlerFromEndpoint instead.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterDidaOpenApiServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterDidaAPIServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server DidaAPIServiceServer) error {
-	mux.Handle(http.MethodGet, pattern_DidaAPIService_GetTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+func RegisterDidaOpenApiServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server DidaOpenApiServiceServer) error {
+	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/GetTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/GetTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_GetTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_GetTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_GetTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_CreateTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_CreateTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/CreateTask", runtime.WithHTTPPathPattern("/open/v1/task"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/CreateTask", runtime.WithHTTPPathPattern("/open/v1/task"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_CreateTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_CreateTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_CreateTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_CreateTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_UpdateTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_UpdateTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/UpdateTask", runtime.WithHTTPPathPattern("/open/v1/task/{task_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/UpdateTask", runtime.WithHTTPPathPattern("/open/v1/task/{task_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_UpdateTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_UpdateTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_UpdateTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_UpdateTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_CompleteTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_CompleteTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/CompleteTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}/complete"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/CompleteTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}/complete"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_CompleteTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_CompleteTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_CompleteTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_CompleteTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodDelete, pattern_DidaAPIService_DeleteTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodDelete, pattern_DidaOpenApiService_DeleteTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/DeleteTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/DeleteTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_DeleteTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_DeleteTask_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_DeleteTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_DeleteTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_DidaAPIService_GetUserProjects_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetUserProjects_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/GetUserProjects", runtime.WithHTTPPathPattern("/open/v1/project"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/GetUserProjects", runtime.WithHTTPPathPattern("/open/v1/project"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_GetUserProjects_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_GetUserProjects_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_GetUserProjects_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetUserProjects_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_DidaAPIService_GetProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/GetProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/GetProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_GetProject_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_GetProject_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_GetProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_DidaAPIService_GetProjectData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetProjectData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/GetProjectData", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/data"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/GetProjectData", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/data"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_GetProjectData_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_GetProjectData_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_GetProjectData_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetProjectData_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_CreateProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_CreateProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/CreateProject", runtime.WithHTTPPathPattern("/open/v1/project"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/CreateProject", runtime.WithHTTPPathPattern("/open/v1/project"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_CreateProject_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_CreateProject_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_CreateProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_CreateProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_UpdateProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_UpdateProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/UpdateProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/UpdateProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_UpdateProject_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_UpdateProject_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_UpdateProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_UpdateProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodDelete, pattern_DidaAPIService_DeleteProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodDelete, pattern_DidaOpenApiService_DeleteProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaAPIService/DeleteProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/api.DidaOpenApiService/DeleteProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_DidaAPIService_DeleteProject_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_DidaOpenApiService_DeleteProject_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_DeleteProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_DeleteProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
 }
 
-// RegisterDidaAPIServiceHandlerFromEndpoint is same as RegisterDidaAPIServiceHandler but
+// RegisterDidaOpenApiServiceHandlerFromEndpoint is same as RegisterDidaOpenApiServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterDidaAPIServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterDidaOpenApiServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
 		return err
@@ -743,235 +743,235 @@ func RegisterDidaAPIServiceHandlerFromEndpoint(ctx context.Context, mux *runtime
 			}
 		}()
 	}()
-	return RegisterDidaAPIServiceHandler(ctx, mux, conn)
+	return RegisterDidaOpenApiServiceHandler(ctx, mux, conn)
 }
 
-// RegisterDidaAPIServiceHandler registers the http handlers for service DidaAPIService to "mux".
+// RegisterDidaOpenApiServiceHandler registers the http handlers for service DidaOpenApiService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterDidaAPIServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterDidaAPIServiceHandlerClient(ctx, mux, NewDidaAPIServiceClient(conn))
+func RegisterDidaOpenApiServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterDidaOpenApiServiceHandlerClient(ctx, mux, NewDidaOpenApiServiceClient(conn))
 }
 
-// RegisterDidaAPIServiceHandlerClient registers the http handlers for service DidaAPIService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "DidaAPIServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "DidaAPIServiceClient"
+// RegisterDidaOpenApiServiceHandlerClient registers the http handlers for service DidaOpenApiService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "DidaOpenApiServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "DidaOpenApiServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "DidaAPIServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterDidaAPIServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client DidaAPIServiceClient) error {
-	mux.Handle(http.MethodGet, pattern_DidaAPIService_GetTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+// "DidaOpenApiServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterDidaOpenApiServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client DidaOpenApiServiceClient) error {
+	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/GetTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/GetTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_GetTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_GetTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_GetTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_CreateTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_CreateTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/CreateTask", runtime.WithHTTPPathPattern("/open/v1/task"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/CreateTask", runtime.WithHTTPPathPattern("/open/v1/task"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_CreateTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_CreateTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_CreateTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_CreateTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_UpdateTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_UpdateTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/UpdateTask", runtime.WithHTTPPathPattern("/open/v1/task/{task_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/UpdateTask", runtime.WithHTTPPathPattern("/open/v1/task/{task_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_UpdateTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_UpdateTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_UpdateTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_UpdateTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_CompleteTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_CompleteTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/CompleteTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}/complete"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/CompleteTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}/complete"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_CompleteTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_CompleteTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_CompleteTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_CompleteTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodDelete, pattern_DidaAPIService_DeleteTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodDelete, pattern_DidaOpenApiService_DeleteTask_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/DeleteTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/DeleteTask", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/task/{task_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_DeleteTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_DeleteTask_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_DeleteTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_DeleteTask_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_DidaAPIService_GetUserProjects_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetUserProjects_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/GetUserProjects", runtime.WithHTTPPathPattern("/open/v1/project"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/GetUserProjects", runtime.WithHTTPPathPattern("/open/v1/project"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_GetUserProjects_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_GetUserProjects_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_GetUserProjects_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetUserProjects_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_DidaAPIService_GetProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/GetProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/GetProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_GetProject_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_GetProject_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_GetProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodGet, pattern_DidaAPIService_GetProjectData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetProjectData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/GetProjectData", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/data"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/GetProjectData", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}/data"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_GetProjectData_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_GetProjectData_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_GetProjectData_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetProjectData_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_CreateProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_CreateProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/CreateProject", runtime.WithHTTPPathPattern("/open/v1/project"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/CreateProject", runtime.WithHTTPPathPattern("/open/v1/project"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_CreateProject_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_CreateProject_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_CreateProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_CreateProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodPost, pattern_DidaAPIService_UpdateProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodPost, pattern_DidaOpenApiService_UpdateProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/UpdateProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/UpdateProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_UpdateProject_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_UpdateProject_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_UpdateProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_UpdateProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
-	mux.Handle(http.MethodDelete, pattern_DidaAPIService_DeleteProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle(http.MethodDelete, pattern_DidaOpenApiService_DeleteProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaAPIService/DeleteProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/api.DidaOpenApiService/DeleteProject", runtime.WithHTTPPathPattern("/open/v1/project/{project_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_DidaAPIService_DeleteProject_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_DidaOpenApiService_DeleteProject_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaAPIService_DeleteProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_DeleteProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	return nil
 }
 
 var (
-	pattern_DidaAPIService_GetTask_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"open", "v1", "project", "project_id", "task", "task_id"}, ""))
-	pattern_DidaAPIService_CreateTask_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"open", "v1", "task"}, ""))
-	pattern_DidaAPIService_UpdateTask_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"open", "v1", "task", "task_id"}, ""))
-	pattern_DidaAPIService_CompleteTask_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5, 2, 6}, []string{"open", "v1", "project", "project_id", "task", "task_id", "complete"}, ""))
-	pattern_DidaAPIService_DeleteTask_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"open", "v1", "project", "project_id", "task", "task_id"}, ""))
-	pattern_DidaAPIService_GetUserProjects_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"open", "v1", "project"}, ""))
-	pattern_DidaAPIService_GetProject_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"open", "v1", "project", "project_id"}, ""))
-	pattern_DidaAPIService_GetProjectData_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"open", "v1", "project", "project_id", "data"}, ""))
-	pattern_DidaAPIService_CreateProject_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"open", "v1", "project"}, ""))
-	pattern_DidaAPIService_UpdateProject_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"open", "v1", "project", "project_id"}, ""))
-	pattern_DidaAPIService_DeleteProject_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"open", "v1", "project", "project_id"}, ""))
+	pattern_DidaOpenApiService_GetTask_0         = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"open", "v1", "project", "project_id", "task", "task_id"}, ""))
+	pattern_DidaOpenApiService_CreateTask_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"open", "v1", "task"}, ""))
+	pattern_DidaOpenApiService_UpdateTask_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"open", "v1", "task", "task_id"}, ""))
+	pattern_DidaOpenApiService_CompleteTask_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5, 2, 6}, []string{"open", "v1", "project", "project_id", "task", "task_id", "complete"}, ""))
+	pattern_DidaOpenApiService_DeleteTask_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"open", "v1", "project", "project_id", "task", "task_id"}, ""))
+	pattern_DidaOpenApiService_GetUserProjects_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"open", "v1", "project"}, ""))
+	pattern_DidaOpenApiService_GetProject_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"open", "v1", "project", "project_id"}, ""))
+	pattern_DidaOpenApiService_GetProjectData_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"open", "v1", "project", "project_id", "data"}, ""))
+	pattern_DidaOpenApiService_CreateProject_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"open", "v1", "project"}, ""))
+	pattern_DidaOpenApiService_UpdateProject_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"open", "v1", "project", "project_id"}, ""))
+	pattern_DidaOpenApiService_DeleteProject_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"open", "v1", "project", "project_id"}, ""))
 )
 
 var (
-	forward_DidaAPIService_GetTask_0         = runtime.ForwardResponseMessage
-	forward_DidaAPIService_CreateTask_0      = runtime.ForwardResponseMessage
-	forward_DidaAPIService_UpdateTask_0      = runtime.ForwardResponseMessage
-	forward_DidaAPIService_CompleteTask_0    = runtime.ForwardResponseMessage
-	forward_DidaAPIService_DeleteTask_0      = runtime.ForwardResponseMessage
-	forward_DidaAPIService_GetUserProjects_0 = runtime.ForwardResponseMessage
-	forward_DidaAPIService_GetProject_0      = runtime.ForwardResponseMessage
-	forward_DidaAPIService_GetProjectData_0  = runtime.ForwardResponseMessage
-	forward_DidaAPIService_CreateProject_0   = runtime.ForwardResponseMessage
-	forward_DidaAPIService_UpdateProject_0   = runtime.ForwardResponseMessage
-	forward_DidaAPIService_DeleteProject_0   = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_GetTask_0         = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_CreateTask_0      = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_UpdateTask_0      = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_CompleteTask_0    = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_DeleteTask_0      = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_GetUserProjects_0 = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_GetProject_0      = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_GetProjectData_0  = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_CreateProject_0   = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_UpdateProject_0   = runtime.ForwardResponseMessage
+	forward_DidaOpenApiService_DeleteProject_0   = runtime.ForwardResponseMessage
 )
