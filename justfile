@@ -1,4 +1,6 @@
-default: build
+default: 
+    just prepare
+    just build
 
 prepare:
     just format
@@ -21,7 +23,7 @@ format:
 generate:
     buf generate
 
-build: prepare
+build:
     CGO_ENABLED=0 go build -o bin/dida365-oauth-server ./cmd/oauth
     CGO_ENABLED=0 go build -o bin/dida365-mcp-server ./cmd/mcp
 
@@ -29,8 +31,8 @@ clean:
     rm -rf bin
     rm -rf gen
 
-run-oauth: build
+run-oauth: default
     ./bin/dida365-oauth-server
 
-run-mcp: build
+run-mcp: default
     ./bin/dida365-mcp-server -verbose
