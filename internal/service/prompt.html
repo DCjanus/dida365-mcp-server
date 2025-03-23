@@ -45,6 +45,13 @@
 
         .header {
             margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .header-content {
+            flex: 1;
         }
 
         .header h1 {
@@ -56,6 +63,31 @@
 
         .header p {
             color: #6b7280;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 8px;
+        }
+
+        .language-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            background: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .language-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .language-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
         }
 
         .config-box {
@@ -181,26 +213,82 @@
         <div id="toast" class="toast"></div>
 
         <div class="header">
-            <h1>Dida365 MCP Server 配置示例</h1>
-            <p>基于当前 access_token 生成的配置示例：</p>
+            <div class="header-content">
+                <h1 id="title">Dida365 MCP Server 配置示例</h1>
+                <p id="subtitle">基于当前 access_token 生成的配置示例：</p>
+            </div>
+            <div class="language-switcher">
+                <button class="language-btn" onclick="changeLanguage('zh')" id="zh-btn">中文</button>
+                <button class="language-btn" onclick="changeLanguage('en')" id="en-btn">English</button>
+            </div>
         </div>
 
         <div class="config-box">
-            <button class="copy-button" onclick="copyConfig()">
+            <button class="copy-button" onclick="copyConfig()" id="copy-btn">
                 复制配置
             </button>
             <pre id="config"></pre>
         </div>
 
         <div class="instructions">
-            <h2>使用说明</h2>
-            <p>1. 将上述配置添加到你的配置文件中</p>
-            <p>2. 确保 access_token 正确设置</p>
-            <p>3. 确保 docker 已安装</p>
+            <h2 id="instructions-title">使用说明</h2>
+            <p id="instruction-1">1. 将上述配置添加到你的配置文件中</p>
+            <p id="instruction-2">2. 确保 access_token 正确设置</p>
+            <p id="instruction-3">3. 确保 docker 已安装</p>
         </div>
     </div>
 
     <script>
+        const translations = {
+            zh: {
+                title: 'Dida365 MCP Server 配置示例',
+                subtitle: '基于当前 access_token 生成的配置示例：',
+                copyBtn: '复制配置',
+                instructionsTitle: '使用说明',
+                instruction1: '1. 将上述配置添加到你的配置文件中',
+                instruction2: '2. 确保 access_token 正确设置',
+                instruction3: '3. 确保 docker 已安装',
+                copySuccess: '配置已复制到剪贴板',
+                copyError: '复制失败，请手动复制',
+                noToken: '未找到 access_token 参数'
+            },
+            en: {
+                title: 'Dida365 MCP Server Configuration Example',
+                subtitle: 'Configuration example based on current access_token:',
+                copyBtn: 'Copy Configuration',
+                instructionsTitle: 'Instructions',
+                instruction1: '1. Add the above configuration to your config file',
+                instruction2: '2. Make sure the access_token is set correctly',
+                instruction3: '3. Ensure docker is installed',
+                copySuccess: 'Configuration copied to clipboard',
+                copyError: 'Copy failed, please copy manually',
+                noToken: 'No access_token parameter found'
+            }
+        };
+
+        function updateLanguage(lang) {
+            const t = translations[lang];
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('copy-btn').textContent = t.copyBtn;
+            document.getElementById('instructions-title').textContent = t.instructionsTitle;
+            document.getElementById('instruction-1').textContent = t.instruction1;
+            document.getElementById('instruction-2').textContent = t.instruction2;
+            document.getElementById('instruction-3').textContent = t.instruction3;
+
+            // Update language buttons
+            document.getElementById('zh-btn').classList.toggle('active', lang === 'zh');
+            document.getElementById('en-btn').classList.toggle('active', lang === 'en');
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        function changeLanguage(lang) {
+            localStorage.setItem('preferred-language', lang);
+            updateLanguage(lang);
+        }
+
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -244,21 +332,29 @@
             const configElement = document.getElementById('config');
             navigator.clipboard.writeText(configElement.textContent)
                 .then(() => {
-                    showToast('配置已复制到剪贴板');
+                    showToast(translations[document.documentElement.lang].copySuccess);
                 })
                 .catch(() => {
-                    showToast('复制失败，请手动复制', 'error');
+                    showToast(translations[document.documentElement.lang].copyError, 'error');
                 });
         }
 
         function init() {
+            // Get preferred language from localStorage or browser
+            const savedLang = localStorage.getItem('preferred-language');
+            const browserLang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+            const initialLang = savedLang || browserLang;
+
+            // Set initial language
+            updateLanguage(initialLang);
+
             const token = getAccessTokenFromUrl();
             const configElement = document.getElementById('config');
 
             if (token) {
                 configElement.textContent = generateConfig(token);
             } else {
-                showToast('未找到 access_token 参数', 'warning');
+                showToast(translations[initialLang].noToken, 'warning');
                 configElement.textContent = '请在 URL 中添加 access_token 参数';
             }
         }
