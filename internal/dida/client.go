@@ -53,7 +53,7 @@ func (c *Client) ListProjects(ctx context.Context) ([]*api.Project, error) {
 	c.log.Debug("ListProjects")
 	path := "/open/v1/project"
 
-	reply := []*api.Project{}
+	var reply []*api.Project
 	res, err := c.cli.
 		R().
 		SetContext(ctx).
