@@ -23,7 +23,7 @@ func NewLogger(cfg *conf.Logging) (*zap.Logger, error) {
 
 	logger := zap.New(zapcore.NewCore(
 		prettyconsole.NewEncoder(config),
-		os.Stdout,
+		os.Stderr, // DO NOT USE os.Stdout, since MCP server uses os.Stdout for JSON-RPC transport
 		level,
 	))
 	return logger, nil
