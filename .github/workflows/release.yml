@@ -17,7 +17,6 @@ jobs:
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
-      image: ${{ steps.meta.outputs.image }}
     steps:
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -67,25 +66,10 @@ jobs:
           context: .
           platforms: linux/${{ matrix.platform.name }}
           labels: ${{ needs.prepare.outputs.labels }}
-          tags: ${{ needs.prepare.outputs.image }}
+          tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
           push: true
-          outputs: type=image,push-by-digest=true,name-canonical=true
           provenance: true
           sbom: true
-
-      - name: Export digest
-        run: |
-          mkdir -p ${{ runner.temp }}/digests
-          digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
-
-      - name: Upload digest
-        uses: actions/upload-artifact@v4
-        with:
-          name: digest-${{ matrix.platform.name }}
-          path: ${{ runner.temp }}/digests/*
-          if-no-files-found: error
-          retention-days: 1
 
   merge:
     needs: [prepare, build]
@@ -106,22 +90,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Download digests
-        uses: actions/download-artifact@v4
-        with:
-          path: ${{ runner.temp }}/digests
-          pattern: digest-*
-          merge-multiple: true
-
-      - name: Create manifest list and push
-        working-directory: ${{ runner.temp }}/digests
+      - name: Create and push manifest
         run: |
           for tag in ${{ needs.prepare.outputs.tags }}; do
             echo "Creating manifest for $tag..."
-            docker buildx imagetools create -t ${{ needs.prepare.outputs.image }}:$tag \
-              $(printf '${{ needs.prepare.outputs.image }}@sha256:%s ' *)
+            docker buildx imagetools create -t $tag \
+              $tag-amd64 \
+              $tag-arm64
             echo "Pushing manifest for $tag..."
-            docker buildx imagetools push ${{ needs.prepare.outputs.image }}:$tag
+            docker buildx imagetools push $tag
             echo "Verifying manifest..."
-            docker buildx imagetools inspect ${{ needs.prepare.outputs.image }}:$tag
+            docker buildx imagetools inspect $tag
           done
