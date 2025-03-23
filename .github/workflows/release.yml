@@ -33,9 +33,17 @@ jobs:
             org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
             org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
 
-  build-amd64:
+  build:
     needs: prepare
-    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        platform:
+          - name: amd64
+            runner: ubuntu-24.04
+          - name: arm64
+            runner: ubuntu-24.04-arm
+      fail-fast: false
+    runs-on: ${{ matrix.platform.runner }}
     permissions:
       contents: read
       packages: write
@@ -52,12 +60,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build and push AMD64 image
+      - name: Build and push ${{ matrix.platform.name }} image
         id: build
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/${{ matrix.platform.name }}
           labels: ${{ needs.prepare.outputs.labels }}
           tags: ${{ needs.prepare.outputs.tags }}
           push: true
@@ -72,57 +80,13 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digest-amd64
-          path: ${{ runner.temp }}/digests/*
-          if-no-files-found: error
-          retention-days: 1
-
-  build-arm64:
-    needs: prepare
-    runs-on: ubuntu-24.04-arm
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Build and push ARM64 image
-        id: build
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          platforms: linux/arm64
-          labels: ${{ needs.prepare.outputs.labels }}
-          tags: ${{ needs.prepare.outputs.tags }}
-          push: true
-          outputs: type=image,push-by-digest=true,name-canonical=true
-
-      - name: Export digest
-        run: |
-          mkdir -p ${{ runner.temp }}/digests
-          digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
-
-      - name: Upload digest
-        uses: actions/upload-artifact@v4
-        with:
-          name: digest-arm64
+          name: digest-${{ matrix.platform.name }}
           path: ${{ runner.temp }}/digests/*
           if-no-files-found: error
           retention-days: 1
 
   merge:
-    needs: [prepare, build-amd64, build-arm64]
+    needs: [prepare, build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
