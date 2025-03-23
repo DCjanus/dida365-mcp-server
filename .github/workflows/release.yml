@@ -97,8 +97,6 @@ jobs:
             docker buildx imagetools create -t $tag \
               $tag-amd64 \
               $tag-arm64
-            echo "Pushing manifest for $tag..."
-            docker buildx imagetools push $tag
             echo "Verifying manifest..."
             docker buildx imagetools inspect $tag
           done
