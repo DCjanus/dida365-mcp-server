@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: api/api.proto
+// source: api/oauth.proto
 
 package api
 
@@ -30,6 +30,8 @@ const (
 // Dida365OAuthServiceClient is the client API for Dida365OAuthService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Dida365 OAuth Service, to gather the access token to use for the Dida365 API
 type Dida365OAuthServiceClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	OAuthLogin(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error)
@@ -77,6 +79,8 @@ func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuth
 // Dida365OAuthServiceServer is the server API for Dida365OAuthService service.
 // All implementations must embed UnimplementedDida365OAuthServiceServer
 // for forward compatibility.
+//
+// Dida365 OAuth Service, to gather the access token to use for the Dida365 API
 type Dida365OAuthServiceServer interface {
 	Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
 	OAuthLogin(context.Context, *emptypb.Empty) (*model.TemporaryRedirectResponse, error)
@@ -196,5 +200,5 @@ var Dida365OAuthService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/api.proto",
+	Metadata: "api/oauth.proto",
 }

@@ -1,10 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "model/response.proto",
+    "title": "api/dida.proto",
     "version": "version not set"
   },
   "tags": [
+    {
+      "name": "DidaAPIService"
+    },
     {
       "name": "Dida365oAuthService"
     }
@@ -74,6 +77,42 @@
         ]
       }
     },
+    "/open/v1/project/{projectId}/task/{taskId}": {
+      "get": {
+        "operationId": "DidaAPIService_GetTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTask"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      }
+    },
     "/ping": {
       "get": {
         "operationId": "Dida365oAuthService_Ping",
@@ -106,6 +145,69 @@
         },
         "state": {
           "type": "string"
+        }
+      }
+    },
+    "apiTask": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "isAllDay": {
+          "type": "boolean"
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "timeZone": {
+          "type": "string"
+        },
+        "repeatFlag": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string"
+        },
+        "reminders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "completedTime": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiTask"
+          }
         }
       }
     },

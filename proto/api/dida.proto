@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+
+// Dida365APIService has been implemented by Dida365 official, here is just for AI completion
+service DidaAPIService {
+  rpc GetTask(GetTaskRequest) returns (Task) {
+    option (google.api.http) = {get: "/open/v1/project/{project_id}/task/{task_id}"};
+  }
+}
+
+message GetTaskRequest {
+  string project_id = 1 [(buf.validate.field).required = true];
+  string task_id = 2 [(buf.validate.field).required = true];
+}
+
+message Task {
+  string id = 1;
+  bool is_all_day = 2;
+  string project_id = 3;
+  string title = 4;
+  string content = 5;
+  string desc = 6;
+  string time_zone = 7;
+  string repeat_flag = 8;
+  string start_date = 9;
+  string due_date = 10;
+  repeated string reminders = 11;
+  int32 priority = 12;
+  int32 status = 13;
+  string completed_time = 14;
+  int32 sort_order = 15;
+  repeated Task items = 16;
+}

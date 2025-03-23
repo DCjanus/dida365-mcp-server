@@ -8,6 +8,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "model/response.proto";
 
+// Dida365 OAuth Service, to gather the access token to use for the Dida365 API
 service Dida365oAuthService {
   rpc Ping(google.protobuf.Empty) returns (google.protobuf.StringValue) {
     option (google.api.http) = {get: "/ping"};
