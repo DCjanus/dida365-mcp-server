@@ -38,7 +38,7 @@ func (d *Dida365oAuthService) Ping(ctx context.Context, _ *emptypb.Empty) (*wrap
 	return &wrapperspb.StringValue{Value: "Pong"}, nil
 }
 
-func (d *Dida365oAuthService) OAuthLogin(ctx context.Context, _ *emptypb.Empty) (*model.TemporaryRedirectResponse, error) {
+func (d *Dida365oAuthService) OAuthLogin(_ context.Context, _ *emptypb.Empty) (*model.TemporaryRedirectResponse, error) {
 	base, err := url.Parse("https://dida365.com/oauth/authorize")
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse base URL")
@@ -54,8 +54,8 @@ func (d *Dida365oAuthService) OAuthLogin(ctx context.Context, _ *emptypb.Empty) 
 	return &model.TemporaryRedirectResponse{Location: base.String()}, nil
 }
 
-//go:embed example.html
-var exampleHTML string
+//go:embed prompt.html
+var promptHTML string
 
 func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthCallbackRequest) (*model.TemporaryRedirectResponse, error) {
 	reply := struct {
@@ -64,6 +64,7 @@ func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthC
 
 	res, err := d.cli.
 		R().
+		WithContext(ctx).
 		SetBasicAuth(d.cfg.GetOauth().GetClientId(), d.cfg.GetOauth().GetClientSecret()).
 		SetFormData(map[string]string{
 			"code":         req.GetCode(),
@@ -83,6 +84,6 @@ func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthC
 	return &model.TemporaryRedirectResponse{Location: "/oauth/prompt?access_token=" + reply.AccessToken}, nil
 }
 
-func (d *Dida365oAuthService) OAuthPrompt(ctx context.Context, req *api.OAuthPromptRequest) (*httpbody.HttpBody, error) {
-	return &httpbody.HttpBody{ContentType: "text/html", Data: []byte(exampleHTML)}, nil
+func (d *Dida365oAuthService) OAuthPrompt(_ context.Context, _ *api.OAuthPromptRequest) (*httpbody.HttpBody, error) {
+	return &httpbody.HttpBody{ContentType: "text/html", Data: []byte(promptHTML)}, nil
 }
