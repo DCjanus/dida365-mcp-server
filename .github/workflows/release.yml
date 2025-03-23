@@ -13,8 +13,6 @@ env:
 
 jobs:
   build-and-push:
-    # Only build and push for official releases
-    if: ${{ !contains(github.ref, '-') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,6 +40,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
+            type=raw,value=latest,enable=${{ !contains(github.ref, '-') }}
           labels: |
             org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
             org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
