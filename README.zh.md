@@ -18,7 +18,7 @@
 
 #### 方式一：使用在线服务（推荐）
 
-1. 打开浏览器访问 <https://oauth.dida365.dcjanus.com/oauth/login>
+1. 打开浏览器访问 <https://dida365.dcjanus.com/oauth/login>
 2. 系统会自动重定向到滴答清单的授权页面
 3. 在滴答清单页面确认授权
 4. 授权成功后，系统会自动重定向回 `/oauth/callback` 端点

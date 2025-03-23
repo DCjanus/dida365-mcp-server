@@ -18,7 +18,7 @@ Dida365 uses OAuth 2.0 authorization mechanism to manage API access. You can obt
 
 #### Option 1: Using Online Service (Recommended)
 
-1. Visit <https://oauth.dida365.dcjanus.com/oauth/login> in your browser
+1. Visit <https://dida365.dcjanus.com/oauth/login> in your browser
 2. The system will automatically redirect you to the Dida365 authorization page
 3. Confirm the authorization on the Dida365 page
 4. After successful authorization, you'll be redirected back to the `/oauth/callback` endpoint
