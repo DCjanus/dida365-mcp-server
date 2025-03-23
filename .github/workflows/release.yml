@@ -52,23 +52,29 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build AMD64 image
+      - name: Build and push AMD64 image
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false
           platforms: linux/amd64
-          tags: ${{ needs.prepare.outputs.tags }}
           labels: ${{ needs.prepare.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          outputs: type=docker,dest=/tmp/amd64.tar
+          tags: ${{ needs.prepare.outputs.tags }}
+          push: true
+          outputs: type=image,push-by-digest=true,name-canonical=true
 
-      - name: Upload AMD64 image
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: amd64-image
-          path: /tmp/amd64.tar
+          name: digest-amd64
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
           retention-days: 1
 
   build-arm64:
@@ -90,23 +96,29 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build ARM64 image
+      - name: Build and push ARM64 image
+        id: build
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false
           platforms: linux/arm64
-          tags: ${{ needs.prepare.outputs.tags }}
           labels: ${{ needs.prepare.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          outputs: type=docker,dest=/tmp/arm64.tar
+          tags: ${{ needs.prepare.outputs.tags }}
+          push: true
+          outputs: type=image,push-by-digest=true,name-canonical=true
 
-      - name: Upload ARM64 image
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: arm64-image
-          path: /tmp/arm64.tar
+          name: digest-arm64
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
           retention-days: 1
 
   merge:
@@ -128,57 +140,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Download AMD64 image
+      - name: Download digests
         uses: actions/download-artifact@v4
         with:
-          name: amd64-image
-          path: /tmp
+          path: ${{ runner.temp }}/digests
+          pattern: digest-*
+          merge-multiple: true
 
-      - name: Download ARM64 image
-        uses: actions/download-artifact@v4
-        with:
-          name: arm64-image
-          path: /tmp
-      
-      - name: Create multi-arch manifest
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
         run: |
-          # Create temporary directory
-          mkdir -p /tmp/images
-          
-          # Load images from build tasks
-          echo "Loading AMD64 image..."
-          docker load -i /tmp/amd64.tar
-          echo "Loading ARM64 image..."
-          docker load -i /tmp/arm64.tar
-          
-          # List loaded images for debugging
-          echo "Loaded images:"
-          docker images
-          
-          # Create multi-arch manifest for each tag
           for tag in ${{ needs.prepare.outputs.tags }}; do
-            echo "Processing tag: $tag"
-            
-            # Tag images with architecture-specific tags
-            echo "Tagging AMD64 image..."
-            docker tag $tag $tag-amd64
-            echo "Tagging ARM64 image..."
-            docker tag $tag $tag-arm64
-            
-            # Verify tags were created
-            echo "Verifying tags..."
-            docker images | awk '{print $1":"$2}' | grep -E "^${tag}(-amd64|-arm64)?$"
-            
-            # Create and push multi-arch manifest
             echo "Creating manifest for $tag..."
-            docker manifest create $tag \
-              --amend $tag-amd64 \
-              --amend $tag-arm64
-              
+            docker buildx imagetools create -t $tag \
+              $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
             echo "Pushing manifest for $tag..."
-            docker manifest push $tag
-            
-            # Verify manifest was created
-            echo "Verifying manifest..."
-            docker manifest inspect $tag || echo "Warning: Manifest inspection failed"
+            docker buildx imagetools push $tag
           done
