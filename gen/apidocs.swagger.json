@@ -682,8 +682,8 @@
           "type": "string"
         },
         "sortOrder": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         },
         "startDate": {
           "type": "string",
@@ -865,8 +865,8 @@
           "title": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\""
         },
         "sortOrder": {
-          "type": "integer",
-          "format": "int32"
+          "type": "string",
+          "format": "int64"
         },
         "items": {
           "type": "array",

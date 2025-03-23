@@ -5,8 +5,12 @@ package dida
 import (
 	"context"
 
+	"github.com/bufbuild/protovalidate-go"
 	"github.com/cockroachdb/errors"
 	"go.uber.org/zap"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/structpb"
 	"resty.dev/v3"
 
 	"github.com/dcjanus/dida365-mcp-server/gen/api"
@@ -22,7 +26,10 @@ type Client struct {
 func NewClient(log *zap.Logger, token string) *Client {
 	return &Client{
 		log: log.With(zap.String("component", "dida.Client")),
-		cli: resty.New().SetBaseURL("https://api.dida365.com").SetAuthToken(token),
+		cli: resty.
+			New().
+			SetBaseURL("https://api.dida365.com").
+			SetAuthToken(token),
 	}
 }
 
@@ -35,8 +42,8 @@ type request struct {
 	method string
 	path   string
 	params map[string]string
-	body   any
-	result any
+	body   proto.Message
+	result proto.Message
 }
 
 // doRequest executes an API request and handles common error cases.
@@ -47,18 +54,33 @@ func (c *Client) doRequest(ctx context.Context, req request) error {
 		r.SetPathParams(req.params)
 	}
 	if req.body != nil {
-		r.SetBody(req.body)
+		if err := protovalidate.Validate(req.body); err != nil {
+			return errors.Wrap(err, "invalid request body")
+		}
+
+		body, err := protojson.MarshalOptions{UseEnumNumbers: true}.Marshal(req.body)
+		if err != nil {
+			return errors.Wrap(err, "failed to marshal request body")
+		}
+		r.SetContentType("application/json")
+		r.SetBody(string(body))
 	}
 	if req.result != nil {
-		r.SetResult(req.result)
+		r.SetExpectResponseContentType("application/json")
 	}
 
-	res, err := r.Execute(req.method, req.path)
+	res, err := r.EnableDebug().Execute(req.method, req.path)
 	if err != nil {
 		return errors.Wrap(err, "failed to execute request")
 	}
 	if res.IsError() {
 		return errors.Errorf("request failed with status %d: %s", res.StatusCode(), res.String())
+	}
+
+	if req.result != nil {
+		if err := (protojson.UnmarshalOptions{DiscardUnknown: true}).Unmarshal(res.Bytes(), req.result); err != nil {
+			return errors.Wrap(err, "failed to unmarshal response")
+		}
 	}
 
 	return nil
@@ -174,17 +196,30 @@ func (c *Client) DeleteTask(ctx context.Context, projectID, taskID string) error
 func (c *Client) ListProjects(ctx context.Context) ([]*api.Project, error) {
 	c.log.Debug("ListProjects")
 
-	var result []*api.Project
+	var reply structpb.ListValue
 	err := c.doRequest(ctx, request{
 		method: "GET",
 		path:   "/open/v1/project",
-		result: &result,
+		result: &reply,
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "list projects")
 	}
 
-	return result, nil
+	projects := make([]*api.Project, 0, len(reply.Values))
+	for _, v := range reply.Values {
+		buf, err := v.MarshalJSON()
+		if err != nil {
+			return nil, errors.Wrap(err, "marshal project")
+		}
+		var p api.Project
+		if err := protojson.Unmarshal(buf, &p); err != nil {
+			return nil, errors.Wrap(err, "unmarshal project")
+		}
+		projects = append(projects, &p)
+	}
+
+	return projects, nil
 }
 
 // GetProject retrieves a specific project by its ID.

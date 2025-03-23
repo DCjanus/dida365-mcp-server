@@ -90,7 +90,7 @@ message ChecklistItem {
   string id = 1;
   ChecklistItemStatus status = 2 [(buf.validate.field).enum.defined_only = true];
   string title = 3;
-  int32 sort_order = 4 [json_name = "sortOrder"];
+  int64 sort_order = 4 [json_name = "sortOrder"];
   // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
   // Example: "2019-11-13T03:00:00+0000"
   string start_date = 5 [json_name = "startDate"];
@@ -122,7 +122,7 @@ message Task {
   TaskStatus status = 13 [(buf.validate.field).enum.defined_only = true];
   // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
   string completed_time = 14 [json_name = "completedTime"];
-  int32 sort_order = 15 [json_name = "sortOrder"];
+  int64 sort_order = 15 [json_name = "sortOrder"];
   repeated ChecklistItem items = 16;
 }
 
