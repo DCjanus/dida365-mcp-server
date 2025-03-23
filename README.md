@@ -1,5 +1,7 @@
 # Dida365 MCP Server
 
+English | [简体中文](README.zh.md)
+
 This is a MCP Server implementation for [Dida365](https://dida365.com) using the [Dida365 Official API](https://developer.dida365.com/api#/openapi).
 
 ## Usage
