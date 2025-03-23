@@ -4,13 +4,10 @@ import (
 	"context"
 	"flag"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/bufbuild/protovalidate-go"
 	"github.com/cockroachdb/errors"
-	mcpgolang "github.com/metoro-io/mcp-golang"
-	"github.com/metoro-io/mcp-golang/transport/stdio"
+	"github.com/mark3labs/mcp-go/server"
 	"go.uber.org/zap"
 
 	"github.com/dcjanus/dida365-mcp-server/gen/conf"
@@ -50,22 +47,18 @@ func main() {
 		_ = log.Sync()
 	}()
 
-	tools, err := NewDidaTools(ctx, log, accessToken)
+	srv := server.NewMCPServer(
+		"Dida365 MCP Server",
+		"0.1.0",
+	)
+
+	wrapper, err := NewDidaWrapper(ctx, log, accessToken)
 	if err != nil {
 		log.Fatal("failed to create dida tools", zap.Error(err))
 	}
+	srv.AddTools(wrapper.Tools()...)
 
-	server := mcpgolang.NewServer(stdio.NewStdioServerTransport())
-	if err := tools.Register(server); err != nil {
-		log.Fatal("failed to register dida tools", zap.Error(err))
-	}
-
-	if err := server.Serve(); err != nil {
+	if err := server.ServeStdio(srv); err != nil {
 		log.Fatal("failed to serve MCP server", zap.Error(err))
 	}
-
-	signals := make(chan os.Signal, 1)
-	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
-	<-signals
-	log.Info("received signal, shutting down")
 }

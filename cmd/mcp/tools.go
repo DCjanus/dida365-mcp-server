@@ -5,47 +5,52 @@ import (
 	"encoding/json"
 
 	"github.com/cockroachdb/errors"
-	mcpgolang "github.com/metoro-io/mcp-golang"
+	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/mark3labs/mcp-go/server"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/dcjanus/dida365-mcp-server/internal/dida"
 )
 
-type DidaTools struct {
+type DidaWrapper struct {
 	log *zap.Logger
 	cli *dida.Client
 	ctx context.Context
 }
 
-func NewDidaTools(ctx context.Context, log *zap.Logger, token string) (*DidaTools, error) {
+func NewDidaWrapper(ctx context.Context, log *zap.Logger, token string) (*DidaWrapper, error) {
 	cli := dida.NewClient(log, token)
 	if _, err := cli.ListProjects(ctx); err != nil {
 		return nil, errors.Wrap(err, "failed to check dida token")
 	}
 
-	return &DidaTools{
-		log: log.With(zap.String("component", "mcp.DidaTools")),
+	return &DidaWrapper{
+		log: log.With(zap.String("component", "mcp.DidaWrapper")),
 		cli: cli,
 		ctx: ctx,
 	}, nil
 }
 
-func (t *DidaTools) Register(server *mcpgolang.Server) error {
-	if err := server.RegisterTool("dida.ListProjects", "List all projects", func(empty *emptypb.Empty) (*mcpgolang.ToolResponse, error) {
-		res, err := t.cli.ListProjects(t.ctx)
-		if err != nil {
-			return nil, errors.Wrap(err, "failed to list projects")
-		}
-		inJson, err := json.Marshal(res)
-		if err != nil {
-			return nil, errors.Wrap(err, "failed to marshal projects")
-		}
-		content := mcpgolang.NewTextContent(string(inJson))
-		return mcpgolang.NewToolResponse(content), nil
-	}); err != nil {
-		return errors.Wrap(err, "failed to register dida.ListProjects")
+func (t *DidaWrapper) Tools() []server.ServerTool {
+	return []server.ServerTool{
+		t.ListProjects(t.ctx),
 	}
+}
 
-	return nil
+func (t *DidaWrapper) ListProjects(ctx context.Context) server.ServerTool {
+	return server.ServerTool{
+		Tool: mcp.NewTool("list_projects", mcp.WithDescription("List all projects, projects are the top level container for tasks")),
+		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+			projects, err := t.cli.ListProjects(ctx)
+			if err != nil {
+				return nil, errors.Wrap(err, "failed to list projects")
+			}
+			inJson, err := json.Marshal(projects)
+			if err != nil {
+				return nil, errors.Wrap(err, "failed to marshal projects")
+			}
+			response := mcp.NewToolResultText(string(inJson))
+			return response, nil
+		},
+	}
 }
