@@ -616,7 +616,7 @@ func RegisterDidaOpenApiServiceHandlerServer(ctx context.Context, mux *runtime.S
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaOpenApiService_GetUserProjects_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetUserProjects_0(annotatedContext, mux, outboundMarshaler, w, req, response_DidaOpenApiService_GetUserProjects_0{resp.(*Projects)}, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -858,7 +858,7 @@ func RegisterDidaOpenApiServiceHandlerClient(ctx context.Context, mux *runtime.S
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_DidaOpenApiService_GetUserProjects_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_DidaOpenApiService_GetUserProjects_0(annotatedContext, mux, outboundMarshaler, w, req, response_DidaOpenApiService_GetUserProjects_0{resp.(*Projects)}, mux.GetForwardResponseOptions()...)
 	})
 	mux.Handle(http.MethodGet, pattern_DidaOpenApiService_GetProject_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
@@ -946,6 +946,14 @@ func RegisterDidaOpenApiServiceHandlerClient(ctx context.Context, mux *runtime.S
 		forward_DidaOpenApiService_DeleteProject_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	return nil
+}
+
+type response_DidaOpenApiService_GetUserProjects_0 struct {
+	*Projects
+}
+
+func (m response_DidaOpenApiService_GetUserProjects_0) XXX_ResponseBody() interface{} {
+	return m.Projects
 }
 
 var (

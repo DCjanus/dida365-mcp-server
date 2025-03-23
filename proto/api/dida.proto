@@ -46,7 +46,10 @@ service DidaOpenApiService {
   }
 
   rpc GetUserProjects(Empty) returns (Projects) {
-    option (google.api.http) = {get: "/open/v1/project"};
+    option (google.api.http) = {
+      get: "/open/v1/project"
+      response_body: "projects"
+    };
   }
 
   rpc GetProject(GetProjectRequest) returns (Project) {
