@@ -77,7 +77,13 @@ func (t *DidaWrapper) Tools() []server.ServerTool {
 
 func (t *DidaWrapper) ListProjects(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("list_projects", mcp.WithDescription("List all projects, projects are the top level container for tasks")),
+		Tool: mcp.NewTool("list_projects",
+			mcp.WithDescription("List all projects, projects are the top level container for tasks"),
+			mcp.WithString("random_string",
+				mcp.Description("Dummy parameter for no-parameter tools"),
+				mcp.Required(),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			projects, err := t.cli.ListProjects(ctx)
 			if err != nil {
@@ -90,7 +96,13 @@ func (t *DidaWrapper) ListProjects(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) GetProject(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("get_project", mcp.WithDescription("Get a project by ID")),
+		Tool: mcp.NewTool("get_project",
+			mcp.WithDescription("Get a project by ID"),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project to get"),
+				mcp.Required(),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var projectID string
 			if err := t.parseJSONRequest(request, &projectID); err != nil {
@@ -107,7 +119,13 @@ func (t *DidaWrapper) GetProject(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) GetProjectData(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("get_project_data", mcp.WithDescription("Get project data")),
+		Tool: mcp.NewTool("get_project_data",
+			mcp.WithDescription("Get project data"),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project to get data for"),
+				mcp.Required(),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var projectID string
 			if err := t.parseJSONRequest(request, &projectID); err != nil {
@@ -124,7 +142,25 @@ func (t *DidaWrapper) GetProjectData(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) CreateProject(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("create_project", mcp.WithDescription("Create a new project")),
+		Tool: mcp.NewTool("create_project",
+			mcp.WithDescription("Create a new project"),
+			mcp.WithString("name",
+				mcp.Description("Name of the project"),
+				mcp.Required(),
+			),
+			mcp.WithString("color",
+				mcp.Description("Color of the project"),
+			),
+			mcp.WithNumber("sort_order",
+				mcp.Description("Sort order of the project"),
+			),
+			mcp.WithString("view_mode",
+				mcp.Description("View mode of the project (list, kanban, timeline)"),
+			),
+			mcp.WithString("kind",
+				mcp.Description("Kind of the project (TASK, NOTE)"),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var req api.CreateProjectRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
@@ -141,7 +177,28 @@ func (t *DidaWrapper) CreateProject(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) UpdateProject(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("update_project", mcp.WithDescription("Update an existing project")),
+		Tool: mcp.NewTool("update_project",
+			mcp.WithDescription("Update an existing project"),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project to update"),
+				mcp.Required(),
+			),
+			mcp.WithString("name",
+				mcp.Description("New name of the project"),
+			),
+			mcp.WithString("color",
+				mcp.Description("New color of the project"),
+			),
+			mcp.WithNumber("sort_order",
+				mcp.Description("New sort order of the project"),
+			),
+			mcp.WithString("view_mode",
+				mcp.Description("New view mode of the project (list, kanban, timeline)"),
+			),
+			mcp.WithString("kind",
+				mcp.Description("New kind of the project (TASK, NOTE)"),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var req api.UpdateProjectRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
@@ -158,7 +215,13 @@ func (t *DidaWrapper) UpdateProject(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) DeleteProject(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("delete_project", mcp.WithDescription("Delete a project")),
+		Tool: mcp.NewTool("delete_project",
+			mcp.WithDescription("Delete a project"),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project to delete"),
+				mcp.Required(),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var projectID string
 			if err := t.parseJSONRequest(request, &projectID); err != nil {
@@ -175,7 +238,17 @@ func (t *DidaWrapper) DeleteProject(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) GetTask(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("get_task", mcp.WithDescription("Get a task by ID")),
+		Tool: mcp.NewTool("get_task",
+			mcp.WithDescription("Get a task by ID"),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project containing the task"),
+				mcp.Required(),
+			),
+			mcp.WithString("task_id",
+				mcp.Description("ID of the task to get"),
+				mcp.Required(),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var req TaskRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
@@ -192,7 +265,47 @@ func (t *DidaWrapper) GetTask(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) CreateTask(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("create_task", mcp.WithDescription("Create a new task")),
+		Tool: mcp.NewTool("create_task",
+			mcp.WithDescription("Create a new task"),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project to create the task in"),
+				mcp.Required(),
+			),
+			mcp.WithString("title",
+				mcp.Description("Title of the task"),
+				mcp.Required(),
+			),
+			mcp.WithString("content",
+				mcp.Description("Content of the task"),
+			),
+			mcp.WithString("desc",
+				mcp.Description("Description of the task"),
+			),
+			mcp.WithBoolean("is_all_day",
+				mcp.Description("Whether the task is an all-day task"),
+			),
+			mcp.WithString("start_date",
+				mcp.Description("Start date of the task"),
+			),
+			mcp.WithString("due_date",
+				mcp.Description("Due date of the task"),
+			),
+			mcp.WithString("time_zone",
+				mcp.Description("Time zone of the task"),
+			),
+			mcp.WithArray("reminders",
+				mcp.Description("Reminder times for the task"),
+			),
+			mcp.WithString("repeat_flag",
+				mcp.Description("Repeat flag for the task"),
+			),
+			mcp.WithNumber("priority",
+				mcp.Description("Priority of the task (0: none, 1: low, 3: medium, 5: high)"),
+			),
+			mcp.WithNumber("sort_order",
+				mcp.Description("Sort order of the task"),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var req api.CreateTaskRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
@@ -209,7 +322,50 @@ func (t *DidaWrapper) CreateTask(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) UpdateTask(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("update_task", mcp.WithDescription("Update an existing task")),
+		Tool: mcp.NewTool("update_task",
+			mcp.WithDescription("Update an existing task"),
+			mcp.WithString("task_id",
+				mcp.Description("ID of the task to update"),
+				mcp.Required(),
+			),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project containing the task"),
+				mcp.Required(),
+			),
+			mcp.WithString("title",
+				mcp.Description("New title of the task"),
+			),
+			mcp.WithString("content",
+				mcp.Description("New content of the task"),
+			),
+			mcp.WithString("desc",
+				mcp.Description("New description of the task"),
+			),
+			mcp.WithBoolean("is_all_day",
+				mcp.Description("Whether the task is an all-day task"),
+			),
+			mcp.WithString("start_date",
+				mcp.Description("New start date of the task"),
+			),
+			mcp.WithString("due_date",
+				mcp.Description("New due date of the task"),
+			),
+			mcp.WithString("time_zone",
+				mcp.Description("New time zone of the task"),
+			),
+			mcp.WithArray("reminders",
+				mcp.Description("New reminder times for the task"),
+			),
+			mcp.WithString("repeat_flag",
+				mcp.Description("New repeat flag for the task"),
+			),
+			mcp.WithNumber("priority",
+				mcp.Description("New priority of the task (0: none, 1: low, 3: medium, 5: high)"),
+			),
+			mcp.WithNumber("sort_order",
+				mcp.Description("New sort order of the task"),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var req api.UpdateTaskRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
@@ -226,7 +382,17 @@ func (t *DidaWrapper) UpdateTask(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) CompleteTask(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("complete_task", mcp.WithDescription("Mark a task as completed")),
+		Tool: mcp.NewTool("complete_task",
+			mcp.WithDescription("Mark a task as completed"),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project containing the task"),
+				mcp.Required(),
+			),
+			mcp.WithString("task_id",
+				mcp.Description("ID of the task to complete"),
+				mcp.Required(),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var req TaskRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
@@ -243,7 +409,17 @@ func (t *DidaWrapper) CompleteTask(ctx context.Context) server.ServerTool {
 
 func (t *DidaWrapper) DeleteTask(ctx context.Context) server.ServerTool {
 	return server.ServerTool{
-		Tool: mcp.NewTool("delete_task", mcp.WithDescription("Delete a task")),
+		Tool: mcp.NewTool("delete_task",
+			mcp.WithDescription("Delete a task"),
+			mcp.WithString("project_id",
+				mcp.Description("ID of the project containing the task"),
+				mcp.Required(),
+			),
+			mcp.WithString("task_id",
+				mcp.Description("ID of the task to delete"),
+				mcp.Required(),
+			),
+		),
 		Handler: func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 			var req TaskRequest
 			if err := t.parseJSONRequest(request, &req); err != nil {
