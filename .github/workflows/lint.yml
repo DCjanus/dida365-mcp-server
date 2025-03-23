@@ -29,6 +29,5 @@ jobs:
         with:
           verify: false
 
-      
       - name: Run lint
         run: just lint 
