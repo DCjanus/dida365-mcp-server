@@ -27,7 +27,7 @@ jobs:
             type=semver,pattern=v{{version}}
             type=semver,pattern=v{{major}}.{{minor}}
             type=semver,pattern=v{{major}}
-            type=raw,value=latest,enable=${{ !contains(github.ref, '-') }}
+            type=raw,value=vlatest,enable=${{ !contains(github.ref, '-') }}
           labels: |
             org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
             org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
@@ -64,6 +64,13 @@ jobs:
           cache-to: type=gha,mode=max
           outputs: type=docker,dest=/tmp/amd64.tar
 
+      - name: Upload AMD64 image
+        uses: actions/upload-artifact@v4
+        with:
+          name: amd64-image
+          path: /tmp/amd64.tar
+          retention-days: 1
+
   build-arm64:
     needs: prepare
     runs-on: ubuntu-latest
@@ -95,6 +102,13 @@ jobs:
           cache-to: type=gha,mode=max
           outputs: type=docker,dest=/tmp/arm64.tar
 
+      - name: Upload ARM64 image
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm64-image
+          path: /tmp/arm64.tar
+          retention-days: 1
+
   merge:
     needs: [prepare, build-amd64, build-arm64]
     runs-on: ubuntu-latest
@@ -113,6 +127,18 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download AMD64 image
+        uses: actions/download-artifact@v4
+        with:
+          name: amd64-image
+          path: /tmp
+
+      - name: Download ARM64 image
+        uses: actions/download-artifact@v4
+        with:
+          name: arm64-image
+          path: /tmp
       
       - name: Create multi-arch manifest
         run: |
