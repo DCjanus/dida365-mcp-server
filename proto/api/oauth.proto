@@ -25,10 +25,8 @@ service Dida365oAuthService {
 
 message OAuthCallbackRequest {
   string code = 1 [(buf.validate.field).required = true];
-  string state = 2;
 }
 
 message OAuthCallbackResponse {
   string access_token = 1;
-  string state = 2;
 }

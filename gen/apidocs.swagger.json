@@ -42,12 +42,6 @@
             "in": "query",
             "required": false,
             "type": "string"
-          },
-          {
-            "name": "state",
-            "in": "query",
-            "required": false,
-            "type": "string"
           }
         ],
         "tags": [
@@ -735,9 +729,6 @@
       "type": "object",
       "properties": {
         "accessToken": {
-          "type": "string"
-        },
-        "state": {
           "type": "string"
         }
       }
