@@ -69,7 +69,7 @@ func (c *Client) doRequest(ctx context.Context, req request) error {
 		r.SetExpectResponseContentType("application/json")
 	}
 
-	res, err := r.EnableDebug().Execute(req.method, req.path)
+	res, err := r.Execute(req.method, req.path)
 	if err != nil {
 		return errors.Wrap(err, "failed to execute request")
 	}
