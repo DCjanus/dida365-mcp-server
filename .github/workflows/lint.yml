@@ -26,6 +26,9 @@ jobs:
       
       - name: Install golangci-lint
         uses: golangci/golangci-lint-action@v6
+        with:
+          verify: false
+
       
       - name: Run lint
         run: just lint 
