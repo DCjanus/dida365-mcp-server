@@ -42,7 +42,6 @@ jobs:
             runner: ubuntu-24.04
           - name: arm64
             runner: ubuntu-24.04-arm
-      fail-fast: false
     runs-on: ${{ matrix.platform.runner }}
     permissions:
       contents: read
