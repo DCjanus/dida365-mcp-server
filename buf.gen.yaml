@@ -1,0 +1,22 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/dcjanus/dida365-mcp-server/gen
+    except:
+      - buf.build/googleapis/googleapis
+      - buf.build/grpc-ecosystem/grpc-gateway
+      - buf.build/bufbuild/protovalidate
+plugins:
+  - plugin: buf.build/protocolbuffers/go
+    out: gen
+    opt: paths=source_relative
+  - plugin: buf.build/grpc/go
+    out: gen
+    opt: paths=source_relative
+  - plugin: buf.build/grpc-ecosystem/gateway
+    out: gen
+    opt: paths=source_relative
+  - plugin: buf.build/grpc-ecosystem/openapiv2
+    out: gen
+    opt: allow_merge=true

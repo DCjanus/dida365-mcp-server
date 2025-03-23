@@ -1,0 +1,318 @@
+syntax = "proto3";
+
+package api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+
+enum TaskPriority {
+  TASK_PRIORITY_NONE = 0;
+  TASK_PRIORITY_LOW = 1;
+  TASK_PRIORITY_MEDIUM = 3;
+  TASK_PRIORITY_HIGH = 5;
+}
+
+enum TaskStatus {
+  TASK_STATUS_NORMAL = 0;
+  TASK_STATUS_COMPLETED = 2;
+}
+
+enum ChecklistItemStatus {
+  CHECKLIST_ITEM_STATUS_NORMAL = 0;
+  CHECKLIST_ITEM_STATUS_COMPLETED = 1;
+}
+
+// DidaOpenApiService is an OpenAPI service provided by Dida365, which we don't need to implement ourselves.
+// This is just for the convenience of AI code generation.
+service DidaOpenApiService {
+  rpc GetTask(GetTaskRequest) returns (Task) {
+    option (google.api.http) = {get: "/open/v1/project/{project_id}/task/{task_id}"};
+  }
+
+  rpc CreateTask(CreateTaskRequest) returns (Task) {
+    option (google.api.http) = {post: "/open/v1/task"};
+  }
+
+  rpc UpdateTask(UpdateTaskRequest) returns (Task) {
+    option (google.api.http) = {post: "/open/v1/task/{task_id}"};
+  }
+
+  rpc CompleteTask(CompleteTaskRequest) returns (Empty) {
+    option (google.api.http) = {post: "/open/v1/project/{project_id}/task/{task_id}/complete"};
+  }
+
+  rpc DeleteTask(DeleteTaskRequest) returns (Empty) {
+    option (google.api.http) = {delete: "/open/v1/project/{project_id}/task/{task_id}"};
+  }
+
+  rpc GetUserProjects(Empty) returns (Projects) {
+    option (google.api.http) = {
+      get: "/open/v1/project"
+      response_body: "projects"
+    };
+  }
+
+  rpc GetProject(GetProjectRequest) returns (Project) {
+    option (google.api.http) = {get: "/open/v1/project/{project_id}"};
+  }
+
+  rpc GetProjectData(GetProjectDataRequest) returns (ProjectData) {
+    option (google.api.http) = {get: "/open/v1/project/{project_id}/data"};
+  }
+
+  rpc CreateProject(CreateProjectRequest) returns (Project) {
+    option (google.api.http) = {post: "/open/v1/project"};
+  }
+
+  rpc UpdateProject(UpdateProjectRequest) returns (Project) {
+    option (google.api.http) = {post: "/open/v1/project/{project_id}"};
+  }
+
+  rpc DeleteProject(DeleteProjectRequest) returns (Empty) {
+    option (google.api.http) = {delete: "/open/v1/project/{project_id}"};
+  }
+}
+
+message GetTaskRequest {
+  // Project identifier that contains the task
+  string project_id = 1 [
+    (buf.validate.field).required = true,
+    json_name = "projectId"
+  ];
+  // Task identifier to get
+  string task_id = 2 [
+    (buf.validate.field).required = true,
+    json_name = "taskId"
+  ];
+}
+
+message ChecklistItem {
+  string id = 1;
+  ChecklistItemStatus status = 2 [(buf.validate.field).enum.defined_only = true];
+  string title = 3;
+  int64 sort_order = 4 [json_name = "sortOrder"];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  // Example: "2019-11-13T03:00:00+0000"
+  string start_date = 5 [json_name = "startDate"];
+  bool is_all_day = 6 [json_name = "isAllDay"];
+  // Example: "America/Los_Angeles"
+  string time_zone = 7 [json_name = "timeZone"];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  string completed_time = 8 [json_name = "completedTime"];
+}
+
+message Task {
+  string id = 1;
+  bool is_all_day = 2 [json_name = "isAllDay"];
+  string project_id = 3 [json_name = "projectId"];
+  string title = 4;
+  string content = 5;
+  string desc = 6;
+  // Example: "America/Los_Angeles"
+  string time_zone = 7 [json_name = "timeZone"];
+  // Example: "RRULE:FREQ=DAILY;INTERVAL=1"
+  string repeat_flag = 8 [json_name = "repeatFlag"];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  string start_date = 9 [json_name = "startDate"];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  string due_date = 10 [json_name = "dueDate"];
+  // Example: ["TRIGGER:P0DT9H0M0S", "TRIGGER:PT0S"]
+  repeated string reminders = 11;
+  TaskPriority priority = 12 [(buf.validate.field).enum.defined_only = true];
+  TaskStatus status = 13 [(buf.validate.field).enum.defined_only = true];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  string completed_time = 14 [json_name = "completedTime"];
+  int64 sort_order = 15 [json_name = "sortOrder"];
+  repeated ChecklistItem items = 16;
+}
+
+message Project {
+  string id = 1;
+  string name = 2;
+  // Format: hex color code
+  // Example: "#F18181"
+  string color = 3;
+  int64 sort_order = 4 [json_name = "sortOrder"];
+  bool closed = 5;
+  string group_id = 6 [json_name = "groupId"];
+  string view_mode = 7 [
+    (buf.validate.field).string = {
+      in: [
+        "list",
+        "kanban",
+        "timeline"
+      ]
+    },
+    json_name = "viewMode"
+  ];
+  string permission = 8 [(buf.validate.field).string = {
+    in: [
+      "read",
+      "write",
+      "comment"
+    ]
+  }];
+  string kind = 9 [(buf.validate.field).string = {
+    in: [
+      "TASK",
+      "NOTE"
+    ]
+  }];
+}
+
+message Column {
+  string id = 1;
+  string project_id = 2 [json_name = "projectId"];
+  string name = 3;
+  int64 sort_order = 4 [json_name = "sortOrder"];
+}
+
+message ProjectData {
+  Project project = 1;
+  repeated Task tasks = 2;
+  repeated Column columns = 3;
+}
+
+message CreateTaskRequest {
+  string project_id = 1 [
+    (buf.validate.field).required = true,
+    json_name = "projectId"
+  ];
+  string title = 2 [(buf.validate.field).required = true];
+  string content = 3;
+  string desc = 4;
+  bool is_all_day = 5 [json_name = "isAllDay"];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  string start_date = 6 [json_name = "startDate"];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  string due_date = 7 [json_name = "dueDate"];
+  // Example: "America/Los_Angeles"
+  string time_zone = 8 [json_name = "timeZone"];
+  // Example: ["TRIGGER:P0DT9H0M0S", "TRIGGER:PT0S"]
+  repeated string reminders = 9;
+  // Example: "RRULE:FREQ=DAILY;INTERVAL=1"
+  string repeat_flag = 10 [json_name = "repeatFlag"];
+  TaskPriority priority = 11 [(buf.validate.field).enum.defined_only = true];
+  int64 sort_order = 12 [json_name = "sortOrder"];
+  repeated ChecklistItem items = 13;
+}
+
+message UpdateTaskRequest {
+  string task_id = 1 [
+    (buf.validate.field).required = true,
+    json_name = "taskId"
+  ];
+  string project_id = 2 [
+    (buf.validate.field).required = true,
+    json_name = "projectId"
+  ];
+  string title = 3;
+  string content = 4;
+  string desc = 5;
+  bool is_all_day = 6 [json_name = "isAllDay"];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  string start_date = 7 [json_name = "startDate"];
+  // Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+  string due_date = 8 [json_name = "dueDate"];
+  // Example: "America/Los_Angeles"
+  string time_zone = 9 [json_name = "timeZone"];
+  // Example: ["TRIGGER:P0DT9H0M0S", "TRIGGER:PT0S"]
+  repeated string reminders = 10;
+  // Example: "RRULE:FREQ=DAILY;INTERVAL=1"
+  string repeat_flag = 11 [json_name = "repeatFlag"];
+  TaskPriority priority = 12 [(buf.validate.field).enum.defined_only = true];
+  int64 sort_order = 13 [json_name = "sortOrder"];
+  repeated ChecklistItem items = 14;
+}
+
+message CompleteTaskRequest {
+  string project_id = 1 [
+    (buf.validate.field).required = true,
+    json_name = "projectId"
+  ];
+  string task_id = 2 [
+    (buf.validate.field).required = true,
+    json_name = "taskId"
+  ];
+}
+
+message DeleteTaskRequest {
+  string project_id = 1 [
+    (buf.validate.field).required = true,
+    json_name = "projectId"
+  ];
+  string task_id = 2 [
+    (buf.validate.field).required = true,
+    json_name = "taskId"
+  ];
+}
+
+message CreateProjectRequest {
+  string name = 1 [(buf.validate.field).required = true];
+  // Format: hex color code
+  // Example: "#F18181"
+  string color = 2;
+  int64 sort_order = 3 [json_name = "sortOrder"];
+  string view_mode = 4 [
+    (buf.validate.field).string = {
+      in: [
+        "list",
+        "kanban",
+        "timeline"
+      ]
+    },
+    json_name = "viewMode"
+  ];
+  string kind = 5 [(buf.validate.field).string = {
+    in: [
+      "TASK",
+      "NOTE"
+    ]
+  }];
+}
+
+message UpdateProjectRequest {
+  string project_id = 1 [
+    (buf.validate.field).required = true,
+    json_name = "projectId"
+  ];
+  string name = 2;
+  // Format: hex color code
+  // Example: "#F18181"
+  string color = 3;
+  int64 sort_order = 4 [json_name = "sortOrder"];
+  string view_mode = 5 [
+    (buf.validate.field).string = {
+      in: [
+        "list",
+        "kanban",
+        "timeline"
+      ]
+    },
+    json_name = "viewMode"
+  ];
+  string kind = 6 [(buf.validate.field).string = {
+    in: [
+      "TASK",
+      "NOTE"
+    ]
+  }];
+}
+
+message DeleteProjectRequest {
+  string project_id = 1 [(buf.validate.field).required = true];
+}
+
+message GetProjectRequest {
+  string project_id = 1 [(buf.validate.field).required = true];
+}
+
+message GetProjectDataRequest {
+  string project_id = 1 [(buf.validate.field).required = true];
+}
+
+message Empty {}
+
+message Projects {
+  repeated Project projects = 1;
+}

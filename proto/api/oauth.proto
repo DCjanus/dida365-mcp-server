@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+import "model/response.proto";
+
+// Dida365 OAuth Service, to gather the access token to use for the Dida365 API
+service Dida365oAuthService {
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.StringValue) {
+    option (google.api.http) = {get: "/ping"};
+  }
+
+  rpc OAuthLogin(google.protobuf.Empty) returns (model.TemporaryRedirectResponse) {
+    option (google.api.http) = {get: "/oauth/login"};
+  }
+
+  rpc OAuthCallback(OAuthCallbackRequest) returns (OAuthCallbackResponse) {
+    option (google.api.http) = {get: "/oauth/callback"};
+  }
+}
+
+message OAuthCallbackRequest {
+  string code = 1 [(buf.validate.field).required = true];
+}
+
+message OAuthCallbackResponse {
+  string access_token = 1;
+}
