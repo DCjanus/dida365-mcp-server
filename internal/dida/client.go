@@ -1,3 +1,5 @@
+// Package dida provides a client for interacting with the Dida365 API.
+// It implements all the basic operations for managing projects and tasks.
 package dida
 
 import (
@@ -10,11 +12,13 @@ import (
 	"github.com/dcjanus/dida365-mcp-server/gen/api"
 )
 
+// Client represents a Dida365 API client.
 type Client struct {
 	log *zap.Logger
 	cli *resty.Client
 }
 
+// NewClient creates a new Dida365 API client with the given logger and authentication token.
 func NewClient(log *zap.Logger, token string) *Client {
 	log = log.With(zap.String("component", "dida.Client"))
 
@@ -24,228 +28,260 @@ func NewClient(log *zap.Logger, token string) *Client {
 	}
 }
 
+// -----------------------------------------------------------------------------
+// Common request handling
+// -----------------------------------------------------------------------------
+
+// request represents a generic API request.
+type request struct {
+	method string
+	path   string
+	params map[string]string
+	body   any
+	result any
+}
+
+// doRequest executes an API request and handles common error cases.
+func (c *Client) doRequest(ctx context.Context, req request) error {
+	r := c.cli.R().SetContext(ctx)
+
+	if req.params != nil {
+		r.SetPathParams(req.params)
+	}
+	if req.body != nil {
+		r.SetBody(req.body)
+	}
+	if req.result != nil {
+		r.SetResult(req.result)
+	}
+
+	res, err := r.Execute(req.method, req.path)
+	if err != nil {
+		return errors.Wrap(err, "failed to execute request")
+	}
+	if res.IsError() {
+		return errors.Errorf("request failed with status %d: %s", res.StatusCode(), res.String())
+	}
+
+	return nil
+}
+
+// -----------------------------------------------------------------------------
+// Task operations
+// -----------------------------------------------------------------------------
+
+// GetTask retrieves a specific task by project ID and task ID.
 func (c *Client) GetTask(ctx context.Context, projectID, taskID string) (*api.Task, error) {
 	c.log.Debug("GetTask", zap.String("projectID", projectID), zap.String("taskID", taskID))
-	path := "/open/v1/project/{project_id}/task/{task_id}"
 
-	var reply api.Task
-
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetPathParams(map[string]string{
+	var result api.Task
+	err := c.doRequest(ctx, request{
+		method: "GET",
+		path:   "/open/v1/project/{project_id}/task/{task_id}",
+		params: map[string]string{
 			"project_id": projectID,
 			"task_id":    taskID,
-		}).
-		SetResult(&reply).
-		Get(path)
+		},
+		result: &result,
+	})
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get task")
-	}
-	if res.IsError() {
-		return nil, errors.Errorf("failed to get task, status: %d, body: %s", res.StatusCode(), res.String())
+		return nil, errors.Wrap(err, "get task")
 	}
 
-	return &reply, nil
+	return &result, nil
 }
 
-func (c *Client) ListProjects(ctx context.Context) ([]*api.Project, error) {
-	c.log.Debug("ListProjects")
-	path := "/open/v1/project"
-
-	var reply []*api.Project
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetResult(&reply).
-		Get(path)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to list projects")
-	}
-	if res.IsError() {
-		return nil, errors.Errorf("failed to list projects, status: %d, body: %s", res.StatusCode(), res.String())
-	}
-	return reply, nil
-}
-
+// CreateTask creates a new task with the given parameters.
 func (c *Client) CreateTask(ctx context.Context, req *api.CreateTaskRequest) (*api.Task, error) {
 	c.log.Debug("CreateTask", zap.String("projectID", req.ProjectId))
-	path := "/open/v1/task"
 
-	var reply api.Task
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetBody(req).
-		SetResult(&reply).
-		Post(path)
+	var result api.Task
+	err := c.doRequest(ctx, request{
+		method: "POST",
+		path:   "/open/v1/task",
+		body:   req,
+		result: &result,
+	})
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to create task")
+		return nil, errors.Wrap(err, "create task")
 	}
-	if res.IsError() {
-		return nil, errors.Errorf("failed to create task, status: %d, body: %s", res.StatusCode(), res.String())
-	}
-	return &reply, nil
+
+	return &result, nil
 }
 
+// UpdateTask updates an existing task with the given parameters.
 func (c *Client) UpdateTask(ctx context.Context, req *api.UpdateTaskRequest) (*api.Task, error) {
 	c.log.Debug("UpdateTask", zap.String("taskID", req.TaskId))
-	path := "/open/v1/task/{task_id}"
 
-	var reply api.Task
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetPathParam("task_id", req.TaskId).
-		SetBody(req).
-		SetResult(&reply).
-		Post(path)
+	var result api.Task
+	err := c.doRequest(ctx, request{
+		method: "POST",
+		path:   "/open/v1/task/{task_id}",
+		params: map[string]string{
+			"task_id": req.TaskId,
+		},
+		body:   req,
+		result: &result,
+	})
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to update task")
+		return nil, errors.Wrap(err, "update task")
 	}
-	if res.IsError() {
-		return nil, errors.Errorf("failed to update task, status: %d, body: %s", res.StatusCode(), res.String())
-	}
-	return &reply, nil
+
+	return &result, nil
 }
 
+// CompleteTask marks a task as completed.
 func (c *Client) CompleteTask(ctx context.Context, projectID, taskID string) error {
 	c.log.Debug("CompleteTask", zap.String("projectID", projectID), zap.String("taskID", taskID))
-	path := "/open/v1/project/{project_id}/task/{task_id}/complete"
 
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetPathParams(map[string]string{
+	err := c.doRequest(ctx, request{
+		method: "POST",
+		path:   "/open/v1/project/{project_id}/task/{task_id}/complete",
+		params: map[string]string{
 			"project_id": projectID,
 			"task_id":    taskID,
-		}).
-		Post(path)
+		},
+	})
 	if err != nil {
-		return errors.Wrap(err, "failed to complete task")
+		return errors.Wrap(err, "complete task")
 	}
-	if res.IsError() {
-		return errors.Errorf("failed to complete task, status: %d, body: %s", res.StatusCode(), res.String())
-	}
+
 	return nil
 }
 
+// DeleteTask deletes a task by its ID.
 func (c *Client) DeleteTask(ctx context.Context, projectID, taskID string) error {
 	c.log.Debug("DeleteTask", zap.String("projectID", projectID), zap.String("taskID", taskID))
-	path := "/open/v1/project/{project_id}/task/{task_id}"
 
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetPathParams(map[string]string{
+	err := c.doRequest(ctx, request{
+		method: "DELETE",
+		path:   "/open/v1/project/{project_id}/task/{task_id}",
+		params: map[string]string{
 			"project_id": projectID,
 			"task_id":    taskID,
-		}).
-		Delete(path)
+		},
+	})
 	if err != nil {
-		return errors.Wrap(err, "failed to delete task")
+		return errors.Wrap(err, "delete task")
 	}
-	if res.IsError() {
-		return errors.Errorf("failed to delete task, status: %d, body: %s", res.StatusCode(), res.String())
-	}
+
 	return nil
 }
 
+// -----------------------------------------------------------------------------
+// Project operations
+// -----------------------------------------------------------------------------
+
+// ListProjects returns a list of all projects.
+func (c *Client) ListProjects(ctx context.Context) ([]*api.Project, error) {
+	c.log.Debug("ListProjects")
+
+	var result []*api.Project
+	err := c.doRequest(ctx, request{
+		method: "GET",
+		path:   "/open/v1/project",
+		result: &result,
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, "list projects")
+	}
+
+	return result, nil
+}
+
+// GetProject retrieves a specific project by its ID.
 func (c *Client) GetProject(ctx context.Context, projectID string) (*api.Project, error) {
 	c.log.Debug("GetProject", zap.String("projectID", projectID))
-	path := "/open/v1/project/{project_id}"
 
-	var reply api.Project
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetPathParam("project_id", projectID).
-		SetResult(&reply).
-		Get(path)
+	var result api.Project
+	err := c.doRequest(ctx, request{
+		method: "GET",
+		path:   "/open/v1/project/{project_id}",
+		params: map[string]string{
+			"project_id": projectID,
+		},
+		result: &result,
+	})
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get project")
+		return nil, errors.Wrap(err, "get project")
 	}
-	if res.IsError() {
-		return nil, errors.Errorf("failed to get project, status: %d, body: %s", res.StatusCode(), res.String())
-	}
-	return &reply, nil
+
+	return &result, nil
 }
 
+// GetProjectData retrieves detailed data for a specific project.
 func (c *Client) GetProjectData(ctx context.Context, projectID string) (*api.ProjectData, error) {
 	c.log.Debug("GetProjectData", zap.String("projectID", projectID))
-	path := "/open/v1/project/{project_id}/data"
 
-	var reply api.ProjectData
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetPathParam("project_id", projectID).
-		SetResult(&reply).
-		Get(path)
+	var result api.ProjectData
+	err := c.doRequest(ctx, request{
+		method: "GET",
+		path:   "/open/v1/project/{project_id}/data",
+		params: map[string]string{
+			"project_id": projectID,
+		},
+		result: &result,
+	})
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to get project data")
+		return nil, errors.Wrap(err, "get project data")
 	}
-	if res.IsError() {
-		return nil, errors.Errorf("failed to get project data, status: %d, body: %s", res.StatusCode(), res.String())
-	}
-	return &reply, nil
+
+	return &result, nil
 }
 
+// CreateProject creates a new project with the given parameters.
 func (c *Client) CreateProject(ctx context.Context, req *api.CreateProjectRequest) (*api.Project, error) {
 	c.log.Debug("CreateProject", zap.String("name", req.Name))
-	path := "/open/v1/project"
 
-	var reply api.Project
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetBody(req).
-		SetResult(&reply).
-		Post(path)
+	var result api.Project
+	err := c.doRequest(ctx, request{
+		method: "POST",
+		path:   "/open/v1/project",
+		body:   req,
+		result: &result,
+	})
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to create project")
+		return nil, errors.Wrap(err, "create project")
 	}
-	if res.IsError() {
-		return nil, errors.Errorf("failed to create project, status: %d, body: %s", res.StatusCode(), res.String())
-	}
-	return &reply, nil
+
+	return &result, nil
 }
 
+// UpdateProject updates an existing project with the given parameters.
 func (c *Client) UpdateProject(ctx context.Context, req *api.UpdateProjectRequest) (*api.Project, error) {
 	c.log.Debug("UpdateProject", zap.String("projectID", req.ProjectId))
-	path := "/open/v1/project/{project_id}"
 
-	var reply api.Project
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetPathParam("project_id", req.ProjectId).
-		SetBody(req).
-		SetResult(&reply).
-		Post(path)
+	var result api.Project
+	err := c.doRequest(ctx, request{
+		method: "POST",
+		path:   "/open/v1/project/{project_id}",
+		params: map[string]string{
+			"project_id": req.ProjectId,
+		},
+		body:   req,
+		result: &result,
+	})
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to update project")
+		return nil, errors.Wrap(err, "update project")
 	}
-	if res.IsError() {
-		return nil, errors.Errorf("failed to update project, status: %d, body: %s", res.StatusCode(), res.String())
-	}
-	return &reply, nil
+
+	return &result, nil
 }
 
+// DeleteProject deletes a project by its ID.
 func (c *Client) DeleteProject(ctx context.Context, projectID string) error {
 	c.log.Debug("DeleteProject", zap.String("projectID", projectID))
-	path := "/open/v1/project/{project_id}"
 
-	res, err := c.cli.
-		R().
-		SetContext(ctx).
-		SetPathParam("project_id", projectID).
-		Delete(path)
+	err := c.doRequest(ctx, request{
+		method: "DELETE",
+		path:   "/open/v1/project/{project_id}",
+		params: map[string]string{
+			"project_id": projectID,
+		},
+	})
 	if err != nil {
-		return errors.Wrap(err, "failed to delete project")
+		return errors.Wrap(err, "delete project")
 	}
-	if res.IsError() {
-		return errors.Errorf("failed to delete project, status: %d, body: %s", res.StatusCode(), res.String())
-	}
+
 	return nil
 }
