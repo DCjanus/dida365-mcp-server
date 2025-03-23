@@ -168,9 +168,11 @@ func (ChecklistItemStatus) EnumDescriptor() ([]byte, []int) {
 }
 
 type GetTaskRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProjectId     string                 `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	TaskId        string                 `protobuf:"bytes,2,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Project identifier that contains the task
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	// Task identifier to get
+	TaskId        string `protobuf:"bytes,2,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -220,15 +222,19 @@ func (x *GetTaskRequest) GetTaskId() string {
 }
 
 type ChecklistItem struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Status        ChecklistItemStatus    `protobuf:"varint,2,opt,name=status,proto3,enum=api.ChecklistItemStatus" json:"status,omitempty"`
-	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
-	SortOrder     int32                  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
-	StartDate     string                 `protobuf:"bytes,5,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	IsAllDay      bool                   `protobuf:"varint,6,opt,name=is_all_day,json=isAllDay,proto3" json:"is_all_day,omitempty"`
-	TimeZone      string                 `protobuf:"bytes,7,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
-	CompletedTime string                 `protobuf:"bytes,8,opt,name=completed_time,json=completedTime,proto3" json:"completed_time,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Id        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Status    ChecklistItemStatus    `protobuf:"varint,2,opt,name=status,proto3,enum=api.ChecklistItemStatus" json:"status,omitempty"`
+	Title     string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	SortOrder int32                  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	// Example: "2019-11-13T03:00:00+0000"
+	StartDate string `protobuf:"bytes,5,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	IsAllDay  bool   `protobuf:"varint,6,opt,name=is_all_day,json=isAllDay,proto3" json:"is_all_day,omitempty"`
+	// Example: "America/Los_Angeles"
+	TimeZone string `protobuf:"bytes,7,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	CompletedTime string `protobuf:"bytes,8,opt,name=completed_time,json=completedTime,proto3" json:"completed_time,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -320,23 +326,29 @@ func (x *ChecklistItem) GetCompletedTime() string {
 }
 
 type Task struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	IsAllDay      bool                   `protobuf:"varint,2,opt,name=is_all_day,json=isAllDay,proto3" json:"is_all_day,omitempty"`
-	ProjectId     string                 `protobuf:"bytes,3,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	Title         string                 `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
-	Content       string                 `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
-	Desc          string                 `protobuf:"bytes,6,opt,name=desc,proto3" json:"desc,omitempty"`
-	TimeZone      string                 `protobuf:"bytes,7,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
-	RepeatFlag    string                 `protobuf:"bytes,8,opt,name=repeat_flag,json=repeatFlag,proto3" json:"repeat_flag,omitempty"`
-	StartDate     string                 `protobuf:"bytes,9,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	DueDate       string                 `protobuf:"bytes,10,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`
-	Reminders     []string               `protobuf:"bytes,11,rep,name=reminders,proto3" json:"reminders,omitempty"`
-	Priority      TaskPriority           `protobuf:"varint,12,opt,name=priority,proto3,enum=api.TaskPriority" json:"priority,omitempty"`
-	Status        TaskStatus             `protobuf:"varint,13,opt,name=status,proto3,enum=api.TaskStatus" json:"status,omitempty"`
-	CompletedTime string                 `protobuf:"bytes,14,opt,name=completed_time,json=completedTime,proto3" json:"completed_time,omitempty"`
-	SortOrder     int32                  `protobuf:"varint,15,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
-	Items         []*ChecklistItem       `protobuf:"bytes,16,rep,name=items,proto3" json:"items,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Id        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	IsAllDay  bool                   `protobuf:"varint,2,opt,name=is_all_day,json=isAllDay,proto3" json:"is_all_day,omitempty"`
+	ProjectId string                 `protobuf:"bytes,3,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	Title     string                 `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
+	Content   string                 `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
+	Desc      string                 `protobuf:"bytes,6,opt,name=desc,proto3" json:"desc,omitempty"`
+	// Example: "America/Los_Angeles"
+	TimeZone string `protobuf:"bytes,7,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
+	// Example: "RRULE:FREQ=DAILY;INTERVAL=1"
+	RepeatFlag string `protobuf:"bytes,8,opt,name=repeat_flag,json=repeatFlag,proto3" json:"repeat_flag,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	StartDate string `protobuf:"bytes,9,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	DueDate string `protobuf:"bytes,10,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`
+	// Example: ["TRIGGER:P0DT9H0M0S", "TRIGGER:PT0S"]
+	Reminders []string     `protobuf:"bytes,11,rep,name=reminders,proto3" json:"reminders,omitempty"`
+	Priority  TaskPriority `protobuf:"varint,12,opt,name=priority,proto3,enum=api.TaskPriority" json:"priority,omitempty"`
+	Status    TaskStatus   `protobuf:"varint,13,opt,name=status,proto3,enum=api.TaskStatus" json:"status,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	CompletedTime string           `protobuf:"bytes,14,opt,name=completed_time,json=completedTime,proto3" json:"completed_time,omitempty"`
+	SortOrder     int32            `protobuf:"varint,15,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	Items         []*ChecklistItem `protobuf:"bytes,16,rep,name=items,proto3" json:"items,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -484,16 +496,18 @@ func (x *Task) GetItems() []*ChecklistItem {
 }
 
 type Project struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Color         string                 `protobuf:"bytes,3,opt,name=color,proto3" json:"color,omitempty"`
-	SortOrder     int64                  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
-	Closed        bool                   `protobuf:"varint,5,opt,name=closed,proto3" json:"closed,omitempty"`
-	GroupId       string                 `protobuf:"bytes,6,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
-	ViewMode      string                 `protobuf:"bytes,7,opt,name=view_mode,json=viewMode,proto3" json:"view_mode,omitempty"`
-	Permission    string                 `protobuf:"bytes,8,opt,name=permission,proto3" json:"permission,omitempty"`
-	Kind          string                 `protobuf:"bytes,9,opt,name=kind,proto3" json:"kind,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name  string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Format: hex color code
+	// Example: "#F18181"
+	Color         string `protobuf:"bytes,3,opt,name=color,proto3" json:"color,omitempty"`
+	SortOrder     int64  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	Closed        bool   `protobuf:"varint,5,opt,name=closed,proto3" json:"closed,omitempty"`
+	GroupId       string `protobuf:"bytes,6,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	ViewMode      string `protobuf:"bytes,7,opt,name=view_mode,json=viewMode,proto3" json:"view_mode,omitempty"`
+	Permission    string `protobuf:"bytes,8,opt,name=permission,proto3" json:"permission,omitempty"`
+	Kind          string `protobuf:"bytes,9,opt,name=kind,proto3" json:"kind,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -720,20 +734,25 @@ func (x *ProjectData) GetColumns() []*Column {
 }
 
 type CreateTaskRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProjectId     string                 `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
-	Desc          string                 `protobuf:"bytes,4,opt,name=desc,proto3" json:"desc,omitempty"`
-	IsAllDay      bool                   `protobuf:"varint,5,opt,name=is_all_day,json=isAllDay,proto3" json:"is_all_day,omitempty"`
-	StartDate     string                 `protobuf:"bytes,6,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	DueDate       string                 `protobuf:"bytes,7,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`
-	TimeZone      string                 `protobuf:"bytes,8,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
-	Reminders     []string               `protobuf:"bytes,9,rep,name=reminders,proto3" json:"reminders,omitempty"`
-	RepeatFlag    string                 `protobuf:"bytes,10,opt,name=repeat_flag,json=repeatFlag,proto3" json:"repeat_flag,omitempty"`
-	Priority      TaskPriority           `protobuf:"varint,11,opt,name=priority,proto3,enum=api.TaskPriority" json:"priority,omitempty"`
-	SortOrder     int64                  `protobuf:"varint,12,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
-	Items         []*ChecklistItem       `protobuf:"bytes,13,rep,name=items,proto3" json:"items,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	ProjectId string                 `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	Title     string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Content   string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	Desc      string                 `protobuf:"bytes,4,opt,name=desc,proto3" json:"desc,omitempty"`
+	IsAllDay  bool                   `protobuf:"varint,5,opt,name=is_all_day,json=isAllDay,proto3" json:"is_all_day,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	StartDate string `protobuf:"bytes,6,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	DueDate string `protobuf:"bytes,7,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`
+	// Example: "America/Los_Angeles"
+	TimeZone string `protobuf:"bytes,8,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
+	// Example: ["TRIGGER:P0DT9H0M0S", "TRIGGER:PT0S"]
+	Reminders []string `protobuf:"bytes,9,rep,name=reminders,proto3" json:"reminders,omitempty"`
+	// Example: "RRULE:FREQ=DAILY;INTERVAL=1"
+	RepeatFlag    string           `protobuf:"bytes,10,opt,name=repeat_flag,json=repeatFlag,proto3" json:"repeat_flag,omitempty"`
+	Priority      TaskPriority     `protobuf:"varint,11,opt,name=priority,proto3,enum=api.TaskPriority" json:"priority,omitempty"`
+	SortOrder     int64            `protobuf:"varint,12,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	Items         []*ChecklistItem `protobuf:"bytes,13,rep,name=items,proto3" json:"items,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -860,21 +879,26 @@ func (x *CreateTaskRequest) GetItems() []*ChecklistItem {
 }
 
 type UpdateTaskRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TaskId        string                 `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
-	ProjectId     string                 `protobuf:"bytes,2,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
-	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
-	Desc          string                 `protobuf:"bytes,5,opt,name=desc,proto3" json:"desc,omitempty"`
-	IsAllDay      bool                   `protobuf:"varint,6,opt,name=is_all_day,json=isAllDay,proto3" json:"is_all_day,omitempty"`
-	StartDate     string                 `protobuf:"bytes,7,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	DueDate       string                 `protobuf:"bytes,8,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`
-	TimeZone      string                 `protobuf:"bytes,9,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
-	Reminders     []string               `protobuf:"bytes,10,rep,name=reminders,proto3" json:"reminders,omitempty"`
-	RepeatFlag    string                 `protobuf:"bytes,11,opt,name=repeat_flag,json=repeatFlag,proto3" json:"repeat_flag,omitempty"`
-	Priority      TaskPriority           `protobuf:"varint,12,opt,name=priority,proto3,enum=api.TaskPriority" json:"priority,omitempty"`
-	SortOrder     int64                  `protobuf:"varint,13,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
-	Items         []*ChecklistItem       `protobuf:"bytes,14,rep,name=items,proto3" json:"items,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	TaskId    string                 `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	ProjectId string                 `protobuf:"bytes,2,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	Title     string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Content   string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	Desc      string                 `protobuf:"bytes,5,opt,name=desc,proto3" json:"desc,omitempty"`
+	IsAllDay  bool                   `protobuf:"varint,6,opt,name=is_all_day,json=isAllDay,proto3" json:"is_all_day,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	StartDate string `protobuf:"bytes,7,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	// Format: "yyyy-MM-dd'T'HH:mm:ssZ"
+	DueDate string `protobuf:"bytes,8,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`
+	// Example: "America/Los_Angeles"
+	TimeZone string `protobuf:"bytes,9,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
+	// Example: ["TRIGGER:P0DT9H0M0S", "TRIGGER:PT0S"]
+	Reminders []string `protobuf:"bytes,10,rep,name=reminders,proto3" json:"reminders,omitempty"`
+	// Example: "RRULE:FREQ=DAILY;INTERVAL=1"
+	RepeatFlag    string           `protobuf:"bytes,11,opt,name=repeat_flag,json=repeatFlag,proto3" json:"repeat_flag,omitempty"`
+	Priority      TaskPriority     `protobuf:"varint,12,opt,name=priority,proto3,enum=api.TaskPriority" json:"priority,omitempty"`
+	SortOrder     int64            `protobuf:"varint,13,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	Items         []*ChecklistItem `protobuf:"bytes,14,rep,name=items,proto3" json:"items,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1112,12 +1136,14 @@ func (x *DeleteTaskRequest) GetTaskId() string {
 }
 
 type CreateProjectRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Color         string                 `protobuf:"bytes,2,opt,name=color,proto3" json:"color,omitempty"`
-	SortOrder     int64                  `protobuf:"varint,3,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
-	ViewMode      string                 `protobuf:"bytes,4,opt,name=view_mode,json=viewMode,proto3" json:"view_mode,omitempty"`
-	Kind          string                 `protobuf:"bytes,5,opt,name=kind,proto3" json:"kind,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Name  string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Format: hex color code
+	// Example: "#F18181"
+	Color         string `protobuf:"bytes,2,opt,name=color,proto3" json:"color,omitempty"`
+	SortOrder     int64  `protobuf:"varint,3,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	ViewMode      string `protobuf:"bytes,4,opt,name=view_mode,json=viewMode,proto3" json:"view_mode,omitempty"`
+	Kind          string `protobuf:"bytes,5,opt,name=kind,proto3" json:"kind,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1188,13 +1214,15 @@ func (x *CreateProjectRequest) GetKind() string {
 }
 
 type UpdateProjectRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProjectId     string                 `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Color         string                 `protobuf:"bytes,3,opt,name=color,proto3" json:"color,omitempty"`
-	SortOrder     int64                  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
-	ViewMode      string                 `protobuf:"bytes,5,opt,name=view_mode,json=viewMode,proto3" json:"view_mode,omitempty"`
-	Kind          string                 `protobuf:"bytes,6,opt,name=kind,proto3" json:"kind,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	ProjectId string                 `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
+	Name      string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Format: hex color code
+	// Example: "#F18181"
+	Color         string `protobuf:"bytes,3,opt,name=color,proto3" json:"color,omitempty"`
+	SortOrder     int64  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	ViewMode      string `protobuf:"bytes,5,opt,name=view_mode,json=viewMode,proto3" json:"view_mode,omitempty"`
+	Kind          string `protobuf:"bytes,6,opt,name=kind,proto3" json:"kind,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }

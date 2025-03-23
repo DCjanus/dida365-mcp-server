@@ -127,6 +127,7 @@
           },
           {
             "name": "color",
+            "description": "Format: hex color code\nExample: \"#F18181\"",
             "in": "query",
             "required": false,
             "type": "string"
@@ -244,6 +245,7 @@
           },
           {
             "name": "color",
+            "description": "Format: hex color code\nExample: \"#F18181\"",
             "in": "query",
             "required": false,
             "type": "string"
@@ -323,12 +325,14 @@
         "parameters": [
           {
             "name": "projectId",
+            "description": "Project identifier that contains the task",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
             "name": "taskId",
+            "description": "Task identifier to get",
             "in": "path",
             "required": true,
             "type": "string"
@@ -459,24 +463,28 @@
           },
           {
             "name": "startDate",
+            "description": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\"",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "dueDate",
+            "description": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\"",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "timeZone",
+            "description": "Example: \"America/Los_Angeles\"",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "reminders",
+            "description": "Example: [\"TRIGGER:P0DT9H0M0S\", \"TRIGGER:PT0S\"]",
             "in": "query",
             "required": false,
             "type": "array",
@@ -487,6 +495,7 @@
           },
           {
             "name": "repeatFlag",
+            "description": "Example: \"RRULE:FREQ=DAILY;INTERVAL=1\"",
             "in": "query",
             "required": false,
             "type": "string"
@@ -573,24 +582,28 @@
           },
           {
             "name": "startDate",
+            "description": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\"",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "dueDate",
+            "description": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\"",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "timeZone",
+            "description": "Example: \"America/Los_Angeles\"",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
             "name": "reminders",
+            "description": "Example: [\"TRIGGER:P0DT9H0M0S\", \"TRIGGER:PT0S\"]",
             "in": "query",
             "required": false,
             "type": "array",
@@ -601,6 +614,7 @@
           },
           {
             "name": "repeatFlag",
+            "description": "Example: \"RRULE:FREQ=DAILY;INTERVAL=1\"",
             "in": "query",
             "required": false,
             "type": "string"
@@ -672,16 +686,19 @@
           "format": "int32"
         },
         "startDate": {
-          "type": "string"
+          "type": "string",
+          "title": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\"\nExample: \"2019-11-13T03:00:00+0000\""
         },
         "isAllDay": {
           "type": "boolean"
         },
         "timeZone": {
-          "type": "string"
+          "type": "string",
+          "title": "Example: \"America/Los_Angeles\""
         },
         "completedTime": {
-          "type": "string"
+          "type": "string",
+          "title": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\""
         }
       }
     },
@@ -735,7 +752,8 @@
           "type": "string"
         },
         "color": {
-          "type": "string"
+          "type": "string",
+          "title": "Format: hex color code\nExample: \"#F18181\""
         },
         "sortOrder": {
           "type": "string",
@@ -814,22 +832,27 @@
           "type": "string"
         },
         "timeZone": {
-          "type": "string"
+          "type": "string",
+          "title": "Example: \"America/Los_Angeles\""
         },
         "repeatFlag": {
-          "type": "string"
+          "type": "string",
+          "title": "Example: \"RRULE:FREQ=DAILY;INTERVAL=1\""
         },
         "startDate": {
-          "type": "string"
+          "type": "string",
+          "title": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\""
         },
         "dueDate": {
-          "type": "string"
+          "type": "string",
+          "title": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\""
         },
         "reminders": {
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "title": "Example: [\"TRIGGER:P0DT9H0M0S\", \"TRIGGER:PT0S\"]"
         },
         "priority": {
           "$ref": "#/definitions/apiTaskPriority"
@@ -838,7 +861,8 @@
           "$ref": "#/definitions/apiTaskStatus"
         },
         "completedTime": {
-          "type": "string"
+          "type": "string",
+          "title": "Format: \"yyyy-MM-dd'T'HH:mm:ssZ\""
         },
         "sortOrder": {
           "type": "integer",
