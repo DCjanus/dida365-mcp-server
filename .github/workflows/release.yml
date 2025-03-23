@@ -142,16 +142,17 @@ jobs:
       
       - name: Create multi-arch manifest
         run: |
-          # 创建临时目录
+          # Create temporary directory
           mkdir -p /tmp/images
           
-          # 从构建任务下载镜像
+          # Load images from build tasks
           docker load -i /tmp/amd64.tar
           docker load -i /tmp/arm64.tar
           
-          # 为每个标签创建多架构镜像
+          # Create multi-arch manifest for each tag
           for tag in ${{ needs.prepare.outputs.tags }}; do
             docker manifest create $tag \
               --amend $tag-amd64 \
               --amend $tag-arm64
             docker manifest push $tag 
+          done
