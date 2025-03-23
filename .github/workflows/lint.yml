@@ -19,8 +19,13 @@ jobs:
       - name: Install just
         uses: taiki-e/install-action@just
       
-      - name: Install tools
-        run: just init
+      - name: Install buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Install golangci-lint
+        uses: golangci/golangci-lint-action@v6
       
       - name: Run lint
         run: just lint 
