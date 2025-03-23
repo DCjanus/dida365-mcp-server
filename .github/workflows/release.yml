@@ -146,18 +146,42 @@ jobs:
           mkdir -p /tmp/images
           
           # Load images from build tasks
+          echo "Loading AMD64 image..."
           docker load -i /tmp/amd64.tar
+          echo "Loading ARM64 image..."
           docker load -i /tmp/arm64.tar
+          
+          # List loaded images for debugging
+          echo "Loaded images:"
+          docker images
           
           # Create multi-arch manifest for each tag
           for tag in ${{ needs.prepare.outputs.tags }}; do
+            echo "Processing tag: $tag"
+            
+            # Get the base image name without registry
+            base_image=$(echo $tag | sed "s|${{ env.REGISTRY }}/||")
+            
             # Tag images with architecture-specific tags
+            echo "Tagging AMD64 image..."
             docker tag $tag $tag-amd64
+            echo "Tagging ARM64 image..."
             docker tag $tag $tag-arm64
             
+            # Verify tags were created
+            echo "Verifying tags..."
+            docker images | grep "$base_image"
+            
             # Create and push multi-arch manifest
+            echo "Creating manifest for $tag..."
             docker manifest create $tag \
               --amend $tag-amd64 \
               --amend $tag-arm64
+              
+            echo "Pushing manifest for $tag..."
             docker manifest push $tag
+            
+            # Verify manifest was created
+            echo "Verifying manifest..."
+            docker manifest inspect $tag || echo "Warning: Manifest inspection failed"
           done
