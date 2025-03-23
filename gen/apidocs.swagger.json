@@ -77,8 +77,232 @@
         ]
       }
     },
+    "/open/v1/project": {
+      "get": {
+        "summary": "Project related APIs",
+        "operationId": "DidaAPIService_GetUserProjects",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiProjects"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "DidaAPIService"
+        ]
+      },
+      "post": {
+        "operationId": "DidaAPIService_CreateProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiProject"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "color",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "viewMode",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      }
+    },
+    "/open/v1/project/{projectId}": {
+      "get": {
+        "operationId": "DidaAPIService_GetProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiProject"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      },
+      "delete": {
+        "operationId": "DidaAPIService_DeleteProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      },
+      "post": {
+        "operationId": "DidaAPIService_UpdateProject",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiProject"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "color",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "viewMode",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      }
+    },
+    "/open/v1/project/{projectId}/data": {
+      "get": {
+        "operationId": "DidaAPIService_GetProjectData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiProjectData"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      }
+    },
     "/open/v1/project/{projectId}/task/{taskId}": {
       "get": {
+        "summary": "Task related APIs",
         "operationId": "DidaAPIService_GetTask",
         "responses": {
           "200": {
@@ -111,6 +335,286 @@
         "tags": [
           "DidaAPIService"
         ]
+      },
+      "delete": {
+        "operationId": "DidaAPIService_DeleteTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      }
+    },
+    "/open/v1/project/{projectId}/task/{taskId}/complete": {
+      "post": {
+        "operationId": "DidaAPIService_CompleteTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiEmpty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      }
+    },
+    "/open/v1/task": {
+      "post": {
+        "operationId": "DidaAPIService_CreateTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTask"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "content",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "desc",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "isAllDay",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dueDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "timeZone",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "reminders",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "repeatFlag",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
+      }
+    },
+    "/open/v1/task/{taskId}": {
+      "post": {
+        "operationId": "DidaAPIService_UpdateTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/apiTask"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "projectId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "content",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "desc",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "isAllDay",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dueDate",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "timeZone",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "reminders",
+            "in": "query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "repeatFlag",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "DidaAPIService"
+        ]
       }
     },
     "/ping": {
@@ -137,6 +641,55 @@
     }
   },
   "definitions": {
+    "apiChecklistItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "title": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "isAllDay": {
+          "type": "boolean"
+        },
+        "timeZone": {
+          "type": "string"
+        }
+      }
+    },
+    "apiColumn": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "apiEmpty": {
+      "type": "object"
+    },
     "apiOAuthCallbackResponse": {
       "type": "object",
       "properties": {
@@ -145,6 +698,73 @@
         },
         "state": {
           "type": "string"
+        }
+      }
+    },
+    "apiProject": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "string",
+          "format": "int64"
+        },
+        "closed": {
+          "type": "boolean"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "viewMode": {
+          "type": "string"
+        },
+        "permission": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        }
+      }
+    },
+    "apiProjectData": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "$ref": "#/definitions/apiProject"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiTask"
+          }
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiColumn"
+          }
+        }
+      }
+    },
+    "apiProjects": {
+      "type": "object",
+      "properties": {
+        "projects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/apiProject"
+          }
         }
       }
     },
@@ -206,7 +826,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/apiTask"
+            "$ref": "#/definitions/apiChecklistItem"
           }
         }
       }

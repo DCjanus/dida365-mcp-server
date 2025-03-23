@@ -19,7 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DidaAPIService_GetTask_FullMethodName = "/api.DidaAPIService/GetTask"
+	DidaAPIService_GetTask_FullMethodName         = "/api.DidaAPIService/GetTask"
+	DidaAPIService_CreateTask_FullMethodName      = "/api.DidaAPIService/CreateTask"
+	DidaAPIService_UpdateTask_FullMethodName      = "/api.DidaAPIService/UpdateTask"
+	DidaAPIService_CompleteTask_FullMethodName    = "/api.DidaAPIService/CompleteTask"
+	DidaAPIService_DeleteTask_FullMethodName      = "/api.DidaAPIService/DeleteTask"
+	DidaAPIService_GetUserProjects_FullMethodName = "/api.DidaAPIService/GetUserProjects"
+	DidaAPIService_GetProject_FullMethodName      = "/api.DidaAPIService/GetProject"
+	DidaAPIService_GetProjectData_FullMethodName  = "/api.DidaAPIService/GetProjectData"
+	DidaAPIService_CreateProject_FullMethodName   = "/api.DidaAPIService/CreateProject"
+	DidaAPIService_UpdateProject_FullMethodName   = "/api.DidaAPIService/UpdateProject"
+	DidaAPIService_DeleteProject_FullMethodName   = "/api.DidaAPIService/DeleteProject"
 )
 
 // DidaAPIServiceClient is the client API for DidaAPIService service.
@@ -28,7 +38,19 @@ const (
 //
 // Dida365APIService has been implemented by Dida365 official, here is just for AI completion
 type DidaAPIServiceClient interface {
+	// Task related APIs
 	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*Task, error)
+	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*Task, error)
+	UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*Task, error)
+	CompleteTask(ctx context.Context, in *CompleteTaskRequest, opts ...grpc.CallOption) (*Empty, error)
+	DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Project related APIs
+	GetUserProjects(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Projects, error)
+	GetProject(ctx context.Context, in *GetProjectRequest, opts ...grpc.CallOption) (*Project, error)
+	GetProjectData(ctx context.Context, in *GetProjectDataRequest, opts ...grpc.CallOption) (*ProjectData, error)
+	CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*Project, error)
+	UpdateProject(ctx context.Context, in *UpdateProjectRequest, opts ...grpc.CallOption) (*Project, error)
+	DeleteProject(ctx context.Context, in *DeleteProjectRequest, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type didaAPIServiceClient struct {
@@ -49,13 +71,125 @@ func (c *didaAPIServiceClient) GetTask(ctx context.Context, in *GetTaskRequest, 
 	return out, nil
 }
 
+func (c *didaAPIServiceClient) CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*Task, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Task)
+	err := c.cc.Invoke(ctx, DidaAPIService_CreateTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) UpdateTask(ctx context.Context, in *UpdateTaskRequest, opts ...grpc.CallOption) (*Task, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Task)
+	err := c.cc.Invoke(ctx, DidaAPIService_UpdateTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) CompleteTask(ctx context.Context, in *CompleteTaskRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DidaAPIService_CompleteTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) DeleteTask(ctx context.Context, in *DeleteTaskRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DidaAPIService_DeleteTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) GetUserProjects(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Projects, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Projects)
+	err := c.cc.Invoke(ctx, DidaAPIService_GetUserProjects_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) GetProject(ctx context.Context, in *GetProjectRequest, opts ...grpc.CallOption) (*Project, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Project)
+	err := c.cc.Invoke(ctx, DidaAPIService_GetProject_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) GetProjectData(ctx context.Context, in *GetProjectDataRequest, opts ...grpc.CallOption) (*ProjectData, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProjectData)
+	err := c.cc.Invoke(ctx, DidaAPIService_GetProjectData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) CreateProject(ctx context.Context, in *CreateProjectRequest, opts ...grpc.CallOption) (*Project, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Project)
+	err := c.cc.Invoke(ctx, DidaAPIService_CreateProject_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) UpdateProject(ctx context.Context, in *UpdateProjectRequest, opts ...grpc.CallOption) (*Project, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Project)
+	err := c.cc.Invoke(ctx, DidaAPIService_UpdateProject_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *didaAPIServiceClient) DeleteProject(ctx context.Context, in *DeleteProjectRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, DidaAPIService_DeleteProject_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DidaAPIServiceServer is the server API for DidaAPIService service.
 // All implementations must embed UnimplementedDidaAPIServiceServer
 // for forward compatibility.
 //
 // Dida365APIService has been implemented by Dida365 official, here is just for AI completion
 type DidaAPIServiceServer interface {
+	// Task related APIs
 	GetTask(context.Context, *GetTaskRequest) (*Task, error)
+	CreateTask(context.Context, *CreateTaskRequest) (*Task, error)
+	UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error)
+	CompleteTask(context.Context, *CompleteTaskRequest) (*Empty, error)
+	DeleteTask(context.Context, *DeleteTaskRequest) (*Empty, error)
+	// Project related APIs
+	GetUserProjects(context.Context, *Empty) (*Projects, error)
+	GetProject(context.Context, *GetProjectRequest) (*Project, error)
+	GetProjectData(context.Context, *GetProjectDataRequest) (*ProjectData, error)
+	CreateProject(context.Context, *CreateProjectRequest) (*Project, error)
+	UpdateProject(context.Context, *UpdateProjectRequest) (*Project, error)
+	DeleteProject(context.Context, *DeleteProjectRequest) (*Empty, error)
 	mustEmbedUnimplementedDidaAPIServiceServer()
 }
 
@@ -68,6 +202,36 @@ type UnimplementedDidaAPIServiceServer struct{}
 
 func (UnimplementedDidaAPIServiceServer) GetTask(context.Context, *GetTaskRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTask not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) CreateTask(context.Context, *CreateTaskRequest) (*Task, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) UpdateTask(context.Context, *UpdateTaskRequest) (*Task, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTask not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) CompleteTask(context.Context, *CompleteTaskRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompleteTask not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) DeleteTask(context.Context, *DeleteTaskRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTask not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) GetUserProjects(context.Context, *Empty) (*Projects, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserProjects not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) GetProject(context.Context, *GetProjectRequest) (*Project, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProject not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) GetProjectData(context.Context, *GetProjectDataRequest) (*ProjectData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetProjectData not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) CreateProject(context.Context, *CreateProjectRequest) (*Project, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateProject not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) UpdateProject(context.Context, *UpdateProjectRequest) (*Project, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateProject not implemented")
+}
+func (UnimplementedDidaAPIServiceServer) DeleteProject(context.Context, *DeleteProjectRequest) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProject not implemented")
 }
 func (UnimplementedDidaAPIServiceServer) mustEmbedUnimplementedDidaAPIServiceServer() {}
 func (UnimplementedDidaAPIServiceServer) testEmbeddedByValue()                        {}
@@ -108,6 +272,186 @@ func _DidaAPIService_GetTask_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DidaAPIService_CreateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).CreateTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_CreateTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).CreateTask(ctx, req.(*CreateTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_UpdateTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).UpdateTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_UpdateTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).UpdateTask(ctx, req.(*UpdateTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_CompleteTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompleteTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).CompleteTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_CompleteTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).CompleteTask(ctx, req.(*CompleteTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_DeleteTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).DeleteTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_DeleteTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).DeleteTask(ctx, req.(*DeleteTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_GetUserProjects_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).GetUserProjects(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_GetUserProjects_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).GetUserProjects(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_GetProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).GetProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_GetProject_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).GetProject(ctx, req.(*GetProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_GetProjectData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetProjectDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).GetProjectData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_GetProjectData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).GetProjectData(ctx, req.(*GetProjectDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_CreateProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).CreateProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_CreateProject_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).CreateProject(ctx, req.(*CreateProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_UpdateProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).UpdateProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_UpdateProject_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).UpdateProject(ctx, req.(*UpdateProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DidaAPIService_DeleteProject_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteProjectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DidaAPIServiceServer).DeleteProject(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DidaAPIService_DeleteProject_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DidaAPIServiceServer).DeleteProject(ctx, req.(*DeleteProjectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DidaAPIService_ServiceDesc is the grpc.ServiceDesc for DidaAPIService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -118,6 +462,46 @@ var DidaAPIService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetTask",
 			Handler:    _DidaAPIService_GetTask_Handler,
+		},
+		{
+			MethodName: "CreateTask",
+			Handler:    _DidaAPIService_CreateTask_Handler,
+		},
+		{
+			MethodName: "UpdateTask",
+			Handler:    _DidaAPIService_UpdateTask_Handler,
+		},
+		{
+			MethodName: "CompleteTask",
+			Handler:    _DidaAPIService_CompleteTask_Handler,
+		},
+		{
+			MethodName: "DeleteTask",
+			Handler:    _DidaAPIService_DeleteTask_Handler,
+		},
+		{
+			MethodName: "GetUserProjects",
+			Handler:    _DidaAPIService_GetUserProjects_Handler,
+		},
+		{
+			MethodName: "GetProject",
+			Handler:    _DidaAPIService_GetProject_Handler,
+		},
+		{
+			MethodName: "GetProjectData",
+			Handler:    _DidaAPIService_GetProjectData_Handler,
+		},
+		{
+			MethodName: "CreateProject",
+			Handler:    _DidaAPIService_CreateProject_Handler,
+		},
+		{
+			MethodName: "UpdateProject",
+			Handler:    _DidaAPIService_UpdateProject_Handler,
+		},
+		{
+			MethodName: "DeleteProject",
+			Handler:    _DidaAPIService_DeleteProject_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
