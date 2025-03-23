@@ -18,7 +18,7 @@ service Dida365oAuthService {
     option (google.api.http) = {get: "/oauth/login"};
   }
 
-  rpc OAuthCallback(OAuthCallbackRequest) returns (OAuthCallbackResponse) {
+  rpc OAuthCallback(OAuthCallbackRequest) returns (model.HTMLResponse) {
     option (google.api.http) = {get: "/oauth/callback"};
   }
 }

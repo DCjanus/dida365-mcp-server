@@ -35,7 +35,7 @@ const (
 type Dida365OAuthServiceClient interface {
 	Ping(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*wrapperspb.StringValue, error)
 	OAuthLogin(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*model.TemporaryRedirectResponse, error)
-	OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*OAuthCallbackResponse, error)
+	OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*model.HTMLResponse, error)
 }
 
 type dida365OAuthServiceClient struct {
@@ -66,9 +66,9 @@ func (c *dida365OAuthServiceClient) OAuthLogin(ctx context.Context, in *emptypb.
 	return out, nil
 }
 
-func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*OAuthCallbackResponse, error) {
+func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuthCallbackRequest, opts ...grpc.CallOption) (*model.HTMLResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(OAuthCallbackResponse)
+	out := new(model.HTMLResponse)
 	err := c.cc.Invoke(ctx, Dida365OAuthService_OAuthCallback_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func (c *dida365OAuthServiceClient) OAuthCallback(ctx context.Context, in *OAuth
 type Dida365OAuthServiceServer interface {
 	Ping(context.Context, *emptypb.Empty) (*wrapperspb.StringValue, error)
 	OAuthLogin(context.Context, *emptypb.Empty) (*model.TemporaryRedirectResponse, error)
-	OAuthCallback(context.Context, *OAuthCallbackRequest) (*OAuthCallbackResponse, error)
+	OAuthCallback(context.Context, *OAuthCallbackRequest) (*model.HTMLResponse, error)
 	mustEmbedUnimplementedDida365OAuthServiceServer()
 }
 
@@ -101,7 +101,7 @@ func (UnimplementedDida365OAuthServiceServer) Ping(context.Context, *emptypb.Emp
 func (UnimplementedDida365OAuthServiceServer) OAuthLogin(context.Context, *emptypb.Empty) (*model.TemporaryRedirectResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OAuthLogin not implemented")
 }
-func (UnimplementedDida365OAuthServiceServer) OAuthCallback(context.Context, *OAuthCallbackRequest) (*OAuthCallbackResponse, error) {
+func (UnimplementedDida365OAuthServiceServer) OAuthCallback(context.Context, *OAuthCallbackRequest) (*model.HTMLResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OAuthCallback not implemented")
 }
 func (UnimplementedDida365OAuthServiceServer) mustEmbedUnimplementedDida365OAuthServiceServer() {}

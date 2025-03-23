@@ -20,3 +20,14 @@ func TemporaryRedirectForwardResponseOption() runtime.ServeMuxOption {
 		return nil
 	})
 }
+func HTMLResponseForwardResponseOption() runtime.ServeMuxOption {
+	return runtime.WithForwardResponseOption(func(ctx context.Context, writer http.ResponseWriter, message proto.Message) error {
+		if rr, ok := message.(*model.HTMLResponse); ok {
+			writer.Header().Set("Content-Type", "text/html")
+			writer.WriteHeader(http.StatusOK)
+			_, err := writer.Write([]byte(rr.Html))
+			return err
+		}
+		return nil
+	})
+}

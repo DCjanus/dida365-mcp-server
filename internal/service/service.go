@@ -1,7 +1,10 @@
 package service
 
 import (
+	"bytes"
 	"context"
+	_ "embed"
+	"html/template"
 	"net/url"
 
 	"github.com/cockroachdb/errors"
@@ -52,7 +55,11 @@ func (d *Dida365oAuthService) OAuthLogin(ctx context.Context, _ *emptypb.Empty) 
 	return &model.TemporaryRedirectResponse{Location: base.String()}, nil
 }
 
-func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthCallbackRequest) (*api.OAuthCallbackResponse, error) {
+//go:embed example.html
+var exampleHTMLTpl string
+var exmapleHTML = template.Must(template.New("example").Parse(exampleHTMLTpl))
+
+func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthCallbackRequest) (*model.HTMLResponse, error) {
 	reply := struct {
 		AccessToken string `json:"access_token"`
 	}{}
@@ -75,5 +82,10 @@ func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthC
 		return nil, errors.Errorf("failed to request oauth token, status: %d, body: %s", res.StatusCode(), res.String())
 	}
 
-	return &api.OAuthCallbackResponse{AccessToken: reply.AccessToken}, nil
+	var buf bytes.Buffer
+	if err := exmapleHTML.Execute(&buf, reply); err != nil {
+		return nil, errors.Wrap(err, "failed to execute example HTML template")
+	}
+
+	return &model.HTMLResponse{Html: buf.String()}, nil
 }

@@ -66,6 +66,7 @@ func main() {
 
 	mux := runtime.NewServeMux(
 		grpcruntime.TemporaryRedirectForwardResponseOption(),
+		grpcruntime.HTMLResponseForwardResponseOption(),
 		grpcruntime.WithHTTPMetadata(log),
 		runtime.WithMarshalerOption(
 			runtime.MIMEWildcard,

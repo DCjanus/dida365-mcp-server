@@ -26,7 +26,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/apiOAuthCallbackResponse"
+              "$ref": "#/definitions/modelHTMLResponse"
             }
           },
           "default": {
@@ -725,14 +725,6 @@
     "apiEmpty": {
       "type": "object"
     },
-    "apiOAuthCallbackResponse": {
-      "type": "object",
-      "properties": {
-        "accessToken": {
-          "type": "string"
-        }
-      }
-    },
     "apiProject": {
       "type": "object",
       "properties": {
@@ -885,6 +877,14 @@
         "TASK_STATUS_COMPLETED"
       ],
       "default": "TASK_STATUS_NORMAL"
+    },
+    "modelHTMLResponse": {
+      "type": "object",
+      "properties": {
+        "html": {
+          "type": "string"
+        }
+      }
     },
     "modelTemporaryRedirectResponse": {
       "type": "object",

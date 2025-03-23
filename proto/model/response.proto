@@ -7,3 +7,7 @@ import "buf/validate/validate.proto";
 message TemporaryRedirectResponse {
   string location = 1 [(buf.validate.field).required = true];
 }
+
+message HTMLResponse {
+  string html = 1 [(buf.validate.field).required = true];
+}
