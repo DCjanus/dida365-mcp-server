@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"net"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/cockroachdb/errors"
@@ -26,7 +28,13 @@ import (
 
 func main() {
 	configPath := flag.String("config", "/etc/dida365-oauth-server/config.yaml", "path to config file")
+	version := flag.Bool("version", false, "print version")
 	flag.Parse()
+
+	if *version {
+		fmt.Println(utils.Version)
+		os.Exit(0)
+	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()

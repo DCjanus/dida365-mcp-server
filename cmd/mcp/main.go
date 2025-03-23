@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/bufbuild/protovalidate-go"
@@ -19,9 +20,16 @@ func main() {
 
 	verbose := false
 	accessToken := ""
+	version := false
 	flag.StringVar(&accessToken, "access_token", "", "The access token to use for the MCP server, can be set using the MCP_ACCESS_TOKEN environment variable")
 	flag.BoolVar(&verbose, "verbose", false, "Whether to enable verbose logging")
+	flag.BoolVar(&version, "version", false, "Whether to print the version")
 	flag.Parse()
+
+	if version {
+		fmt.Println(utils.Version)
+		os.Exit(0)
+	}
 
 	if accessToken == "" {
 		accessToken = os.Getenv("MCP_ACCESS_TOKEN")
@@ -53,7 +61,7 @@ func main() {
 
 	srv := server.NewMCPServer(
 		"Dida365 MCP Server",
-		"0.1.0",
+		utils.Version,
 	)
 
 	wrapper, err := NewDidaWrapper(ctx, log, accessToken)

@@ -1,3 +1,5 @@
+VERSION := `git describe --tags --always --dirty`
+
 default: 
     just prepare
     just build
@@ -25,8 +27,8 @@ generate:
     buf generate
 
 build:
-    CGO_ENABLED=0 go build -o bin/dida365-oauth-server ./cmd/oauth
-    CGO_ENABLED=0 go build -o bin/dida365-mcp-server ./cmd/mcp
+    CGO_ENABLED=0 go build -o bin/dida365-oauth-server -ldflags "-X 'github.com/dcjanus/dida365-mcp-server/internal/utils.Version={{VERSION}}'" ./cmd/oauth
+    CGO_ENABLED=0 go build -o bin/dida365-mcp-server -ldflags "-X 'github.com/dcjanus/dida365-mcp-server/internal/utils.Version={{VERSION}}'" ./cmd/mcp
 
 clean:
     rm -rf bin
