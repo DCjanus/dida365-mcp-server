@@ -86,6 +86,7 @@ message ChecklistItem {
   string start_date = 5;
   bool is_all_day = 6;
   string time_zone = 7;
+  string completed_time = 8;
 }
 
 message Task {
@@ -162,7 +163,7 @@ message CreateTaskRequest {
   string repeat_flag = 10;
   TaskPriority priority = 11 [(buf.validate.field).enum.defined_only = true];
   int64 sort_order = 12;
-  repeated Task items = 13;
+  repeated ChecklistItem items = 13;
 }
 
 message UpdateTaskRequest {
@@ -179,7 +180,7 @@ message UpdateTaskRequest {
   string repeat_flag = 11;
   TaskPriority priority = 12 [(buf.validate.field).enum.defined_only = true];
   int64 sort_order = 13;
-  repeated Task items = 14;
+  repeated ChecklistItem items = 14;
 }
 
 message CompleteTaskRequest {

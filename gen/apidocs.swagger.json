@@ -679,6 +679,9 @@
         },
         "timeZone": {
           "type": "string"
+        },
+        "completedTime": {
+          "type": "string"
         }
       }
     },
