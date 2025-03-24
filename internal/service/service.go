@@ -2,11 +2,13 @@ package service
 
 import (
 	"context"
+	_ "embed"
 	"net/url"
 
 	"github.com/cockroachdb/errors"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
+	"google.golang.org/genproto/googleapis/api/httpbody"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"google.golang.org/protobuf/types/known/wrapperspb"
@@ -36,7 +38,7 @@ func (d *Dida365oAuthService) Ping(ctx context.Context, _ *emptypb.Empty) (*wrap
 	return &wrapperspb.StringValue{Value: "Pong"}, nil
 }
 
-func (d *Dida365oAuthService) OAuthLogin(ctx context.Context, _ *emptypb.Empty) (*model.TemporaryRedirectResponse, error) {
+func (d *Dida365oAuthService) OAuthLogin(_ context.Context, _ *emptypb.Empty) (*model.TemporaryRedirectResponse, error) {
 	base, err := url.Parse("https://dida365.com/oauth/authorize")
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to parse base URL")
@@ -52,13 +54,17 @@ func (d *Dida365oAuthService) OAuthLogin(ctx context.Context, _ *emptypb.Empty) 
 	return &model.TemporaryRedirectResponse{Location: base.String()}, nil
 }
 
-func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthCallbackRequest) (*api.OAuthCallbackResponse, error) {
+//go:embed prompt.html
+var promptHTML string
+
+func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthCallbackRequest) (*model.TemporaryRedirectResponse, error) {
 	reply := struct {
 		AccessToken string `json:"access_token"`
 	}{}
 
 	res, err := d.cli.
 		R().
+		WithContext(ctx).
 		SetBasicAuth(d.cfg.GetOauth().GetClientId(), d.cfg.GetOauth().GetClientSecret()).
 		SetFormData(map[string]string{
 			"code":         req.GetCode(),
@@ -75,5 +81,9 @@ func (d *Dida365oAuthService) OAuthCallback(ctx context.Context, req *api.OAuthC
 		return nil, errors.Errorf("failed to request oauth token, status: %d, body: %s", res.StatusCode(), res.String())
 	}
 
-	return &api.OAuthCallbackResponse{AccessToken: reply.AccessToken}, nil
+	return &model.TemporaryRedirectResponse{Location: "/oauth/prompt?access_token=" + reply.AccessToken}, nil
+}
+
+func (d *Dida365oAuthService) OAuthPrompt(_ context.Context, _ *api.OAuthPromptRequest) (*httpbody.HttpBody, error) {
+	return &httpbody.HttpBody{ContentType: "text/html", Data: []byte(promptHTML)}, nil
 }

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dida365 MCP Server Example</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+            --warning-color: #d97706;
+            --text-color: #1f2937;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --code-bg: #f8fafc;
+            --border-radius: 8px;
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 32px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 8px;
+        }
+
+        .language-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            background: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .language-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .language-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .config-box {
+            background-color: var(--code-bg);
+            padding: 24px;
+            border-radius: var(--border-radius);
+            position: relative;
+            margin: 24px 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .copy-button:active {
+            transform: scale(0.98);
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .instructions {
+            background-color: var(--card-bg);
+            border: 1px solid #e5e7eb;
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        .instructions h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+
+        .instructions p {
+            margin: 8px 0;
+            color: #4b5563;
+        }
+
+        code {
+            background-color: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.9em;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-size: 14px;
+            opacity: 0;
+            transition: var(--transition);
+            transform: translateY(-20px);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background-color: var(--success-color);
+        }
+
+        .toast.error {
+            background-color: var(--error-color);
+        }
+
+        .toast.warning {
+            background-color: var(--warning-color);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px;
+            }
+
+            .config-box {
+                padding: 16px;
+            }
+
+            .copy-button {
+                position: static;
+                width: 100%;
+                margin-bottom: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="toast" class="toast"></div>
+
+        <div class="header">
+            <div class="header-content">
+                <h1 id="title">Dida365 MCP Server 配置示例</h1>
+                <p id="subtitle">基于当前 access_token 生成的配置示例：</p>
+            </div>
+            <div class="language-switcher">
+                <button class="language-btn" onclick="changeLanguage('zh')" id="zh-btn">中文</button>
+                <button class="language-btn" onclick="changeLanguage('en')" id="en-btn">English</button>
+            </div>
+        </div>
+
+        <div class="config-box">
+            <button class="copy-button" onclick="copyConfig()" id="copy-btn">
+                复制配置
+            </button>
+            <pre id="config"></pre>
+        </div>
+
+        <div class="instructions">
+            <h2 id="instructions-title">使用说明</h2>
+            <p id="instruction-1">1. 将上述配置添加到你的配置文件中</p>
+            <p id="instruction-2">2. 确保 access_token 正确设置</p>
+            <p id="instruction-3">3. 确保 docker 已安装</p>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            zh: {
+                title: 'Dida365 MCP Server 配置示例',
+                subtitle: '基于当前 access_token 生成的配置示例：',
+                copyBtn: '复制配置',
+                instructionsTitle: '使用说明',
+                instruction1: '1. 将上述配置添加到你的配置文件中',
+                instruction2: '2. 确保 access_token 正确设置',
+                instruction3: '3. 确保 docker 已安装',
+                copySuccess: '配置已复制到剪贴板',
+                copyError: '复制失败，请手动复制',
+                noToken: '未找到 access_token 参数'
+            },
+            en: {
+                title: 'Dida365 MCP Server Configuration Example',
+                subtitle: 'Configuration example based on current access_token:',
+                copyBtn: 'Copy Configuration',
+                instructionsTitle: 'Instructions',
+                instruction1: '1. Add the above configuration to your config file',
+                instruction2: '2. Make sure the access_token is set correctly',
+                instruction3: '3. Ensure docker is installed',
+                copySuccess: 'Configuration copied to clipboard',
+                copyError: 'Copy failed, please copy manually',
+                noToken: 'No access_token parameter found'
+            }
+        };
+
+        function updateLanguage(lang) {
+            const t = translations[lang];
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('copy-btn').textContent = t.copyBtn;
+            document.getElementById('instructions-title').textContent = t.instructionsTitle;
+            document.getElementById('instruction-1').textContent = t.instruction1;
+            document.getElementById('instruction-2').textContent = t.instruction2;
+            document.getElementById('instruction-3').textContent = t.instruction3;
+
+            // Update language buttons
+            document.getElementById('zh-btn').classList.toggle('active', lang === 'zh');
+            document.getElementById('en-btn').classList.toggle('active', lang === 'en');
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        function changeLanguage(lang) {
+            localStorage.setItem('preferred-language', lang);
+            updateLanguage(lang);
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        function getAccessTokenFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('access_token');
+        }
+
+        function generateConfig(token) {
+            return JSON.stringify({
+                mcpServers: {
+                    dida365: {
+                        command: "docker",
+                        args: [
+                            "run",
+                            "-i",
+                            "--rm",
+                            "--init",
+                            "--name",
+                            "dida365-mcp-server",
+                            "--pull",
+                            "always",
+                            "ghcr.io/dcjanus/dida365-mcp-server:latest",
+                            "dida365-mcp-server",
+                            "-access_token",
+                            token
+                        ]
+                    }
+                }
+            }, null, 4);
+        }
+
+        function copyConfig() {
+            const configElement = document.getElementById('config');
+            navigator.clipboard.writeText(configElement.textContent)
+                .then(() => {
+                    showToast(translations[document.documentElement.lang].copySuccess);
+                })
+                .catch(() => {
+                    showToast(translations[document.documentElement.lang].copyError, 'error');
+                });
+        }
+
+        function init() {
+            // Get preferred language from localStorage or browser
+            const savedLang = localStorage.getItem('preferred-language');
+            const browserLang = navigator.language.startsWith('zh') ? 'zh' : 'en';
+            const initialLang = savedLang || browserLang;
+
+            // Set initial language
+            updateLanguage(initialLang);
+
+            const token = getAccessTokenFromUrl();
+            const configElement = document.getElementById('config');
+
+            if (token) {
+                configElement.textContent = generateConfig(token);
+            } else {
+                showToast(translations[initialLang].noToken, 'warning');
+                configElement.textContent = '请在 URL 中添加 access_token 参数';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

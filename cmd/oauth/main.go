@@ -67,9 +67,8 @@ func main() {
 	mux := runtime.NewServeMux(
 		grpcruntime.TemporaryRedirectForwardResponseOption(),
 		grpcruntime.WithHTTPMetadata(log),
-		runtime.WithMarshalerOption(
-			runtime.MIMEWildcard,
-			&runtime.JSONPb{
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.HTTPBodyMarshaler{
+			Marshaler: &runtime.JSONPb{
 				MarshalOptions: protojson.MarshalOptions{
 					UseProtoNames:     true,
 					EmitDefaultValues: true,
@@ -78,7 +77,7 @@ func main() {
 					DiscardUnknown: true,
 				},
 			},
-		),
+		}),
 	)
 	if err := mux.HandlePath(http.MethodGet, "/metrics", func(w http.ResponseWriter, r *http.Request, _ map[string]string) {
 		promhttp.Handler().ServeHTTP(w, r)

@@ -4,6 +4,7 @@ package api;
 
 import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/api/httpbody.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "model/response.proto";
@@ -18,8 +19,12 @@ service Dida365oAuthService {
     option (google.api.http) = {get: "/oauth/login"};
   }
 
-  rpc OAuthCallback(OAuthCallbackRequest) returns (OAuthCallbackResponse) {
+  rpc OAuthCallback(OAuthCallbackRequest) returns (model.TemporaryRedirectResponse) {
     option (google.api.http) = {get: "/oauth/callback"};
+  }
+
+  rpc OAuthPrompt(OAuthPromptRequest) returns (google.api.HttpBody) {
+    option (google.api.http) = {get: "/oauth/prompt"};
   }
 }
 
@@ -27,6 +32,6 @@ message OAuthCallbackRequest {
   string code = 1 [(buf.validate.field).required = true];
 }
 
-message OAuthCallbackResponse {
-  string access_token = 1;
+message OAuthPromptRequest {
+  string access_token = 1 [(buf.validate.field).required = true];
 }
