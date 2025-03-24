@@ -25,6 +25,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=sha,prefix=temp-
+            type=raw,value=latest,enable=false
           labels: |
             org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
             org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
