@@ -120,7 +120,7 @@ jobs:
 
       - name: Create and push manifest
         run: |
-          set -ex
+          set -e
           sources=$(ls -1 ${{ runner.temp }}/digests | xargs printf "${{ needs.prepare.outputs.image_name }}@sha256:%s ")
           tags='${{ needs.prepare.outputs.tags }}'
           for tag in $tags; do
