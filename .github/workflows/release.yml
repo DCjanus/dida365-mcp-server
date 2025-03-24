@@ -119,14 +119,14 @@ jobs:
           set -ex
 
           # Get all digest files
-          digests=$(ls -1 ${{ runner.temp }}/digests/*)
+          digests=$(ls -1 ${{ runner.temp }}/digests)
           echo "Digests: $digests"
 
           # Create multi-platform manifest for each tag
           for tag in ${{ needs.prepare.outputs.tags }}; do
             echo "Creating manifest for $tag..."
             docker buildx imagetools create -t $tag \
-              $(for digest in "${digests[@]}"; do echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${digest} "; done)
+              $(for digest in "${digests[@]}"; do echo "${{ needs.prepare.outputs.image_name }}@${digest} "; done)
             
             echo "Verifying manifest..."
             docker buildx imagetools inspect $tag
