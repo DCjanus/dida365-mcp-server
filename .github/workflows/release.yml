@@ -119,7 +119,7 @@ jobs:
           set -ex
 
           # Get all digest files
-          digests=$(ls -al ${{ runner.temp }}/digests/*)
+          digests=$(ls -1 ${{ runner.temp }}/digests/*)
           echo "Digests: $digests"
 
           # Create multi-platform manifest for each tag
