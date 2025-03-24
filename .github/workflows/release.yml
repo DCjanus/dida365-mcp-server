@@ -36,8 +36,10 @@ jobs:
       - name: Split image name from tags
         id: image_name
         run: |
-          image_name=$(echo ${{ steps.meta.outputs.tags }} | cut -d ':' -f 1)
-          echo "image_name=${image_name}" >> $GITHUB_OUTPUT
+          for tag in ${{ steps.meta.outputs.tags }}; do
+            image_name=$(echo $tag | cut -d ':' -f 1)
+            echo "image_name=${image_name}" >> $GITHUB_OUTPUT
+          done
 
   build:
     needs: prepare
