@@ -37,7 +37,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build and push by digest
+      - name: Build and push
         id: build
         uses: docker/build-push-action@v5
         with:
@@ -46,7 +46,7 @@ jobs:
           push: true
           provenance: true
           sbom: true
-          outputs: type=image,push-by-digest=true,name-canonical=true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-${{ matrix.platform.name }}
 
       - name: Export digest
         run: |
@@ -104,12 +104,18 @@ jobs:
             org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
 
       - name: Create and push manifest
-        working-directory: ${{ runner.temp }}/digests
         run: |
           for tag in ${{ steps.meta.outputs.tags }}; do
             echo "Creating manifest for $tag..."
-            docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-              $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+            docker buildx imagetools create -t $tag \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-amd64 \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-arm64
             echo "Verifying manifest..."
             docker buildx imagetools inspect $tag
           done
+
+      - name: Clean up temporary tags
+        run: |
+          docker buildx imagetools rm \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-amd64 \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-arm64
