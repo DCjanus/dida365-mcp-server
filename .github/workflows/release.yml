@@ -34,10 +34,8 @@ jobs:
       - name: Split image name from tags
         id: image_name
         run: |
-          set -ex
           image_name=$(echo ${{ steps.meta.outputs.tags }} | cut -d ':' -f 1)
           echo "image_name=${image_name}" >> $GITHUB_OUTPUT
-          echo "image_name=${image_name}"
 
   build:
     needs: prepare
@@ -118,19 +116,19 @@ jobs:
 
       - name: Create and push manifest
         run: |
-          # 获取所有的 digest 文件
+          # Get all digest files
           digests=()
           for platform in "amd64" "arm64"; do
             digest=$(cat ${{ runner.temp }}/digests/*-${platform})
             digests+=("${digest}")
           done
 
-          # 为每个标签创建多平台 manifest
+          # Create multi-platform manifest for each tag
           for tag in ${{ needs.prepare.outputs.tags }}; do
-            echo "正在为 $tag 创建 manifest..."
+            echo "Creating manifest for $tag..."
             docker buildx imagetools create -t $tag \
               $(for digest in "${digests[@]}"; do echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${digest} "; done)
             
-            echo "正在验证 manifest..."
+            echo "Verifying manifest..."
             docker buildx imagetools inspect $tag
           done
