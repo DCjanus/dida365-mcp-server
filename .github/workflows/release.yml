@@ -58,19 +58,14 @@ jobs:
       
       - name: Build and push
         id: build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/${{ matrix.platform.name }}
-          push: true
           provenance: true
           sbom: true
           tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
-          labels: ${{ needs.prepare.outputs.labels }}
-
-      - name: Clean up temporary tags
-        run: |
-          docker buildx imagetools rm ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
         run: |
