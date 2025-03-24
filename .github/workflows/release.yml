@@ -15,13 +15,20 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      image_name: ${{ steps.meta.outputs.image_name }}
+      tags: ${{ steps.meta.outputs.tags }}
+      labels: ${{ steps.meta.outputs.labels }}
     steps:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=temp-
+          labels: |
+            org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
+            org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
+            org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
 
   build:
     needs: prepare
@@ -58,7 +65,8 @@ jobs:
           push: true
           provenance: true
           sbom: true
-          tags: ${{ needs.prepare.outputs.image_name }}-temp-${{ matrix.platform.name }}
+          tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
+          labels: ${{ needs.prepare.outputs.labels }}
 
       - name: Export digest
         run: |
@@ -100,34 +108,27 @@ jobs:
           pattern: digests-*
           merge-multiple: true
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ needs.prepare.outputs.image_name }}
-          tags: |
-            type=semver,pattern=v{{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
-            type=raw,value=latest,enable=${{ !contains(github.ref, '-') }}
-          labels: |
-            org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
-            org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
-            org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
-
       - name: Create and push manifest
         run: |
-          for tag in ${{ steps.meta.outputs.tags }}; do
-            echo "Creating manifest for $tag..."
+          # 获取所有的 digest 文件
+          digests=()
+          for platform in "amd64" "arm64"; do
+            digest=$(cat ${{ runner.temp }}/digests/*-${platform})
+            digests+=("${digest}")
+          done
+
+          # 为每个标签创建多平台 manifest
+          for tag in ${{ needs.prepare.outputs.tags }}; do
+            echo "正在为 $tag 创建 manifest..."
             docker buildx imagetools create -t $tag \
-              ${{ needs.prepare.outputs.image_name }}-temp-amd64 \
-              ${{ needs.prepare.outputs.image_name }}-temp-arm64
-            echo "Verifying manifest..."
+              $(for digest in "${digests[@]}"; do echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${digest} "; done)
+            
+            echo "正在验证 manifest..."
             docker buildx imagetools inspect $tag
           done
 
       - name: Clean up temporary tags
         run: |
           docker buildx imagetools rm \
-            ${{ needs.prepare.outputs.image_name }}-temp-amd64 \
-            ${{ needs.prepare.outputs.image_name }}-temp-arm64
+            ${{ needs.prepare.outputs.tags }}-amd64 \
+            ${{ needs.prepare.outputs.tags }}-arm64
