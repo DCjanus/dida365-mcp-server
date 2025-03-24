@@ -68,6 +68,10 @@ jobs:
           tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
           labels: ${{ needs.prepare.outputs.labels }}
 
+      - name: Clean up temporary tags
+        run: |
+          docker buildx imagetools rm ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
+
       - name: Export digest
         run: |
           mkdir -p ${{ runner.temp }}/digests
@@ -126,9 +130,3 @@ jobs:
             echo "正在验证 manifest..."
             docker buildx imagetools inspect $tag
           done
-
-      - name: Clean up temporary tags
-        run: |
-          docker buildx imagetools rm \
-            ${{ needs.prepare.outputs.tags }}-amd64 \
-            ${{ needs.prepare.outputs.tags }}-arm64
