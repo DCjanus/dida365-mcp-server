@@ -117,15 +117,10 @@ jobs:
       - name: Create and push manifest
         run: |
           set -ex
-          echo "Listing digests..."
-          ls -al ${{ runner.temp }}/digests
 
           # Get all digest files
-          digests=()
-          for platform in "amd64" "arm64"; do
-            digest=$(cat ${{ runner.temp }}/digests/*-${platform})
-            digests+=("${digest}")
-          done
+          digests=$(ls -al ${{ runner.temp }}/digests/*)
+          echo "Digests: $digests"
 
           # Create multi-platform manifest for each tag
           for tag in ${{ needs.prepare.outputs.tags }}; do
