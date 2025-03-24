@@ -12,29 +12,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    outputs:
-      tags: ${{ steps.meta.outputs.tags }}
-      labels: ${{ steps.meta.outputs.labels }}
-    steps:
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=semver,pattern=v{{version}}
-            type=semver,pattern=v{{major}}.{{minor}}
-            type=semver,pattern=v{{major}}
-            type=raw,value=latest,enable=${{ !contains(github.ref, '-') }}
-          labels: |
-            org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
-            org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
-            org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
-
   build:
-    needs: prepare
     strategy:
       matrix:
         platform:
@@ -59,20 +37,33 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build and push ${{ matrix.platform.name }} image
+      - name: Build and push by digest
         id: build
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/${{ matrix.platform.name }}
-          labels: ${{ needs.prepare.outputs.labels }}
-          tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
           push: true
           provenance: true
           sbom: true
+          outputs: type=image,push-by-digest=true,name-canonical=true
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.platform.name }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
 
   merge:
-    needs: [prepare, build]
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -90,13 +81,35 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern=v{{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+            type=raw,value=latest,enable=${{ !contains(github.ref, '-') }}
+          labels: |
+            org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
+            org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
+            org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
+
       - name: Create and push manifest
+        working-directory: ${{ runner.temp }}/digests
         run: |
-          for tag in ${{ needs.prepare.outputs.tags }}; do
+          for tag in ${{ steps.meta.outputs.tags }}; do
             echo "Creating manifest for $tag..."
-            docker buildx imagetools create -t $tag \
-              $tag-amd64 \
-              $tag-arm64
+            docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+              $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
             echo "Verifying manifest..."
             docker buildx imagetools inspect $tag
           done
