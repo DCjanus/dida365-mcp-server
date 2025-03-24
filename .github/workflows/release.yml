@@ -58,7 +58,7 @@ jobs:
           push: true
           provenance: true
           sbom: true
-          tags: ${{ needs.prepare.outputs.image_name }}:temp-${{ matrix.platform.name }}
+          tags: ${{ needs.prepare.outputs.image_name }}-temp-${{ matrix.platform.name }}
 
       - name: Export digest
         run: |
@@ -120,8 +120,8 @@ jobs:
           for tag in ${{ steps.meta.outputs.tags }}; do
             echo "Creating manifest for $tag..."
             docker buildx imagetools create -t $tag \
-              ${{ needs.prepare.outputs.image_name }}:temp-amd64 \
-              ${{ needs.prepare.outputs.image_name }}:temp-arm64
+              ${{ needs.prepare.outputs.image_name }}-temp-amd64 \
+              ${{ needs.prepare.outputs.image_name }}-temp-arm64
             echo "Verifying manifest..."
             docker buildx imagetools inspect $tag
           done
@@ -129,5 +129,5 @@ jobs:
       - name: Clean up temporary tags
         run: |
           docker buildx imagetools rm \
-            ${{ needs.prepare.outputs.image_name }}:temp-amd64 \
-            ${{ needs.prepare.outputs.image_name }}:temp-arm64
+            ${{ needs.prepare.outputs.image_name }}-temp-amd64 \
+            ${{ needs.prepare.outputs.image_name }}-temp-arm64
