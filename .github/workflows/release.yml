@@ -116,6 +116,10 @@ jobs:
 
       - name: Create and push manifest
         run: |
+          set -ex
+          echo "Listing digests..."
+          ls -al ${{ runner.temp }}/digests
+
           # Get all digest files
           digests=()
           for platform in "amd64" "arm64"; do
