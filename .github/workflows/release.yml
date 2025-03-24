@@ -122,7 +122,8 @@ jobs:
         run: |
           set -ex
           sources=$(ls -1 ${{ runner.temp }}/digests | xargs printf "${{ needs.prepare.outputs.image_name }}@sha256:%s ")
-          for tag in '${{ needs.prepare.outputs.tags }}'; do
+          tags='${{ needs.prepare.outputs.tags }}'
+          for tag in $tags; do
             echo "Creating manifest for $tag..."
             docker buildx imagetools create -t $tag $sources
             echo "Verifying manifest..."
