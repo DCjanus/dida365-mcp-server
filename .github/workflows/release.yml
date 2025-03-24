@@ -9,10 +9,22 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository | toLowerCase }}
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      image_name: ${{ steps.meta.outputs.image_name }}
+    steps:
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
   build:
+    needs: prepare
     strategy:
       matrix:
         platform:
@@ -46,7 +58,7 @@ jobs:
           push: true
           provenance: true
           sbom: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-${{ matrix.platform.name }}
+          tags: ${{ needs.prepare.outputs.image_name }}:temp-${{ matrix.platform.name }}
 
       - name: Export digest
         run: |
@@ -63,7 +75,7 @@ jobs:
           retention-days: 1
 
   merge:
-    needs: build
+    needs: [prepare, build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -92,7 +104,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ needs.prepare.outputs.image_name }}
           tags: |
             type=semver,pattern=v{{version}}
             type=semver,pattern=v{{major}}.{{minor}}
@@ -108,8 +120,8 @@ jobs:
           for tag in ${{ steps.meta.outputs.tags }}; do
             echo "Creating manifest for $tag..."
             docker buildx imagetools create -t $tag \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-amd64 \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-arm64
+              ${{ needs.prepare.outputs.image_name }}:temp-amd64 \
+              ${{ needs.prepare.outputs.image_name }}:temp-arm64
             echo "Verifying manifest..."
             docker buildx imagetools inspect $tag
           done
@@ -117,5 +129,5 @@ jobs:
       - name: Clean up temporary tags
         run: |
           docker buildx imagetools rm \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-amd64 \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:temp-arm64
+            ${{ needs.prepare.outputs.image_name }}:temp-amd64 \
+            ${{ needs.prepare.outputs.image_name }}:temp-arm64
