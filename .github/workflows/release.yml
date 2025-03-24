@@ -17,6 +17,7 @@ jobs:
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
+      image_name: ${{ steps.image_name.outputs.image_name }}
     steps:
       - name: Docker meta
         id: meta
@@ -30,6 +31,10 @@ jobs:
             org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
             org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
             org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
+      - name: Split image name from tags
+        id: image_name
+        run: |
+          echo "image_name=$(echo ${{ steps.meta.outputs.tags[0] }} | cut -d ':' -f 1)" >> $GITHUB_OUTPUT
 
   build:
     needs: prepare
@@ -65,7 +70,7 @@ jobs:
           platforms: linux/${{ matrix.platform.name }}
           provenance: true
           sbom: true
-          tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
+          tags: ${{ needs.prepare.outputs.image_name }}
           outputs: type=image,push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
