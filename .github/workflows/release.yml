@@ -17,8 +17,9 @@ jobs:
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
       labels: ${{ steps.meta.outputs.labels }}
+      image_name: ${{ steps.image_name.outputs.image_name }}
     steps:
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -32,6 +33,13 @@ jobs:
             org.opencontainers.image.title=${GITHUB_REPOSITORY#*/}
             org.opencontainers.image.version=${GITHUB_REF#refs/tags/v}
             org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
+      - name: Split image name from tags
+        id: image_name
+        run: |
+          for tag in '${{ steps.meta.outputs.tags }}'; do
+            image_name=$(echo $tag | cut -d ':' -f 1)
+            echo "image_name=${image_name}" >> $GITHUB_OUTPUT
+          done
 
   build:
     needs: prepare
@@ -59,17 +67,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build and push ${{ matrix.platform.name }} image
+      - name: Build and push
         id: build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/${{ matrix.platform.name }}
-          labels: ${{ needs.prepare.outputs.labels }}
-          tags: ${{ needs.prepare.outputs.tags }}-${{ matrix.platform.name }}
-          push: true
           provenance: true
           sbom: true
+          tags: ${{ needs.prepare.outputs.image_name }}
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.platform.name }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
 
   merge:
     needs: [prepare, build]
@@ -79,10 +100,10 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -90,13 +111,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
       - name: Create and push manifest
         run: |
-          for tag in ${{ needs.prepare.outputs.tags }}; do
+          set -e
+          sources=$(ls -1 ${{ runner.temp }}/digests | xargs printf "${{ needs.prepare.outputs.image_name }}@sha256:%s ")
+          tags='${{ needs.prepare.outputs.tags }}'
+          for tag in $tags; do
             echo "Creating manifest for $tag..."
-            docker buildx imagetools create -t $tag \
-              $tag-amd64 \
-              $tag-arm64
+            docker buildx imagetools create -t $tag $sources
             echo "Verifying manifest..."
             docker buildx imagetools inspect $tag
           done
