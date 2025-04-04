@@ -40,9 +40,19 @@ Add the following to your configuration file:
 ```json
 {
     "mcpServers": {
-        "dida": {
-            "command": "/path/to/dida365-mcp-server",
+        "dida365": {
+            "command": "docker",
             "args": [
+                "run",
+                "-i",
+                "--rm",
+                "--init",
+                "--name",
+                "dida365-mcp-server",
+                "--pull",
+                "always",
+                "ghcr.io/dcjanus/dida365-mcp-server:latest",
+                "dida365-mcp-server",
                 "-access_token",
                 "<YOUR_ACCESS_TOKEN>"
             ]
