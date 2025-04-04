@@ -47,8 +47,6 @@
                 "-i",
                 "--rm",
                 "--init",
-                "--name",
-                "dida365-mcp-server",
                 "--pull",
                 "always",
                 "ghcr.io/dcjanus/dida365-mcp-server:latest",
